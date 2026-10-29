@@ -1,3 +1,5 @@
+import { vttSeconds as seconds } from './time.js';
+
 /** One storyboard image: a whole picture, or a tile of a sprite when w and h are set. */
 export interface Thumb {
 	start: number;
@@ -8,14 +10,6 @@ export interface Thumb {
 	/** 0 when the image is used whole. */
 	w: number;
 	h: number;
-}
-
-const TIME = /(?:(\d+):)?(\d{1,2}):(\d{2}(?:\.\d+)?)/;
-
-function seconds(s: string): number {
-	const m = TIME.exec(s);
-	if (!m) return NaN;
-	return Number(m[1] ?? 0) * 3600 + Number(m[2]) * 60 + Number(m[3]);
 }
 
 /** Parses a WebVTT storyboard: each cue's text is an image URL, optionally `#xywh=x,y,w,h` into a sprite. */

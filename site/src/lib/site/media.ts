@@ -6,6 +6,7 @@ export const media = {
 		dash: 'https://dash.akamaized.net/akamai/bbb_30fps/bbb_30fps.mpd',
 		poster: 'https://peach.blender.org/wp-content/uploads/bbb-splash.png',
 		storyboard: '/media/bbb/storyboard.vtt',
+		chapters: '/media/bbb/chapters.vtt',
 		credit: 'Big Buck Bunny © Blender Foundation, CC BY 3.0',
 	},
 	sintel: {

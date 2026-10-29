@@ -60,7 +60,7 @@ qyro-player::part(title) {
 }
 ```
 
-Parts: `root`, `stage`, `video`, `top-bar`, `title`, `big-play-button`, `skip-back-button`, `skip-forward-button`, `spinner`, `controls`, `scrubber`, `track`, `progress`, `thumb`, `preview`, `preview-image`, `time`, `current-time`, `duration`, `live-badge`, `live-badge-corner`, `capsule`, `volume`, `play-button`, `mute-button`, `volume-slider`, `captions-button`, `settings-button`, `pip-button`, `fullscreen-button`, `settings`, `context-menu`, `stats`, `shortcuts`, `toast`, `error`, `retry-button`.
+Parts: `root`, `stage`, `video`, `top-bar`, `title`, `big-play-button`, `skip-back-button`, `skip-forward-button`, `spinner`, `controls`, `scrubber`, `track`, `progress`, `thumb`, `preview`, `preview-image`, `time`, `current-time`, `duration`, `live-badge`, `live-badge-corner`, `capsule`, `volume`, `play-button`, `mute-button`, `volume-slider`, `captions-button`, `settings-button`, `pip-button`, `fullscreen-button`, `chapters-button`, `current-chapter`, `chapters`, `settings`, `context-menu`, `stats`, `shortcuts`, `toast`, `error`, `retry-button`.
 
 ## Motion
 

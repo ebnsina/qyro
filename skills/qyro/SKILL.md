@@ -1,6 +1,6 @@
 ---
 name: qyro
-description: Add, configure and theme the Qyro video player (<qyro-player> web component, npm package "qyro") in any site or framework. Use when embedding video, HLS/DASH/live streams, captions or subtitles, storyboard thumbnails, theming a player, or turning on Seyr video analytics with Qyro.
+description: Add, configure and theme the Qyro video player (<qyro-player> web component, npm package "qyro") in any site or framework. Use when embedding video, HLS/DASH/live streams, captions or subtitles, storyboard thumbnails, chapters, theming a player, or turning on Seyr video analytics with Qyro.
 ---
 
 # Qyro
@@ -40,7 +40,7 @@ Without a bundler, one script tag gives you everything in a single file:
 ></qyro-player>
 ```
 
-`src` takes HLS (`.m3u8`), DASH (`.mpd`) or a plain file such as MP4. The player sizes itself to the width of its container at 16:9; set `--qyro-aspect-ratio` to change that.
+`src` takes HLS (`.m3u8`), DASH (`.mpd`) or a plain file such as MP4. The player sizes itself to the width of its container at 16:9 and never changes size on its own, so nothing on the page shifts when a video loads. For other shapes, set `--qyro-aspect-ratio` (for example `2.4` for a widescreen film) and the picture fills it.
 
 ## Attributes
 
@@ -58,6 +58,7 @@ Set these in HTML or with `setAttribute`. Most have a matching property (see [Ja
 | `start` | seconds | Where playback starts. |
 | `live` | boolean | Treat the stream as live. Live streams are found on their own; use this only when a stream doesn't say so. |
 | `thumbnails` | URL | A WebVTT storyboard for the seek preview. See [Thumbnails](https://ebnsina.github.io/qyro/docs/thumbnails.md). |
+| `chapters` | URL | A WebVTT chapters file; a `<track kind="chapters">` child works too. See [Chapters](https://ebnsina.github.io/qyro/docs/chapters.md). |
 | `autoadvance` | `"false"` to turn off | With a playlist, plays the next video when one ends. On by default. |
 | `next-at` | seconds | With a playlist, shows the Up next card from this time (say, when the credits start) and moves on ten seconds later. Without it, the card shows in the last ten seconds. |
 | `glass` | `"light"` | Milky glass with dark glyphs, for bright videos. Dark glass is the default. |
@@ -110,6 +111,8 @@ player.play();
 | `error` | `PlayerError \| null` | The current error, if any. |
 | `video` | `HTMLVideoElement` | The video inside the player. |
 | `ready` | `Promise` | Resolves once the playback engine has started. |
+| `chapters` | `Chapter[]` | `{ start, end?, title }` in seconds, sorted. Set them, or `null` for the file's. See [Chapters](https://ebnsina.github.io/qyro/docs/chapters.md). |
+| `chapter` | `Chapter \| null` | The chapter playing now. Read only. |
 | `engine` | object or `null` | Advanced escape hatch: the playback engine itself. Most sites never need it. |
 
 
@@ -125,6 +128,7 @@ player.play();
 | `addTextTrack(src, language, label?, kind?)` | Adds a caption file. Resolves when it's loaded. |
 | `toggleFullscreen()` | Enters or leaves full screen (native full screen on iPhone). |
 | `togglePictureInPicture()` | Enters or leaves picture in picture. |
+| `seekToChapter(index)` | Seeks to the start of a chapter, from 0. |
 | `retry()` | Loads again after an error, from where it stopped. |
 
 
@@ -194,6 +198,11 @@ player.addEventListener('qualitychange', (e) => {
 ```js
 player.addEventListener('itemchange', (e) => highlightEpisode(e.detail.index));
 ```
+
+
+### chapterchange
+
+Fires when playback moves into another chapter, with `detail.index` and `detail.chapter` (`-1` and `null` outside any).
 
 
 ### error
@@ -316,4 +325,4 @@ If the SDK can't load, the video plays on and the console says what went wrong.
 
 ## More
 
-Full docs as Markdown: https://ebnsina.github.io/qyro/llms-full.txt. Captions: https://ebnsina.github.io/qyro/docs/captions.md. Thumbnails: https://ebnsina.github.io/qyro/docs/thumbnails.md. Live: https://ebnsina.github.io/qyro/docs/live.md. Theming tokens: https://ebnsina.github.io/qyro/docs/theming.md.
+Full docs as Markdown: https://ebnsina.github.io/qyro/llms-full.txt. Captions: https://ebnsina.github.io/qyro/docs/captions.md. Thumbnails: https://ebnsina.github.io/qyro/docs/thumbnails.md. Chapters: https://ebnsina.github.io/qyro/docs/chapters.md. Live: https://ebnsina.github.io/qyro/docs/live.md. Theming tokens: https://ebnsina.github.io/qyro/docs/theming.md.

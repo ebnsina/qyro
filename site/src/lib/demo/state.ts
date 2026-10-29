@@ -10,14 +10,16 @@ export interface Source {
 	poster?: string;
 	/** Only Big Buck Bunny's streams have a storyboard made for them. */
 	storyboard?: string;
+	/** A WebVTT chapters file, shown by the Course template. */
+	chapters?: string;
 	live?: boolean;
 	/** The picture's shape, given up front so the player is the right size before the video loads. */
 	aspect?: string;
 }
 
 export const sources: Source[] = [
-	{ id: 'bbb-hls', label: 'Big Buck Bunny (HLS)', src: media.bbb.hls, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard },
-	{ id: 'bbb-dash', label: 'Big Buck Bunny (DASH)', src: media.bbb.dash, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard },
+	{ id: 'bbb-hls', label: 'Big Buck Bunny (HLS)', src: media.bbb.hls, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard, chapters: media.bbb.chapters },
+	{ id: 'bbb-dash', label: 'Big Buck Bunny (DASH)', src: media.bbb.dash, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard, chapters: media.bbb.chapters },
 	{ id: 'bbb-mp4', label: 'Big Buck Bunny clip (MP4)', src: '/media/bbb/clip.mp4', title: 'Big Buck Bunny clip', poster: media.bbb.poster },
 	{ id: 'sintel', label: 'Sintel (HLS)', src: media.sintel.hls, title: media.sintel.title, poster: media.sintel.poster, aspect: '2.35' },
 	{ id: 'tos', label: 'Tears of Steel (HLS)', src: media.tos.hls, title: media.tos.title, poster: media.tos.poster, aspect: '2.4' },
@@ -120,6 +122,9 @@ export function serialize(s: State): string {
 }
 
 export const sourceOf = (s: State) => sources.find((x) => x.id == s.source) ?? sources[0];
+
+/** The chapters track for this state: the Course template, on a video that has chapters. */
+export const chaptersOf = (s: State) => (s.t == 'course' ? sourceOf(s).chapters : undefined);
 
 /** The attributes on <qyro-player> for this state; `asset` makes site paths absolute for the page. */
 export function playerAttrs(s: State, asset: (p: string) => string = (p) => p): Record<string, string | true> {

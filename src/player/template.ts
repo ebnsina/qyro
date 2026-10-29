@@ -22,11 +22,12 @@ export const template = `
 	<div class="dock" part="controls">
 		<div class="timeline glass" part="timeline">
 			<span class="current" part="time current-time" aria-hidden="true">0:00</span>
+			<span class="chapter-now" part="current-chapter" aria-hidden="true"></span>
 			<div class="scrubber slider" part="scrubber" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0 seconds">
 			<div class="track" part="track"><div class="fill buffered"></div><div class="fill progress" part="progress"></div></div>
 			<div class="rail marker-rail" aria-hidden="true"><div class="marker"></div></div>
 			<div class="rail thumb-rail"><div class="thumb" part="thumb"></div></div>
-			<div class="rail bubble-rail" aria-hidden="true"><div class="bubble glass" part="preview"><div class="shot" part="preview-image"></div><span class="bubble-time">0:00</span></div></div>
+			<div class="rail bubble-rail" aria-hidden="true"><div class="bubble glass" part="preview"><div class="shot" part="preview-image"></div><span class="bubble-label"><span class="bubble-chapter"></span><span class="bubble-time">0:00</span></span></div></div>
 			</div>
 			<button class="duration" part="time duration" aria-label="Show time remaining">0:00</button>
 			<button class="live glass" part="live-badge" aria-label="Go to live"><span class="dot"></span><span class="live-label">Live</span></button>
@@ -44,6 +45,7 @@ export const template = `
 			<button class="live live-row glass" part="live-badge" aria-label="Go to live"><span class="dot"></span><span class="live-label">Live</span></button>
 			<span class="spacer"></span>
 			<div class="cap glass group" part="capsule">
+				<button class="btn toc" part="chapters-button" aria-label="Chapters" aria-haspopup="dialog" aria-expanded="false" aria-controls="chapters" hidden>${icons.chapters}</button>
 				<button class="btn list" part="playlist-button" aria-label="Up next" aria-haspopup="dialog" aria-expanded="false" aria-controls="upnext" hidden>${icons.playlist}</button>
 				<button class="btn cc" part="captions-button" aria-label="Captions" aria-pressed="false">${icons.captions}</button>
 				<button class="btn gear" part="settings-button" aria-label="Settings" aria-haspopup="menu" aria-expanded="false" aria-controls="settings">${icons.settings}</button>
@@ -65,6 +67,10 @@ export const template = `
 	<div class="panel glass upnext" id="upnext" part="playlist" role="dialog" aria-label="Up next" inert>
 		<div class="panel-head"><span>Up next</span><button class="panel-close" aria-label="Close up next">${icons.close}</button></div>
 		<ol class="upnext-list"></ol>
+	</div>
+	<div class="panel glass chapters" id="chapters" part="chapters" role="dialog" aria-label="Chapters" inert>
+		<div class="panel-head"><span>Chapters</span><button class="panel-close" aria-label="Close chapters">${icons.close}</button></div>
+		<ol class="chapter-list"></ol>
 	</div>
 	<div class="next-card glass" part="next-card" role="status" inert>
 		<p class="next-label">Up next <span class="next-count"></span></p>

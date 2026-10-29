@@ -25,6 +25,7 @@ import RefreshCcwIcon from '@hugeicons/core-free-icons/RefreshCcwIcon';
 import PlayListIcon from '@hugeicons/core-free-icons/PlayListIcon';
 import PreviousIcon from '@hugeicons/core-free-icons/PreviousIcon';
 import NextIcon from '@hugeicons/core-free-icons/NextIcon';
+import LeftToRightListBulletIcon from '@hugeicons/core-free-icons/LeftToRightListBulletIcon';
 
 type IconNode = readonly (readonly [string, Record<string, string | number>])[];
 
@@ -72,4 +73,5 @@ export const icons = {
 	playlist: svg(PlayListIcon as IconNode),
 	previous: svg(PreviousIcon as IconNode, true),
 	nextItem: svg(NextIcon as IconNode, true),
+	chapters: svg(LeftToRightListBulletIcon as IconNode),
 };

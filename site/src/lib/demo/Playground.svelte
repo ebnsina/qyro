@@ -13,7 +13,7 @@
 	import { isDark } from '#lib/sinaui/ui/theme.js';
 	import ThemeControls from './ThemeControls.svelte';
 	import { snippet, TABS, type Tab } from './code.js';
-	import { CAPTIONS, initial, parse, playerAttrs, serialize, sourceOf, sources, styleOf, themeVars, type Settings, type State } from './state.js';
+	import { CAPTIONS, chaptersOf, initial, parse, playerAttrs, serialize, sourceOf, sources, styleOf, themeVars, type Settings, type State } from './state.js';
 	import { templates } from './templates.js';
 	import type { PlaygroundContext, PlayerEl } from './context.js';
 	import { SITE_URL, file } from '#lib/site/links.js';
@@ -115,7 +115,7 @@
 
 	// ---------- Events log: what the player fires, as it fires ----------
 
-	const EVENTS = ['loadedmetadata', 'play', 'playing', 'pause', 'waiting', 'seeking', 'seeked', 'ended', 'ratechange', 'volumechange', 'qualitychange', 'error', 'enterpictureinpicture', 'leavepictureinpicture'];
+	const EVENTS = ['loadedmetadata', 'play', 'playing', 'pause', 'waiting', 'seeking', 'seeked', 'ended', 'ratechange', 'volumechange', 'qualitychange', 'chapterchange', 'error', 'enterpictureinpicture', 'leavepictureinpicture'];
 	let log = $state<{ id: number; at: string; name: string; detail: string }[]>([]);
 	let seq = 0;
 	// Times count from the first event, not the playhead: live streams sit on a clock decades long.
@@ -132,6 +132,7 @@
 		const p = e.target as PlayerEl & { volume: number; playbackRate: number };
 		const d = (e as CustomEvent).detail;
 		if (e.type == 'qualitychange') return `${d.height}p · ${(d.bitrate / 1e6).toFixed(2)} Mbps${d.auto ? ' · Auto' : ''}`;
+		if (e.type == 'chapterchange') return d.chapter?.title ?? 'between chapters';
 		if (e.type == 'error') return `${d?.kind ?? 'unknown'}${d?.code ? ` · code ${d.code}` : ''}`;
 		if (e.type == 'volumechange') return p.muted ? 'muted' : `volume ${Math.round(p.volume * 100)}%`;
 		if (e.type == 'ratechange') return `speed ${p.playbackRate}×`;
@@ -177,6 +178,7 @@
 				<div class="pg-player">
 					<qyro-player bind:this={player} {...attrs}>
 						{#if s.captions}<track kind="subtitles" srclang="en" label="English" src={file(CAPTIONS)} default />{/if}
+						{#if chaptersOf(s)}<track kind="chapters" src={file(chaptersOf(s)!)} />{/if}
 					</qyro-player>
 				</div>
 				{#if template.side}
@@ -361,9 +363,9 @@
 		z-index: 1;
 	}
 
-	/* Beside the player when there's room: course chapters, the episode list, product details. */
+	/* Beside the player when there's room: the episode list, product details. */
 	@container frame (min-width: 760px) {
-		.pg-layout:is([data-t='course'], [data-t='playlist']) {
+		.pg-layout[data-t='playlist'] {
 			grid-template-columns: minmax(0, 1fr) 16rem;
 			grid-template-areas: 'player aside' 'after aside';
 		}

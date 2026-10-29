@@ -145,3 +145,32 @@ for (const width of [300, 320, 360, 414]) {
 		for (let i = 1; i < caps.length; i++) expect(caps[i].l, `${caps[i].c} overlaps`).toBeGreaterThanOrEqual(caps[i - 1].r);
 	});
 }
+
+test('chapters open with a tap, as a bottom sheet on phones, and a tap on one seeks there', async ({ page }) => {
+	const player = await playing(page, '&loop&chapters=/test/fixtures/chapters.vtt');
+	await player.locator('.toc').tap();
+	const panel = player.getByRole('dialog', { name: 'Chapters' });
+	await expect(panel).toBeVisible();
+	const box = (await player.boundingBox())!;
+	const toc = (await player.locator('.toc').boundingBox())!;
+	expect(toc.height).toBeGreaterThanOrEqual(44);
+	await page.waitForTimeout(500); // the panel slides into place
+	const sheet = (await panel.boundingBox())!;
+	expect(sheet.x).toBeGreaterThanOrEqual(box.x);
+	expect(sheet.x + sheet.width).toBeLessThanOrEqual(box.x + box.width + 0.5);
+	if (box.width <= 440) {
+		// Edge to edge along the bottom, over the controls.
+		expect(sheet.width).toBeGreaterThan(box.width - 30);
+		expect(box.y + box.height - (sheet.y + sheet.height)).toBeLessThan(16);
+	}
+	await panel.getByRole('button', { name: /A butterfly/ }).tap();
+	await expect(panel).toBeHidden();
+	await expect.poll(async () => (await state(player)).time).toBeGreaterThanOrEqual(8);
+	expect((await state(player)).paused).toBe(false);
+	// A tap outside closes it without pausing.
+	await player.locator('.toc').tap();
+	await expect(panel).toBeVisible();
+	await page.touchscreen.tap(box.x + 30, box.y + 30);
+	await expect(panel).toBeHidden();
+	expect((await state(player)).paused).toBe(false);
+});

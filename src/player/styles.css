@@ -800,6 +800,40 @@ video::-webkit-media-controls {
 	display: none;
 }
 
+/* The chapter playing, by the time when there's room. Every title sits in one grid cell, so the slot is
+   as wide as the longest from the start and the seek bar never resizes as chapters change. */
+.chapter-now {
+	display: none;
+	flex: none;
+	grid-template-columns: minmax(0, 1fr);
+	max-width: 8rem;
+	margin-left: -2px;
+	color: rgb(255 255 255 / 0.72);
+	font-size: var(--_fs-meta);
+	font-weight: 500;
+	line-height: 1;
+	text-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
+}
+
+.chapter-now span {
+	grid-area: 1 / 1;
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	visibility: hidden;
+}
+
+.chapter-now span[data-on] {
+	visibility: visible;
+}
+
+@container (min-width: 640px) {
+	.root[data-has-chapters]:not([data-live]) .chapter-now {
+		display: grid;
+	}
+}
+
 /* ---------- Live pill ---------- */
 
 .live {
@@ -1104,16 +1138,50 @@ video::-webkit-media-controls {
 	display: block;
 }
 
-.bubble[data-shot] .bubble-time {
+.bubble-label {
+	display: grid;
+	justify-items: center;
+	gap: 3px;
+}
+
+/* The chapter's title above the time; a long one is cut short rather than widening the preview. */
+.bubble-chapter {
+	display: none;
+	max-width: 14rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-family: var(--_font);
+	font-size: var(--_fs-meta);
+	font-weight: 600;
+	line-height: 1.25;
+}
+
+.bubble[data-chapter] .bubble-chapter {
+	display: block;
+}
+
+.bubble[data-chapter]:not([data-shot]) {
+	padding: 6px 12px;
+	border-radius: 14px;
+}
+
+.bubble[data-shot] .bubble-label {
 	position: absolute;
 	inset: auto 0 0;
-	padding: 14px 0 6px;
+	padding: 14px 8px 6px;
 	border-radius: 0 0 var(--_panel-radius) var(--_panel-radius);
 	background: linear-gradient(to top, rgb(0 0 0 / 0.6), transparent);
 	color: #fff;
-	font-size: 11.5px;
 	text-align: center;
 	text-shadow: 0 1px 2px rgb(0 0 0 / 0.6);
+}
+
+.bubble[data-shot] .bubble-chapter {
+	max-width: 100%;
+}
+
+.bubble[data-shot] .bubble-time {
+	font-size: 11.5px;
 }
 
 .scrubber[data-hovering] .bubble,
@@ -1402,17 +1470,22 @@ video::-webkit-media-controls {
 	opacity: 1;
 }
 
-/* Up next: a list that slides in from the right inside the player (a bottom sheet on phones) */
-.upnext {
+/* Up next and Chapters: lists that slide in from the right inside the player (a bottom sheet on phones) */
+.upnext,
+.chapters {
 	left: auto;
+	top: auto;
 	right: var(--_gap);
 	bottom: calc(var(--_gap) + 2 * var(--_control) + 16px);
 	width: min(320px, calc(100% - 2 * var(--_gap)));
+	/* As tall as its rows, up to the top inset; longer lists scroll. */
+	max-height: calc(100% - 3 * var(--_gap) - 2 * var(--_control) - 16px);
 	transform: translateX(24px) scale(0.98);
 	transform-origin: right center;
 }
 
-.root[data-upnext] .upnext {
+.root[data-upnext] .upnext,
+.root[data-chapters] .chapters {
 	visibility: visible;
 	transition-delay: 0s;
 	opacity: 1;
@@ -1420,7 +1493,8 @@ video::-webkit-media-controls {
 	filter: none;
 }
 
-.upnext-list {
+.upnext-list,
+.chapter-list {
 	margin: 0 -8px;
 	padding: 0;
 	list-style: none;
@@ -1438,11 +1512,13 @@ video::-webkit-media-controls {
 	font-size: var(--_fs-body);
 }
 
-.upnext-list button:focus-visible {
+.upnext-list button:focus-visible,
+.chapter-list button:focus-visible {
 	outline-offset: -2px;
 }
 
-.upnext-list button[aria-current='true'] {
+.upnext-list button[aria-current='true'],
+.chapter-list button[aria-current='true'] {
 	background: rgb(255 255 255 / 0.13);
 	font-weight: 600;
 }
@@ -1475,6 +1551,39 @@ video::-webkit-media-controls {
 	font-family: var(--_mono);
 	font-size: var(--_fs-meta);
 	opacity: 0.6;
+}
+
+/* Each chapter: its start time, then its title, which may wrap. */
+.chapter-list button {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	align-items: baseline;
+	align-content: center;
+	gap: 12px;
+	width: 100%;
+	min-height: var(--_item-h);
+	padding: 7px 10px;
+	border-radius: var(--_r-inner);
+	text-align: left;
+	font-size: var(--_fs-body);
+	transition: background 160ms;
+}
+
+@media (hover: hover) {
+	.chapter-list button:hover {
+		background: rgb(255 255 255 / 0.08);
+	}
+}
+
+.chapter-list .at {
+	font-family: var(--_mono);
+	font-size: var(--_fs-meta);
+	font-variant-numeric: tabular-nums;
+	opacity: 0.6;
+}
+
+.chapter-list [aria-current='true'] .at {
+	opacity: 0.9;
 }
 
 /* Near the end: what plays next, with a countdown and a way out. */
@@ -1548,13 +1657,14 @@ video::-webkit-media-controls {
 		pointer-events: none;
 	}
 
-	.upnext {
+	.upnext,
+	.chapters {
 		left: var(--_gap);
 		right: var(--_gap);
 		width: auto;
 		bottom: var(--_gap);
 		top: auto;
-		max-height: 70%;
+		max-height: calc(100% - 2 * var(--_gap));
 		transform: translateY(24px);
 		transform-origin: bottom center;
 	}

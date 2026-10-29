@@ -1,3 +1,12 @@
+const VTT_TIME = /(?:(\d+):)?(\d{1,2}):(\d{2}(?:\.\d+)?)/;
+
+/** Reads a WebVTT timestamp such as `01:02.500` or `1:00:02.500`; NaN when there is none. */
+export function vttSeconds(s: string): number {
+	const m = VTT_TIME.exec(s);
+	if (!m) return NaN;
+	return Number(m[1] ?? 0) * 3600 + Number(m[2]) * 60 + Number(m[3]);
+}
+
 const whole = (n: number) => (Number.isFinite(n) ? Math.max(0, Math.floor(n)) : 0);
 
 /**
