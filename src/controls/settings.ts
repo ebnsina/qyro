@@ -83,6 +83,25 @@ export class Settings {
 	}
 
 	#draw(): void {
+		const pages = this.#main.parentElement!;
+		const from = pages.offsetHeight;
+		this.#drawPages();
+		// The sheet fits the page on show and eases between heights; CSS can't animate to an auto height.
+		pages.style.height = '';
+		const to = pages.offsetHeight;
+		if (!from || from == to || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		pages.style.height = `${from}px`;
+		void pages.offsetHeight;
+		pages.style.height = `${to}px`;
+		const done = (e: TransitionEvent) => {
+			if (e.target != pages || e.propertyName != 'height') return;
+			pages.style.height = '';
+			pages.removeEventListener('transitionend', done);
+		};
+		pages.addEventListener('transitionend', done);
+	}
+
+	#drawPages(): void {
 		this.#main.innerHTML = this.visible().map(row).join('');
 		const m = this.#stack.at(-1);
 		this.#main.dataset.state = m ? 'left' : '';

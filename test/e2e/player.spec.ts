@@ -178,6 +178,21 @@ test('settings only lists rows with a real choice', async ({ page }) => {
 	await expect(player.locator('.sheet .main').getByRole('menuitem')).toHaveText([/Quality/, /Speed/]);
 });
 
+test('settings: the sheet is as tall as its rows, and every panel uses the same type size', async ({ page }) => {
+	const player = await open(page);
+	await play(player);
+	await player.locator('.gear').click();
+	await page.waitForTimeout(500);
+	const rows = player.locator('.sheet .main .item');
+	const [sheet, last] = [(await player.locator('.sheet').boundingBox())!, (await rows.last().boundingBox())!];
+	// No empty space under the last row beyond the panel's own padding.
+	expect(sheet.y + sheet.height - (last.y + last.height)).toBeLessThan(12);
+	await player.locator('.gear').click();
+	await player.click({ button: 'right' });
+	const size = (l: ReturnType<Page['locator']>) => l.evaluate((e) => getComputedStyle(e).fontSize);
+	expect(await size(player.locator('.menu .item').first())).toBe(await size(rows.first()));
+});
+
 for (const width of [1280, 375]) {
 	test(`timeline: times sit on the scrubber's line and never resize it (${width}px)`, async ({ page }) => {
 		await page.setViewportSize({ width, height: 800 });
