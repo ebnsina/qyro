@@ -16,7 +16,7 @@ export interface SeyrOptions {
 	key: string;
 	host?: string;
 	video: SeyrMeta;
-	player: { name: string; version: string };
+	player: { name: string; software: string; version: string };
 }
 
 export interface SeyrView {

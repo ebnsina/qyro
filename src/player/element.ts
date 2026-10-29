@@ -272,7 +272,7 @@ export class QyroPlayer extends HTMLElement {
 		try {
 			const sdk = await loadSeyr(host);
 			if (this.#player != player) return;
-			this.#seyr = sdk.monitor(sdk.shaka(player, this.#video), { key, host, video, player: { name: 'Qyro', version } });
+			this.#seyr = sdk.monitor(sdk.shaka(player, this.#video), { key, host, video, player: { name: 'Qyro', software: 'qyro', version } });
 		} catch (e) {
 			// Analytics must never stop playback, so this is logged and the video plays on.
 			console.warn('qyro: Seyr analytics did not start; check seyr-key and seyr-host', e);
