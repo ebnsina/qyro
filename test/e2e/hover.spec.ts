@@ -107,3 +107,18 @@ test('controls stay while the pointer rests on them, and hide once it leaves', a
 	await expect.poll(() => idle(player), { timeout: 5000 }).toBe(true);
 });
 
+
+test('volume: the glass bead stays whole inside its capsule at 0 and at full volume', async ({ page }) => {
+	const player = await playing(page);
+	const inside = async () => {
+		const [pop, bead] = await Promise.all([player.locator('.volume-pop').boundingBox(), player.locator('.volume-slider .thumb').boundingBox()]);
+		return bead!.x >= pop!.x - 0.5 && bead!.x + bead!.width <= pop!.x + pop!.width + 0.5;
+	};
+	for (const level of [0, 1]) {
+		await player.evaluate((p: any, v) => ((p.volume = v), (p.muted = v == 0)), level);
+		await player.locator('.mute').hover();
+		await expect(player.locator('.volume-pop')).toHaveCSS('opacity', '1');
+		await page.waitForTimeout(500); // the capsule finishes growing
+		expect(await inside()).toBe(true);
+	}
+});

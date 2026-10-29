@@ -11,11 +11,14 @@ export const media = {
 	sintel: {
 		title: 'Sintel',
 		hls: 'https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8',
+		poster: '/media/sintel/poster.jpg',
 		credit: 'Sintel © Blender Foundation, CC BY 3.0',
 	},
 	tos: {
 		title: 'Tears of Steel',
 		hls: 'https://test-streams.mux.dev/tos_ismc/main.m3u8',
+		// A frame at 1:00, where the hero starts, so the poster hands over to the video without a jump.
+		poster: '/media/tos/poster.jpg',
 		credit: 'Tears of Steel © Blender Foundation, CC BY 3.0',
 	},
 	live: {

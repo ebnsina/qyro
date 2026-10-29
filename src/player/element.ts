@@ -420,6 +420,7 @@ export class QyroPlayer extends HTMLElement {
 		this.#ui.style.setProperty('--_cc-bg', CAPTION_BACKGROUNDS[s.background]?.value ?? CAPTION_BACKGROUNDS[1].value);
 		this.#ui.style.setProperty('--_cc-color', CAPTION_COLORS[s.color]?.value ?? '#fff');
 		this.#ui.toggleAttribute('data-cc-outline', s.background == 0);
+		this.#ui.toggleAttribute('data-cc-glass', s.background == 1);
 	}
 
 	// ---------- Public API ----------
