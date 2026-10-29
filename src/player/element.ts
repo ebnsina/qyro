@@ -44,6 +44,16 @@ export const MEDIA_EVENTS = [
 	'leavepictureinpicture',
 ] as const;
 
+/** Detail of the `qualitychange` event. */
+export interface QualityChange {
+	height: number;
+	width: number;
+	/** Bits per second. */
+	bitrate: number;
+	/** True when Auto picked it. */
+	auto: boolean;
+}
+
 const IDLE_MS = 2600;
 const DOUBLE_TAP_MS = 280;
 const LIVE_EDGE_S = 6;
@@ -173,6 +183,13 @@ export class QyroPlayer extends HTMLElement {
 			this.#onKey(e as KeyboardEvent);
 		});
 		this.#listen(this, 'focusin', () => this.#activity());
+		// <track> children added or removed later: load again from the same moment, playing if it was.
+		const tracks = new MutationObserver((changes) => {
+			const touched = changes.some((c) => [...c.addedNodes, ...c.removedNodes].some((n) => n.nodeName == 'TRACK'));
+			if (touched && this.#loadedSrc) void this.#load(this.#video.currentTime, !this.#video.paused);
+		});
+		tracks.observe(this, { childList: true });
+		this.#teardown.push(() => tracks.disconnect());
 		this.#start();
 	}
 
@@ -280,7 +297,7 @@ export class QyroPlayer extends HTMLElement {
 		});
 	}
 
-	async #load(startAt?: number): Promise<void> {
+	async #load(startAt?: number, resume = startAt !== undefined): Promise<void> {
 		const player = this.#player!;
 		const { src, start } = splitStart(this.src);
 		if (src == this.#loadedSrc && startAt === undefined) return;
@@ -314,7 +331,7 @@ export class QyroPlayer extends HTMLElement {
 			await this.#addTracks(player);
 			await this.#loadThumbs();
 			this.#refresh();
-			if (this.autoplay || startAt !== undefined) this.play().catch(() => {});
+			if (this.autoplay || resume) this.play().catch(() => {});
 		} catch (e) {
 			if (id != this.#loadId || (e as ShakaErrorLike).code == LOAD_INTERRUPTED) return;
 			this.#fail(e);
@@ -638,6 +655,18 @@ export class QyroPlayer extends HTMLElement {
 			if (detail?.severity == CRITICAL) this.#fail(detail);
 		});
 		for (const t of ['trackschanged', 'variantchanged', 'adaptation', 'textchanged', 'abrstatuschanged', 'audiotrackschanged']) on(t, () => this.#refresh());
+		// One public event for any rendition change, picked by the viewer or by Auto.
+		let last = '';
+		const quality = () => {
+			const t = p.getVariantTracks().find((v) => v.active);
+			if (!t?.height) return;
+			const detail: QualityChange = { height: t.height, width: t.width ?? 0, bitrate: t.bandwidth, auto: p.getConfiguration().abr.enabled };
+			const key = `${detail.height}|${detail.bitrate}|${detail.auto}`;
+			if (key == last) return;
+			last = key;
+			this.dispatchEvent(new CustomEvent<QualityChange>('qualitychange', { detail }));
+		};
+		for (const t of ['adaptation', 'variantchanged', 'trackschanged', 'abrstatuschanged']) on(t, quality);
 	}
 
 	#wireControls(): void {

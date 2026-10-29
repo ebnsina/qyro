@@ -1,48 +1,40 @@
 <script lang="ts">
-	import { file, media } from '#lib/site/links.js';
+	import { getContext } from 'svelte';
+	import type { PlaygroundContext } from './context.js';
 
+	const ctx = getContext<PlaygroundContext>('playground');
 	const episodes = [
-		{ id: 'bbb', title: media.bbb.title, src: media.bbb.hls, poster: media.bbb.poster, thumbnails: file(media.bbb.storyboard), length: '10:34' },
-		{ id: 'sintel', title: media.sintel.title, src: media.sintel.hls, length: '14:48' },
-		{ id: 'tos', title: media.tos.title, src: media.tos.hls, length: '12:14' },
+		{ source: 'bbb-hls', title: 'Big Buck Bunny', length: '10:34' },
+		{ source: 'sintel', title: 'Sintel', length: '14:48' },
+		{ source: 'tos', title: 'Tears of Steel', length: '12:14' },
 	];
-	let index = $state(0);
-	const now = $derived(episodes[index]);
+	const index = $derived(Math.max(0, episodes.findIndex((e) => e.source == ctx.state.source)));
 	const next = $derived(episodes[index + 1]);
-	let player = $state<HTMLElement & { play(): Promise<void> }>();
 
-	// Changing src loads the next episode; autoplay carries on from the one that ended.
-	function play(i: number) {
-		index = i;
-	}
+	// The list drives the one player: choosing an episode swaps its source, and the end plays the next.
+	$effect(() => {
+		const p = ctx.player;
+		if (!p) return;
+		const ended = () => next && ctx.set({ source: next.source, autoplay: true });
+		p.addEventListener('ended', ended);
+		return () => p.removeEventListener('ended', ended);
+	});
 </script>
 
-<div class="playlist">
-	<div>
-		<qyro-player bind:this={player} src={now.src} poster={now.poster} title={now.title} thumbnails={now.thumbnails} autoplay={index > 0} onended={() => next && play(index + 1)}></qyro-player>
-		{#if next}<p class="playlist-next">Up next: {next.title}</p>{/if}
-	</div>
-	<ol aria-label="Episodes">
-		{#each episodes as ep, i (ep.id)}
-			<li>
-				<button aria-current={i == index ? 'true' : undefined} onclick={() => play(i)}>
-					<span class="n">{i + 1}</span>
-					<span class="t">{ep.title}</span>
-					<span class="l">{ep.length}</span>
-				</button>
-			</li>
-		{/each}
-	</ol>
-</div>
+<div class="side-after">{#if next}<p class="next">Up next: {next.title}</p>{/if}</div>
+<ol class="side-aside" aria-label="Episodes">
+	{#each episodes as ep, i (ep.source)}
+		<li>
+			<button aria-current={i == index ? 'true' : undefined} onclick={() => ctx.set({ source: ep.source })}>
+				<span class="n">{i + 1}</span><span class="t">{ep.title}</span><span class="l">{ep.length}</span>
+			</button>
+		</li>
+	{/each}
+</ol>
 
 <style>
-	.playlist {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) 18rem;
-		gap: 2rem;
-	}
-
-	.playlist-next {
+	.next {
+		margin: 0;
 		color: var(--ui-muted);
 	}
 
@@ -82,11 +74,5 @@
 
 	.t {
 		flex: 1;
-	}
-
-	@media (max-width: 860px) {
-		.playlist {
-			grid-template-columns: minmax(0, 1fr);
-		}
 	}
 </style>

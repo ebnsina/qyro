@@ -223,3 +223,15 @@ for (const dpr of [1, 2, 3]) {
 		});
 	});
 }
+test('qualitychange fires with the new resolution when the viewer picks one', async ({ page }) => {
+	const player = await open(page);
+	await player.evaluate((p: any) => {
+		p.changes = [];
+		p.addEventListener('qualitychange', (e: CustomEvent) => p.changes.push(e.detail));
+	});
+	await play(player);
+	await player.locator('.gear').click();
+	await player.getByRole('menuitem', { name: /Quality/ }).click();
+	await player.getByRole('menuitemradio', { name: '360p' }).click();
+	await expect.poll(() => player.evaluate((p: any) => p.changes.at(-1))).toMatchObject({ height: 360, auto: false });
+});

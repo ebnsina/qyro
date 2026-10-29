@@ -152,6 +152,17 @@ player.addEventListener('timeupdate', () => saveProgress(player.currentTime));
 ```
 
 
+### qualitychange
+
+Fires when the picture changes resolution, whether the viewer chose it or Auto did:
+
+```js
+player.addEventListener('qualitychange', (e) => {
+	const { height, width, bitrate, auto } = e.detail; // e.g. 720, 1280, 2149280, true
+});
+```
+
+
 ### error
 
 When playback fails, the viewer sees a plain message and a Try again button. Your code gets an `error` event with the details:
