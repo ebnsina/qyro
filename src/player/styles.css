@@ -937,6 +937,18 @@ video::-webkit-media-controls {
 	top: calc(var(--_gap) + 30px);
 }
 
+/* Inside the seek capsule the pill is just its dot and label: one glass layer, not two. */
+.timeline .live.glass {
+	background: none;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+	box-shadow: none;
+}
+
+.timeline .live.glass::before {
+	display: none;
+}
+
 /* The pill fits what it says; its width animates, so the bar eases rather than jumps. */
 .timeline .live {
 	justify-content: center;
