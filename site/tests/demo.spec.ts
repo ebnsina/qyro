@@ -74,6 +74,18 @@ test('event times count from the first event and fit their column, even on live'
 	}
 });
 
+test('the player keeps its size from first paint to playback, at the film\'s own shape', async ({ page }) => {
+	await page.goto('/demo?t=standard&src=tos');
+	const box = () => player(page).evaluate((p: any) => p.getBoundingClientRect().height);
+	const before = await box();
+	await ready(page);
+	await player(page).evaluate((p: any) => ((p.muted = true), p.play()));
+	await page.waitForTimeout(1500);
+	expect(Math.abs((await box()) - before)).toBeLessThan(0.5);
+	const r = await player(page).evaluate((p: any) => p.getBoundingClientRect().width / p.getBoundingClientRect().height);
+	expect(r).toBeCloseTo(2.4, 1);
+});
+
 test('old demo pages open the playground on that template', async ({ page }) => {
 	await page.goto('/demo/live');
 	await expect(page).toHaveURL(/\/demo\?t=live/);

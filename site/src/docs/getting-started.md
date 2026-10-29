@@ -35,7 +35,7 @@ Without a bundler, one script tag gives you everything in a single file:
 ></qyro-player>
 ```
 
-`src` takes HLS (`.m3u8`), DASH (`.mpd`) or a plain file such as MP4. The player sizes itself to the width of its container at 16:9; set `--qyro-aspect-ratio` to change that.
+`src` takes HLS (`.m3u8`), DASH (`.mpd`) or a plain file such as MP4. The player sizes itself to the width of its container at 16:9 and never changes size on its own, so nothing on the page shifts when a video loads. For other shapes, set `--qyro-aspect-ratio` (for example `2.4` for a widescreen film) and the picture fills it.
 
 ## Check it works
 

@@ -112,7 +112,6 @@ export class QyroPlayer extends HTMLElement {
 	#timeWidth = '';
 	#liveLabel = '';
 	#wasLive = false;
-	#aspectSet = false;
 	#playlist: PlaylistItem[] = [];
 	#index = -1;
 	#playNext = false;
@@ -327,7 +326,6 @@ export class QyroPlayer extends HTMLElement {
 		this.#clearError();
 		this.#flag('fresh', true);
 		this.#flag('paused', true);
-		this.#aspectSet = false;
 		this.#flag('live', false);
 		this.#idle.hold();
 		this.#settings.close();
@@ -656,11 +654,6 @@ export class QyroPlayer extends HTMLElement {
 		v.addEventListener('timeupdate', () => this.#paint());
 		v.addEventListener('loadedmetadata', () => {
 			this.#paint();
-			// Take the shape from the first picture of each video; later quality changes keep it.
-			if (!this.#aspectSet && v.videoWidth && v.videoHeight) {
-				this.#aspectSet = true;
-				this.style.setProperty('--_media-aspect', `${v.videoWidth} / ${v.videoHeight}`);
-			}
 			this.#fit();
 		});
 		v.addEventListener('resize', () => this.#fit());
