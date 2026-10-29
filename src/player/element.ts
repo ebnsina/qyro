@@ -1351,7 +1351,12 @@ export class QyroPlayer extends HTMLElement {
 			pill.style.width = `${from}px`;
 			void pill.offsetWidth;
 			pill.style.width = `${to}px`;
-			pill.addEventListener('transitionend', () => (pill.style.width = ''), { once: true });
+			const done = (e: TransitionEvent) => {
+				if (e.target != pill || e.propertyName != 'width') return;
+				pill.style.width = '';
+				pill.removeEventListener('transitionend', done);
+			};
+			pill.addEventListener('transitionend', done);
 		});
 	}
 
