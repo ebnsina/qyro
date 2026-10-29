@@ -36,6 +36,12 @@ describe('actionForKey', () => {
 		expect(key('?', { shiftKey: true })).toEqual({ type: 'show-shortcuts' });
 	});
 
+	it('moves through a playlist with Shift+N and Shift+P', () => {
+		expect(key('N', { shiftKey: true })).toEqual({ type: 'next' });
+		expect(key('P', { shiftKey: true })).toEqual({ type: 'previous' });
+		expect(key('n')).toBeNull();
+	});
+
 	it('leaves other keys and browser shortcuts alone', () => {
 		expect(key('x')).toBeNull();
 		expect(key('Tab')).toBeNull();

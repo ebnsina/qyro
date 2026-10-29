@@ -32,13 +32,18 @@ export const template = `
 			<button class="live glass" part="live-badge" aria-label="Go to live"><span class="dot"></span><span class="live-label">Live</span></button>
 		</div>
 		<div class="row">
-			<div class="cap glass" part="capsule"><button class="btn play" part="play-button" aria-label="Play">${morph}</button></div>
+			<div class="cap glass" part="capsule">
+				<button class="btn prev" part="previous-button" aria-label="Previous video" hidden>${icons.previous}</button>
+				<button class="btn play" part="play-button" aria-label="Play">${morph}</button>
+				<button class="btn next" part="next-button" aria-label="Next video" hidden>${icons.nextItem}</button>
+			</div>
 			<div class="cap glass volume" part="capsule volume">
 				<button class="btn mute" part="mute-button" aria-label="Mute"><span class="i-high">${icons.volumeHigh}</span><span class="i-low">${icons.volumeLow}</span><span class="i-off">${icons.volumeOff}</span></button>
 				<div class="volume-pop"><div class="slider volume-slider" part="volume-slider" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div class="track"><div class="fill progress"></div></div><div class="rail thumb-rail"><div class="thumb"></div></div></div></div>
 			</div>
 			<span class="spacer"></span>
 			<div class="cap glass group" part="capsule">
+				<button class="btn list" part="playlist-button" aria-label="Up next" aria-haspopup="dialog" aria-expanded="false" aria-controls="upnext" hidden>${icons.playlist}</button>
 				<button class="btn cc" part="captions-button" aria-label="Captions" aria-pressed="false">${icons.captions}</button>
 				<button class="btn gear" part="settings-button" aria-label="Settings" aria-haspopup="menu" aria-expanded="false" aria-controls="settings">${icons.settings}</button>
 				<button class="btn pip" part="pip-button" aria-label="Picture in picture">${icons.pip}</button>
@@ -55,6 +60,15 @@ export const template = `
 	<div class="panel glass keys" part="shortcuts" role="dialog" aria-label="Keyboard shortcuts" inert>
 		<div class="panel-head"><span>Keyboard shortcuts</span><button class="panel-close" aria-label="Close shortcuts">${icons.close}</button></div>
 		<dl class="keys-list"></dl>
+	</div>
+	<div class="panel glass upnext" id="upnext" part="playlist" role="dialog" aria-label="Up next" inert>
+		<div class="panel-head"><span>Up next</span><button class="panel-close" aria-label="Close up next">${icons.close}</button></div>
+		<ol class="upnext-list"></ol>
+	</div>
+	<div class="next-card glass" part="next-card" role="status" inert>
+		<p class="next-label">Up next <span class="next-count"></span></p>
+		<p class="next-title"></p>
+		<div class="next-actions"><button class="next-play">Play now</button><button class="next-cancel">Cancel</button></div>
 	</div>
 	<div class="toast glass" part="toast" aria-hidden="true"></div>
 	<div class="error" part="error" role="alert" inert>

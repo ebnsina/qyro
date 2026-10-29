@@ -1352,6 +1352,164 @@ video::-webkit-media-controls {
 	opacity: 1;
 }
 
+/* Up next: a list that slides in from the right inside the player (a bottom sheet on phones) */
+.upnext {
+	left: auto;
+	right: var(--_gap);
+	bottom: calc(var(--_gap) + 2 * var(--_control) + 16px);
+	width: min(320px, calc(100% - 2 * var(--_gap)));
+	transform: translateX(24px) scale(0.98);
+	transform-origin: right center;
+}
+
+.root[data-upnext] .upnext {
+	visibility: visible;
+	transition-delay: 0s;
+	opacity: 1;
+	transform: none;
+	filter: none;
+}
+
+.upnext-list {
+	margin: 0 -8px;
+	padding: 0;
+	list-style: none;
+}
+
+.upnext-list button {
+	display: grid;
+	grid-template-columns: 1.25rem 4rem minmax(0, 1fr);
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 6px 8px;
+	border-radius: var(--_r-inner);
+	text-align: left;
+	font-size: 13px;
+}
+
+.upnext-list button:focus-visible {
+	outline-offset: -2px;
+}
+
+.upnext-list button[aria-current='true'] {
+	background: rgb(255 255 255 / 0.13);
+	font-weight: 600;
+}
+
+.upnext-list .n {
+	font-family: var(--_mono);
+	opacity: 0.6;
+	text-align: right;
+}
+
+.upnext-list .pic {
+	width: 4rem;
+	aspect-ratio: 16 / 9;
+	border-radius: calc(var(--_r-inner) - 4px);
+	background: rgb(255 255 255 / 0.08) center / cover no-repeat;
+}
+
+.upnext-list .meta {
+	display: grid;
+	min-width: 0;
+}
+
+.upnext-list .t {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.upnext-list .d {
+	font-family: var(--_mono);
+	font-size: 11.5px;
+	opacity: 0.6;
+}
+
+/* Near the end: what plays next, with a countdown and a way out. */
+.next-card {
+	position: absolute;
+	right: var(--_gap);
+	bottom: calc(var(--_gap) + 2 * var(--_control) + 16px);
+	display: grid;
+	gap: 4px;
+	width: min(260px, calc(100% - 2 * var(--_gap)));
+	padding: 12px 14px;
+	border-radius: var(--_panel-radius);
+	opacity: 0;
+	transform: translateY(10px) scale(0.96);
+	visibility: hidden;
+	transition:
+		opacity 200ms var(--_ease-out),
+		transform 420ms var(--_ease),
+		visibility 0s 420ms;
+}
+
+.root[data-next-card] .next-card {
+	opacity: 1;
+	transform: none;
+	visibility: visible;
+	transition-delay: 0s;
+}
+
+.next-card p {
+	margin: 0;
+}
+
+.next-label {
+	font-size: 12px;
+	opacity: 0.72;
+}
+
+.next-count {
+	font-family: var(--_mono);
+}
+
+.next-title {
+	font-weight: 600;
+	font-size: 14px;
+}
+
+.next-actions {
+	display: flex;
+	gap: 6px;
+	margin-top: 6px;
+}
+
+.next-actions button {
+	height: 32px;
+	padding: 0 12px;
+	border-radius: var(--_r-pill);
+	font-size: 13px;
+	font-weight: 550;
+	background: rgb(255 255 255 / 0.14);
+}
+
+.next-actions .next-play {
+	background: var(--_accent);
+	color: #111;
+}
+
+@container (max-width: 440px) {
+	/* A small player has no room for both: the Up next card takes the middle. */
+	.root[data-next-card] .center > * {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.upnext {
+		left: var(--_gap);
+		right: var(--_gap);
+		width: auto;
+		bottom: var(--_gap);
+		top: auto;
+		max-height: 70%;
+		transform: translateY(24px);
+		transform-origin: bottom center;
+	}
+}
+
 /* Copied, and other short notes */
 .toast {
 	position: absolute;
@@ -1615,6 +1773,7 @@ video::-webkit-media-controls {
 	.sheet,
 	.menu,
 	.panel,
+	.next-card,
 	.toast,
 	.card,
 	.round,

@@ -24,6 +24,14 @@ player.addEventListener('qualitychange', (e) => {
 });
 ```
 
+## playlistchange and itemchange
+
+`playlistchange` fires when `playlist` is set (`detail.length`), and `itemchange` each time another item starts (`detail.index`, `detail.item`).
+
+```js
+player.addEventListener('itemchange', (e) => highlightEpisode(e.detail.index));
+```
+
 ## error
 
 When playback fails, the viewer sees a plain message and a Try again button. Your code gets an `error` event with the details:

@@ -19,6 +19,8 @@ Set these in HTML or with `setAttribute`. Most have a matching property (see [Ja
 | `start` | seconds | Where playback starts. |
 | `live` | boolean | Treat the stream as live. Live streams are found on their own; use this only when a stream doesn't say so. |
 | `thumbnails` | URL | A WebVTT storyboard for the seek preview. See [Thumbnails](/docs/thumbnails). |
+| `autoadvance` | `"false"` to turn off | With a playlist, plays the next video when one ends. On by default. |
+| `next-at` | seconds | With a playlist, shows the Up next card from this time (say, when the credits start) and moves on ten seconds later. Without it, the card shows in the last ten seconds. |
 | `glass` | `"light"` | Milky glass with dark glyphs, for bright videos. Dark glass is the default. |
 | `seyr-key` | text | Turns on [Seyr analytics](/docs/analytics) with this project key. |
 | `seyr-host` | URL | Where your Seyr server runs. |

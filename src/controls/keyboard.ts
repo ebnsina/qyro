@@ -9,13 +9,17 @@ export type KeyAction =
 	| { type: 'seek-start' }
 	| { type: 'seek-end' }
 	| { type: 'show-shortcuts' }
-	| { type: 'open-menu' };
+	| { type: 'open-menu' }
+	| { type: 'next' }
+	| { type: 'previous' };
 
 /** Maps a keypress to a player action, or null when the key isn't ours. */
 export function actionForKey(e: Pick<KeyboardEvent, 'key' | 'ctrlKey' | 'metaKey' | 'altKey'> & { shiftKey?: boolean }): KeyAction | null {
 	if (e.ctrlKey || e.metaKey || e.altKey) return null;
 	if (e.key == 'ContextMenu' || (e.shiftKey && e.key == 'F10')) return { type: 'open-menu' };
 	if (e.key == '?') return { type: 'show-shortcuts' };
+	if (e.shiftKey && (e.key == 'N' || e.key == 'n')) return { type: 'next' };
+	if (e.shiftKey && (e.key == 'P' || e.key == 'p')) return { type: 'previous' };
 	const key = e.key.length == 1 ? e.key.toLowerCase() : e.key;
 	if (/^[0-9]$/.test(key)) return { type: 'seek-percent', percent: Number(key) * 10 };
 	switch (key) {

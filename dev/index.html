@@ -15,7 +15,8 @@
 			const p = document.createElement('qyro-player');
 			const q = new URLSearchParams(location.search);
 			// Big Buck Bunny (© Blender Foundation, CC BY 3.0) unless the URL says otherwise.
-			if (!q.has('src')) {
+			if (q.get('src') === '') q.delete('src');
+			else if (!q.has('src')) {
 				q.set('src', 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
 				q.set('title', q.get('title') ?? 'Big Buck Bunny');
 				q.set('poster', 'https://peach.blender.org/wp-content/uploads/bbb-splash.png');

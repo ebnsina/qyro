@@ -34,14 +34,20 @@ test('caption style: size, background and color apply to the cues', async ({ pag
 	await page.keyboard.press('c');
 	await expect(cue(player)).toBeVisible();
 	const before = await cue(player).evaluate((e) => parseFloat(getComputedStyle(e).fontSize));
+	// Settings → Captions → Caption style → one of its parts.
 	const pick = async (menu: RegExp, option: string) => {
 		if (!(await player.locator('.gear').getAttribute('aria-expanded'))?.includes('true')) await player.locator('.gear').click();
+		await player.getByRole('menuitem', { name: /^Captions/ }).click();
+		await player.getByRole('menuitem', { name: /^Caption style/ }).click();
 		await player.getByRole('menuitem', { name: menu }).click();
 		await player.getByRole('menuitemradio', { name: option }).click();
+		await page.keyboard.press('Escape');
+		await page.keyboard.press('Escape');
+		await page.keyboard.press('Escape');
 	};
-	await pick(/Caption size/, 'Extra large');
-	await pick(/Caption background/, 'Solid');
-	await pick(/Caption color/, 'Yellow');
+	await pick(/^Size/, 'Extra large');
+	await pick(/^Background/, 'Solid');
+	await pick(/^Text color/, 'Yellow');
 	const style = await cue(player).evaluate((e) => {
 		const s = getComputedStyle(e);
 		return { size: parseFloat(s.fontSize), bg: s.backgroundColor, color: s.color };
@@ -82,4 +88,15 @@ test('storyboard: the preview shows the thumbnail for the time under the pointer
 	expect(Math.round((-x / w) * 160)).toBe(320);
 	await expect(player.locator('.bubble-time')).toHaveText('0:05');
 	await expect(player.locator('.marker')).toHaveCSS('opacity', '1');
+});
+
+test('the top level of settings stays short: style lives under Captions', async ({ page }) => {
+	const player = await open(page);
+	await player.locator('.big-play').click();
+	await player.locator('.gear').click();
+	await expect(player.locator('.sheet .main').getByRole('menuitem')).toHaveText([/Quality/, /Speed/, /Captions/]);
+	await player.getByRole('menuitem', { name: /^Captions/ }).click();
+	await expect(player.locator('.sheet .sub').getByRole('menuitem', { name: /Caption style/ })).toBeVisible();
+	await page.keyboard.press('Escape');
+	await expect(player.locator('.sheet .main').getByRole('menuitem', { name: /^Captions/ })).toBeFocused();
 });

@@ -8,6 +8,9 @@ The first version.
 
 ### Added
 
+- Playlists: `player.playlist`, `next()`, `previous()`, `index`, `autoadvance` and `next-at`, with previous and next buttons, an Up next list inside the player, and an Up next card that counts down near the end.
+- Settings → Captions → Caption style holds size, background and text color, so the top level is Quality, Speed, Captions and Audio.
+
 - `<qyro-player>`, a web component that plays HLS, DASH, live streams and MP4 in plain HTML and any framework.
 - Frosted glass controls: a thin seek bar with buffered range, a glass bead thumb, a position dot and a time or thumbnail preview; play, volume (the slider grows out of the icon), captions, settings, picture in picture and full screen in floating capsules; times on the seek bar's line that never shift it.
 - Settings for quality (Auto shows the current resolution), speed, captions with Auto by device language, caption size, background and color, and audio language. Rows with no real choice are hidden.
