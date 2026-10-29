@@ -2,6 +2,7 @@
 	import CodeBlock from '#lib/sinaui/ui/CodeBlock.svelte';
 	import Seo from '#lib/site/Seo.svelte';
 	import ThemePreview from '#lib/docs/ThemePreview.svelte';
+	import AiGuide from '#lib/ai/AiGuide.svelte';
 	import { blocks } from '#lib/docs/markdown.js';
 	import { pages } from '#lib/docs/pages.js';
 	import { to } from '#lib/site/links.js';
@@ -25,6 +26,8 @@
 			<CodeBlock code={part.code} lang={part.lang} />
 		{:else if part.name == 'theming'}
 			<ThemePreview />
+		{:else if part.name == 'tools' || part.name == 'prompts'}
+			<AiGuide show={part.name} />
 		{/if}
 	{/each}
 

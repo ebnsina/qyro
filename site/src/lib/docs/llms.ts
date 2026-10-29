@@ -1,14 +1,15 @@
 import { pages, sections, page } from './pages';
-import { SITE } from '#lib/site/links.js';
+import { SITE_URL } from '#lib/site/links.js';
+import { expand } from '#lib/ai/ai.js';
 
 /** llms.txt in the llmstxt.org format: a title, a summary, and links to every page as Markdown. */
-export function llms(base: string): string {
+export function llms(): string {
 	const lines = ['# Qyro', '', '> A beautiful video player for any website: one <qyro-player> element that streams HLS, DASH, live and MP4 with captions, thumbnails, keyboard, touch and screen reader support in every browser, plus theming and optional private analytics.', ''];
 	for (const s of sections) {
 		lines.push(`## ${s.title}`, '');
 		for (const slug of s.slugs) {
 			const p = page(slug)!;
-			lines.push(`- [${p.title}](${SITE}${base}/docs/${slug}.md): ${p.description}`);
+			lines.push(`- [${p.title}](${SITE_URL}/docs/${slug}.md): ${p.description}`);
 		}
 		lines.push('');
 	}
@@ -17,5 +18,5 @@ export function llms(base: string): string {
 
 /** Every docs page in one file. */
 export function llmsFull(): string {
-	return ['# Qyro', '', ...pages.map((p) => p.body.replace(/^# .*\n/, `# ${p.title}\n`))].join('\n');
+	return ['# Qyro', '', ...pages.map((p) => expand(p.body).replace(/^# .*\n/, `# ${p.title}\n`))].join('\n');
 }

@@ -8,6 +8,10 @@ export const GITHUB = 'https://github.com/ebnsina/qyro';
 // Where the site is served, without the base path (GitHub Pages until a deploy target is chosen).
 export const SITE = 'https://ebnsina.github.io';
 
+declare const __SITE_URL__: string;
+/** The public site's full address for links read elsewhere (llms.txt, prompts); SITE_URL at build time. */
+export const SITE_URL = __SITE_URL__;
+
 // Open movies from the Blender Foundation, each checked to play.
 export const media = {
 	bbb: {

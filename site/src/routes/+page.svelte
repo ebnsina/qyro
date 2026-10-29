@@ -16,6 +16,7 @@
 	import Footer from '#lib/site/Footer.svelte';
 	import Header from '#lib/site/Header.svelte';
 	import Seo from '#lib/site/Seo.svelte';
+	import AiGuide from '#lib/ai/AiGuide.svelte';
 		import { file, media, to } from '#lib/site/links.js';
 	import { reveal } from '#lib/site/reveal.js';
 
@@ -107,13 +108,13 @@
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap install">
 			<div>
-				<h2>Works with your coding agent</h2>
+				<h2>Build it with your AI</h2>
 				<p class="site-lede">
-					Give Claude Code, Codex or any agent the Qyro skill or llms.txt, and it adds, themes and wires up the player correctly.
+					Claude Code, Codex, Cursor, Copilot and the rest add Qyro correctly with its skill. Copy a prompt and paste it into yours.
 				</p>
-				<Button variant="outline" href={to('/docs/ai')}>Use with AI</Button>
+				<Button variant="outline" href={to('/docs/ai')}>Install the skill</Button>
 			</div>
-			<CodeBlock code={`Add a Qyro video player playing /film.m3u8 with English captions\nand a storyboard. Use the Qyro skill.`} lang="shell" />
+			<AiGuide show="compact" />
 		</div>
 	</section>
 </main>

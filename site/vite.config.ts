@@ -6,7 +6,7 @@ import { defaultClientConditions, defaultServerConditions, defineConfig } from '
 const { version } = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
 export default defineConfig({
-	define: { __VERSION__: JSON.stringify(version) },
+	define: { __VERSION__: JSON.stringify(version), __SITE_URL__: JSON.stringify(process.env.SITE_URL ?? 'https://ebnsina.github.io/qyro') },
 	// The "source" export condition plays the player straight from the library's TypeScript.
 	resolve: { conditions: ['source', ...defaultClientConditions] },
 	ssr: { resolve: { conditions: ['source', ...defaultServerConditions] } },
