@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Qyro playground</title>
+		<style>
+			body { margin: 0; padding: 24px; background: #0b0b0d; color: #eee; font-family: system-ui; }
+			qyro-player { max-width: 1100px; margin: 0 auto; }
+			@media (max-width: 500px) { body { padding: 0; } qyro-player { border-radius: 0; } }
+		</style>
+		<script type="module">
+			import '/src/index.ts';
+			// Every query parameter becomes an attribute, e.g. ?src=/test/fixtures/hls/main.m3u8&title=Test
+			const p = document.createElement('qyro-player');
+			const q = new URLSearchParams(location.search);
+			// Big Buck Bunny (© Blender Foundation, CC BY 3.0) unless the URL says otherwise.
+			if (!q.has('src')) {
+				q.set('src', 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8');
+				q.set('title', q.get('title') ?? 'Big Buck Bunny');
+				q.set('poster', 'https://peach.blender.org/wp-content/uploads/bbb-splash.png');
+				q.set('thumbnails', '/site/static/media/bbb/storyboard.vtt');
+			}
+			for (const [k, v] of q) if (k != 'captions' && k != 'tracks') p.setAttribute(k, v);
+			const track = (src, srclang, label) => p.append(Object.assign(document.createElement('track'), { kind: 'subtitles', src, srclang, label }));
+			if (q.has('captions')) track(q.get('captions'), 'en', 'English');
+			// ?tracks: English WebVTT plus Spanish SRT, for the language tests.
+			if (q.has('tracks')) {
+				track('/test/fixtures/captions.vtt', 'en', 'English');
+				track('/test/fixtures/captions.es.srt', 'es', 'Español');
+			}
+			document.body.append(p);
+			window.player = p;
+		</script>
+	</head>
+	<body></body>
+</html>

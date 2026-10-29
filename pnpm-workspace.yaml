@@ -1,0 +1,8 @@
+packages:
+  - site
+
+# @seyr/video is an optional peer; only sites that turn on analytics install it.
+autoInstallPeers: false
+
+minimumReleaseAgeExclude:
+  - '@hugeicons/core-free-icons@4.4.0'
