@@ -38,7 +38,8 @@
 	display: block;
 	position: relative;
 	/* The video's own shape once it's known (set from its metadata), 16:9 before that. */
-	aspect-ratio: var(--qyro-aspect-ratio, var(--_media-aspect, 16 / 9));
+	/* The page decides the shape; the player never resizes itself once it's on screen. */
+	aspect-ratio: var(--qyro-aspect-ratio, 16 / 9);
 	border-radius: var(--_player-radius);
 	overflow: hidden;
 	background: var(--_bg);
