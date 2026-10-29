@@ -190,7 +190,7 @@ video::-webkit-media-controls {
 	justify-content: flex-end;
 	padding-bottom: 5%;
 	font-family: var(--_font);
-	font-size: calc(clamp(12px, 2.6cqi, 28px) * var(--_cc-scale, 1));
+	font-size: calc(clamp(11px, 2cqi, 22px) * var(--_cc-scale, 1));
 	font-weight: 500;
 	line-height: 1.4;
 	letter-spacing: 0.005em;
@@ -216,8 +216,8 @@ video::-webkit-media-controls {
 .root[data-cc-glass] .shaka-text-container span:not(.shaka-text-wrapper) {
 	display: inline-block;
 	max-width: 80%;
-	padding: 0.3em 0.75em;
-	border-radius: 0.75em;
+	padding: 0.25em 0.7em;
+	border-radius: 0.7em;
 	text-align: center;
 	-webkit-backdrop-filter: blur(14px) saturate(var(--_saturate));
 	backdrop-filter: blur(14px) saturate(var(--_saturate));
