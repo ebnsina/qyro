@@ -57,6 +57,18 @@ test('caption style: size, background and color apply to the cues', async ({ pag
 	expect(style.color).toBe('rgb(255, 225, 77)');
 });
 
+test('no caption shows before the first play, even with captions on', async ({ page }) => {
+	const player = await open(page);
+	await player.evaluate((p: any) => {
+		const t = p.engine.getTextTracks()[0];
+		p.engine.selectTextTrack(t);
+	});
+	await page.waitForTimeout(800);
+	await expect(player.locator('.shaka-text-container')).toBeHidden();
+	await player.locator('.big-play').click();
+	await expect(cue(player)).toBeVisible();
+});
+
 test('captions lift above the controls while they show', async ({ page }) => {
 	const player = await open(page, '&loop');
 	await player.locator('.big-play').click();

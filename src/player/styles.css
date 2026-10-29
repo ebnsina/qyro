@@ -235,6 +235,11 @@ video::-webkit-media-controls {
 		0 1px 2px rgb(0 0 0 / 0.9);
 }
 
+/* No captions before the first play: a cue at the start time would sit on the poster. */
+.root[data-fresh] .shaka-text-container {
+	visibility: hidden;
+}
+
 /* Lift captions above the controls while they show. */
 .root:not([data-idle]):not([data-fresh]) .shaka-text-container {
 	transform: translateY(calc(-1 * var(--_dock-height, 90px)));
