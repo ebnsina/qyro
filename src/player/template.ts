@@ -20,7 +20,7 @@ export const template = `
 	</div>
 	<div class="spinner" part="spinner" role="status" aria-label="Loading"><span></span></div>
 	<div class="dock" part="controls">
-		<div class="timeline">
+		<div class="timeline glass" part="timeline">
 			<span class="current" part="time current-time" aria-hidden="true">0:00</span>
 			<div class="scrubber slider" part="scrubber" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0 seconds">
 			<div class="track" part="track"><div class="fill buffered"></div><div class="fill progress" part="progress"></div></div>

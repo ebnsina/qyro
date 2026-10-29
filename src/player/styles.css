@@ -725,11 +725,15 @@ video::-webkit-media-controls {
 
 /* ---------- Timeline: current time, scrubber, duration or live pill ---------- */
 
+/* The times and the seek bar share one glass capsule, the same as the volume's. */
 .timeline {
 	display: flex;
 	align-items: center;
 	gap: 10px;
-	margin: 0 6px 4px;
+	height: var(--_control);
+	margin: 0 0 8px;
+	padding: 0 16px;
+	border-radius: var(--_r-pill);
 }
 
 /* Each label is sized for the longest time in this video, so the scrubber never resizes. */
@@ -1006,7 +1010,8 @@ video::-webkit-media-controls {
 
 .bubble {
 	position: absolute;
-	bottom: 24px;
+	/* Clear of the capsule the bar sits in. */
+	bottom: calc(var(--_control) / 2 + 20px);
 	left: 0;
 	padding: 5px 10px;
 	border-radius: var(--_r-pill);
@@ -1092,9 +1097,9 @@ video::-webkit-media-controls {
 .sheet {
 	/* Above the gear's capsule and the scrubber, with the capsules' inset from the edge. */
 	right: var(--_gap);
-	bottom: calc(var(--_gap) - 2px + var(--_control) + var(--_scrubber) + 4px + 8px);
+	bottom: calc(var(--_gap) - 2px + 2 * var(--_control) + 16px);
 	width: min(272px, calc(100% - 2 * var(--_gap)));
-	max-height: calc(100% - var(--_control) - var(--_scrubber) - 3 * var(--_gap));
+	max-height: calc(100% - 2 * var(--_control) - 3 * var(--_gap) - 8px);
 	overflow: hidden;
 	transform: translateY(16px) scale(0.92);
 	transform-origin: bottom right;
@@ -1469,7 +1474,7 @@ video::-webkit-media-controls {
 
 	/* Lift the preview clear of the finger. */
 	.bubble {
-		bottom: 44px;
+		bottom: calc(var(--_control) / 2 + 34px);
 	}
 
 	.volume {

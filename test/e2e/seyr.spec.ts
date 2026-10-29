@@ -35,6 +35,9 @@ test('with seyr-key, Qyro loads the SDK from seyr-host and reports the view', as
 	expect(text).toContain('bbb-mp4');
 	expect(text).toContain('Qyro');
 	expect(text).toContain('Big Buck Bunny');
+	// The data customers read never names the engine.
+	expect(text).toContain('"player_software":"qyro"');
+	expect(text).not.toMatch(/shaka/i);
 });
 
 test('without seyr-key, nothing is loaded or sent', async ({ page }) => {
