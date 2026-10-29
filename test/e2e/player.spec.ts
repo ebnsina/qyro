@@ -203,3 +203,23 @@ for (const width of [1280, 375]) {
 		await expect(player.locator('.duration')).toHaveText(/^-0:0\d$/);
 	});
 }
+
+for (const dpr of [1, 2, 3]) {
+	test.describe(`at ${dpr}x`, () => {
+		test.use({ deviceScaleFactor: dpr });
+
+		test('the picture fills the player with no edge bars at a fractional width, and the seek bead shows at rest', async ({ page }) => {
+			const player = await open(page);
+			await player.evaluate((p: any) => (p.style.width = '1137.5px'));
+			await play(player);
+			await expect(player.locator('video')).toHaveAttribute('data-fill', '');
+			const [host, video] = await player.evaluate((p: any) => [p.getBoundingClientRect().toJSON(), p.video.getBoundingClientRect().toJSON()]);
+			for (const k of ['left', 'right', 'top', 'bottom']) expect(Math.abs(host[k] - video[k])).toBeLessThan(0.5);
+			const [w, h] = (await player.evaluate((p: any) => getComputedStyle(p).aspectRatio)).split('/').map(Number);
+			expect(w / h).toBeCloseTo(16 / 9, 2);
+			await page.mouse.move(0, 0);
+			await expect(player.locator('.scrubber .thumb')).toHaveCSS('transform', /none|matrix\(1, 0, 0, 1, 0, 0\)/);
+			await expect(player.locator('.volume-slider .thumb')).toHaveCSS('transform', /none|matrix\(1, 0, 0, 1, 0, 0\)/);
+		});
+	});
+}

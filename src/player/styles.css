@@ -31,7 +31,8 @@
 
 	display: block;
 	position: relative;
-	aspect-ratio: var(--qyro-aspect-ratio, 16 / 9);
+	/* The video's own shape once it's known (set from its metadata), 16:9 before that. */
+	aspect-ratio: var(--qyro-aspect-ratio, var(--_media-aspect, 16 / 9));
 	border-radius: var(--_player-radius);
 	overflow: hidden;
 	background: var(--_bg);
@@ -41,6 +42,9 @@
 	line-height: 1.3;
 	-webkit-tap-highlight-color: transparent;
 	contain: layout paint;
+	/* Clip glass and video to the same rounded corners, so nothing bleeds past them. */
+	overflow: clip;
+	isolation: isolate;
 	outline: none;
 }
 
@@ -128,6 +132,7 @@ svg {
 .root {
 	position: absolute;
 	inset: 0;
+	border-radius: inherit;
 	container-type: inline-size;
 	user-select: none;
 	-webkit-user-select: none;
@@ -144,6 +149,7 @@ svg {
 .surface {
 	position: absolute;
 	inset: 0;
+	border-radius: inherit;
 }
 
 video {
@@ -153,6 +159,12 @@ video {
 	height: 100%;
 	object-fit: contain;
 	background: transparent;
+	border-radius: inherit;
+}
+
+/* When the picture's shape is within a few percent of the player's, fill it: no hairline bars. */
+video[data-fill] {
+	object-fit: cover;
 }
 
 video::-webkit-media-controls {
@@ -670,10 +682,6 @@ video::-webkit-media-controls {
 	margin: 0 14px 0 4px;
 }
 
-.volume-slider .thumb {
-	transform: scale(1);
-}
-
 /* ---------- Captions, full screen, gear ---------- */
 
 .cc[aria-pressed='true']::after {
@@ -981,13 +989,8 @@ video::-webkit-media-controls {
 	transition: transform 360ms var(--_ease);
 }
 
-@media (hover: hover) {
-	.scrubber:hover .thumb {
-		transform: scale(1);
-	}
-}
-
-.scrubber:focus-visible .thumb {
+/* The seek bar's bead shows at rest, like the volume's: the two are the same slider. */
+.slider .thumb {
 	transform: scale(1);
 }
 
