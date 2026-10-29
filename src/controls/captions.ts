@@ -18,7 +18,7 @@ export const CAPTION_SIZES = [
 ];
 export const CAPTION_BACKGROUNDS = [
 	{ label: 'None', value: 'transparent' },
-	{ label: 'Semi-transparent', value: 'rgb(0 0 0 / 0.6)' },
+	{ label: 'Glass', value: 'rgb(18 18 22 / 0.38)' },
 	{ label: 'Solid', value: 'rgb(0 0 0)' },
 ];
 export const CAPTION_COLORS = [

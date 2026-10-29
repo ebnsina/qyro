@@ -17,8 +17,8 @@ export const sources: Source[] = [
 	{ id: 'bbb-hls', label: 'Big Buck Bunny (HLS)', src: media.bbb.hls, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard },
 	{ id: 'bbb-dash', label: 'Big Buck Bunny (DASH)', src: media.bbb.dash, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard },
 	{ id: 'bbb-mp4', label: 'Big Buck Bunny clip (MP4)', src: '/media/bbb/clip.mp4', title: 'Big Buck Bunny clip', poster: media.bbb.poster },
-	{ id: 'sintel', label: 'Sintel (HLS)', src: media.sintel.hls, title: media.sintel.title },
-	{ id: 'tos', label: 'Tears of Steel (HLS)', src: media.tos.hls, title: media.tos.title },
+	{ id: 'sintel', label: 'Sintel (HLS)', src: media.sintel.hls, title: media.sintel.title, poster: media.sintel.poster },
+	{ id: 'tos', label: 'Tears of Steel (HLS)', src: media.tos.hls, title: media.tos.title, poster: media.tos.poster },
 	{ id: 'live', label: 'Live test stream (DASH)', src: media.live.dash, title: 'Opening keynote', live: true },
 	{ id: 'custom', label: 'Your own URL', src: '', title: 'My video' },
 ];
@@ -60,7 +60,7 @@ const BASE: Settings = { source: 'bbb-hls', url: '', autoplay: false, muted: fal
 export const TEMPLATE_DEFAULTS: Record<string, Partial<Settings>> = {
 	standard: {},
 	cinema: { source: 'sintel', poster: false },
-	hero: { source: 'tos', autoplay: true, muted: true, loop: true, poster: false },
+	hero: { source: 'tos', autoplay: true, muted: true, loop: true, start: 60 },
 	course: { captions: true },
 	article: { source: 'sintel', start: 20 },
 	product: { muted: true, loop: true, start: 95 },
