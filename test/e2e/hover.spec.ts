@@ -86,7 +86,7 @@ test('settings: a diagonal path from the gear into the quality submenu keeps eve
 	await glide(page, center(gear), center((await quality.boundingBox())!), 25);
 	await page.mouse.down();
 	await page.mouse.up();
-	const option = player.getByRole('menuitemradio', { name: '540p' });
+	const option = player.getByRole('menuitemradio', { name: '540p', exact: true });
 	await expect(option).toBeVisible();
 	await page.waitForTimeout(500);
 	await glide(page, center((await quality.boundingBox())!), center((await option.boundingBox())!), 25);

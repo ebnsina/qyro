@@ -70,7 +70,8 @@ export interface QualityChange {
 
 const IDLE_MS = 2600;
 const DOUBLE_TAP_MS = 280;
-const LIVE_EDGE_S = 6;
+// Within this many seconds of the window's end counts as live: a fresh join sits a few segments back.
+const LIVE_EDGE_S = 10;
 /** A live seekable window shorter than this is no DVR: the bar hides and seek keys do nothing. */
 const MIN_DVR_S = 30;
 /** Menu value for "Auto (device language)". */
@@ -1302,7 +1303,9 @@ export class QyroPlayer extends HTMLElement {
 		const t = v.currentTime;
 		let buffered = 0;
 		for (let i = 0; i < v.buffered.length; i++) if (v.buffered.start(i) <= t + 0.5) buffered = v.buffered.end(i);
-		this.#scrubber.update(t, buffered);
+		// At the live edge the bead sits at the end of the window, not a few seconds short of it.
+		const edge = this.live ? this.#range().end : 0;
+		this.#scrubber.update(this.live && edge - t < LIVE_EDGE_S ? edge : t, buffered);
 		this.#paintNextCard(t);
 		const q = (s: string) => this.#root.querySelector(s)!;
 		const r = this.#range();
@@ -1314,12 +1317,15 @@ export class QyroPlayer extends HTMLElement {
 		}
 		if (this.live) {
 			const behind = r.end - t;
-			const atLive = behind < LIVE_EDGE_S;
+			// Without a DVR window there's no "behind": the stream is simply live.
+			const noDvr = scale < MIN_DVR_S;
+			const atLive = behind < LIVE_EDGE_S || noDvr;
 			this.#flag('at-live', atLive);
-			this.#flag('no-dvr', scale < MIN_DVR_S);
-			q('.current').textContent = atLive ? '' : `-${formatTime(behind, scale)}`;
-			q('.live').setAttribute('aria-label', atLive ? 'Playing live' : 'Go to live');
-			this.#root.querySelectorAll('.live-label').forEach((l) => (l.textContent = atLive ? 'Live' : 'Go live'));
+			this.#flag('no-dvr', noDvr);
+			// How far behind sits in the pill itself, so the left of the bar never changes.
+			const label = atLive ? 'Live' : `-${formatTime(behind, scale)} · Go live`;
+			this.#root.querySelectorAll('.live').forEach((l) => l.setAttribute('aria-label', atLive ? 'Playing live' : `${formatTime(behind, scale)} behind live. Go to live`));
+			this.#root.querySelectorAll('.live-label').forEach((l) => (l.textContent = label));
 		} else {
 			q('.current').textContent = formatTime(t, scale);
 			q('.duration').textContent = this.#remaining ? `-${formatTime(v.duration - t, scale)}` : formatTime(v.duration, scale);

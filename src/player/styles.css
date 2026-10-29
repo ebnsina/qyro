@@ -769,7 +769,8 @@ video::-webkit-media-controls {
 	}
 }
 
-.root[data-live] .duration {
+.root[data-live] .duration,
+.root[data-live] .current {
 	display: none;
 }
 
@@ -871,9 +872,25 @@ video::-webkit-media-controls {
 	top: calc(var(--_gap) + 30px);
 }
 
-/* Live without a DVR window: nothing to seek, so no bar. */
-.root[data-no-dvr] .scrubber {
-	visibility: hidden;
+/* Live keeps one pill width whatever it says, so the bar never resizes. */
+.timeline .live {
+	min-width: 9.5rem;
+	justify-content: center;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Live without a DVR window: nothing to seek, so no bar; the pill moves next to play. */
+.root[data-no-dvr] .timeline {
+	display: none;
+}
+
+.root[data-live] .live.live-row {
+	display: none;
+}
+
+.root[data-live][data-no-dvr] .live.live-row {
+	display: inline-flex;
+	height: var(--_control);
 }
 
 /* ---------- Sliders: the seek bar and the volume share every rule below ---------- */

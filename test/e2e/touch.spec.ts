@@ -92,7 +92,7 @@ test('settings work with taps', async ({ page }) => {
 	const player = await playing(page);
 	await player.locator('.gear').tap();
 	await player.getByRole('menuitem', { name: /Quality/ }).tap();
-	await player.getByRole('menuitemradio', { name: '360p' }).tap();
+	await player.getByRole('menuitemradio', { name: '360p', exact: true }).tap();
 	await expect.poll(() => player.evaluate((p: any) => p.engine.getVariantTracks().find((t: any) => t.active).height)).toBe(360);
 	const sheet = (await player.locator('.sheet').boundingBox())!;
 	const box = (await player.boundingBox())!;

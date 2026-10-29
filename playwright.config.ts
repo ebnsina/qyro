@@ -6,6 +6,8 @@ const touch = /touch\.spec\.ts$/;
 export default defineConfig({
 	testDir: 'test/e2e',
 	fullyParallel: true,
+	// Every test plays real video; more workers than this starve each other on one laptop.
+	workers: process.env.CI ? undefined : 4,
 	reporter: process.env.CI ? 'github' : 'list',
 	use: { baseURL: 'http://localhost:5311', trace: 'retain-on-failure' },
 	projects: [

@@ -41,6 +41,7 @@ export const template = `
 				<button class="btn mute" part="mute-button" aria-label="Mute"><span class="i-high">${icons.volumeHigh}</span><span class="i-low">${icons.volumeLow}</span><span class="i-off">${icons.volumeOff}</span></button>
 				<div class="volume-pop"><div class="slider volume-slider" part="volume-slider" role="slider" tabindex="0" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100"><div class="track"><div class="fill progress"></div></div><div class="rail thumb-rail"><div class="thumb"></div></div></div></div>
 			</div>
+			<button class="live live-row glass" part="live-badge" aria-label="Go to live"><span class="dot"></span><span class="live-label">Live</span></button>
 			<span class="spacer"></span>
 			<div class="cap glass group" part="capsule">
 				<button class="btn list" part="playlist-button" aria-label="Up next" aria-haspopup="dialog" aria-expanded="false" aria-controls="upnext" hidden>${icons.playlist}</button>
