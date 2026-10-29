@@ -14,12 +14,12 @@ Point `src` at a live HLS or DASH stream. Qyro finds that it's live, starts at t
 ## The badge
 
 - At the live edge: a red dot that gently pulses, and **Live**. The dot stays still with reduced motion.
-- Behind the edge: grey, reading **Go live**. Clicking it glides back to the edge.
+- Behind the edge: grey, with how far behind you are, like **-0:42 · Go live**. Clicking it glides back to the edge.
 - While the controls are hidden, a small badge stays in the top-left corner, so viewers always know it's live.
 
 ## Seeking back (DVR)
 
-When the stream keeps a window of the past, the seek bar covers that window and the left time shows how far behind live you are, like `-0:42`. Without a window, the bar hides and the seek keys do nothing.
+When the stream keeps a window of the past, the seek bar covers that window; at the edge its bead sits at the very end. Without a window, the bar hides, the LIVE badge sits next to play, and the seek keys do nothing.
 
 ## Details
 

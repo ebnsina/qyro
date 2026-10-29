@@ -81,7 +81,7 @@ test('settings: switches quality, then back to Auto', async ({ page }) => {
 	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
 	await sheet.getByRole('menuitem', { name: /Quality/ }).click();
 	await expect(sheet.getByRole('menuitemradio')).toHaveText(['Auto', '720pHD', '540p', '360p'].map((s) => new RegExp(s.replace('HD', '.*HD'))));
-	await sheet.getByRole('menuitemradio', { name: '360p' }).click();
+	await sheet.getByRole('menuitemradio', { name: '360p', exact: true }).click();
 	await expect
 		.poll(() => player.evaluate((p: any) => [p.engine.getConfiguration().abr.enabled, p.engine.getVariantTracks().find((t: any) => t.active).height]))
 		.toEqual([false, 360]);
@@ -232,6 +232,6 @@ test('qualitychange fires with the new resolution when the viewer picks one', as
 	await play(player);
 	await player.locator('.gear').click();
 	await player.getByRole('menuitem', { name: /Quality/ }).click();
-	await player.getByRole('menuitemradio', { name: '360p' }).click();
+	await player.getByRole('menuitemradio', { name: '360p', exact: true }).click();
 	await expect.poll(() => player.evaluate((p: any) => p.changes.at(-1))).toMatchObject({ height: 360, auto: false });
 });
