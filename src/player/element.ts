@@ -86,6 +86,7 @@ export class QyroPlayer extends HTMLElement {
 	#remaining = false;
 	#timeWidth = '';
 	#wasLive = false;
+	#aspectSet = false;
 	#thumbs: Thumb[] = [];
 	#captionStyle: CaptionStyle = readStyle();
 	#thumbsFor = '';
@@ -289,6 +290,7 @@ export class QyroPlayer extends HTMLElement {
 		this.#clearError();
 		this.#flag('fresh', true);
 		this.#flag('paused', true);
+		this.#aspectSet = false;
 		this.#flag('live', false);
 		this.#idle.hold();
 		this.#settings.close();
@@ -610,7 +612,17 @@ export class QyroPlayer extends HTMLElement {
 		v.addEventListener('progress', () => this.#paint());
 		v.addEventListener('durationchange', () => this.#paint());
 		v.addEventListener('timeupdate', () => this.#paint());
-		v.addEventListener('loadedmetadata', () => this.#paint());
+		v.addEventListener('loadedmetadata', () => {
+			this.#paint();
+			// Take the shape from the first picture of each video; later quality changes keep it.
+			if (!this.#aspectSet && v.videoWidth && v.videoHeight) {
+				this.#aspectSet = true;
+				this.style.setProperty('--_media-aspect', `${v.videoWidth} / ${v.videoHeight}`);
+			}
+			this.#fit();
+		});
+		v.addEventListener('resize', () => this.#fit());
+		new ResizeObserver(() => this.#fit()).observe(this);
 		v.addEventListener('volumechange', () => this.#paintVolume());
 		v.addEventListener('ratechange', () => v.playbackRate && (this.#rate = v.playbackRate));
 		v.addEventListener('enterpictureinpicture', () => this.#flag('pip', true));
@@ -1104,6 +1116,19 @@ export class QyroPlayer extends HTMLElement {
 		mute.dataset.level = level == 0 ? 'off' : level < 0.5 ? 'low' : 'high';
 		mute.setAttribute('aria-label', v.muted ? 'Unmute' : 'Mute');
 		this.#volumeSlider.set(level, `${Math.round(level * 100)}%`);
+	}
+
+	/**
+	 * Fills the player when the picture's shape is within 3% of it, so renditions that are a few pixels
+	 * off 16:9 (320×184, 848×480) don't leave thin bars; clearly different shapes keep their bars.
+	 */
+	#fit(): void {
+		const v = this.#video;
+		const w = this.clientWidth;
+		const h = this.clientHeight;
+		if (!v.videoWidth || !v.videoHeight || !w || !h) return;
+		const off = Math.abs(v.videoWidth / v.videoHeight / (w / h) - 1);
+		v.toggleAttribute('data-fill', off < 0.03);
 	}
 
 	#onFullscreen(): void {
