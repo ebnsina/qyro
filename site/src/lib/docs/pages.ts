@@ -13,7 +13,7 @@ export interface Page {
 export const sections: { title: string; slugs: string[] }[] = [
 	{ title: 'Start', slugs: ['getting-started', 'ai'] },
 	{ title: 'Reference', slugs: ['attributes', 'api', 'events', 'theming'] },
-	{ title: 'Guides', slugs: ['captions', 'thumbnails', 'live', 'analytics'] },
+	{ title: 'Guides', slugs: ['captions', 'thumbnails', 'chapters', 'live', 'analytics'] },
 	{ title: 'More', slugs: ['accessibility', 'browser-support', 'faq'] },
 ];
 

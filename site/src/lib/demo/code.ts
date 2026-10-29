@@ -1,5 +1,5 @@
 // The code panel: the exact player for the playground's state, in each way people add Qyro.
-import { CAPTIONS, playerAttrs, themeVars, type State } from './state.js';
+import { CAPTIONS, chaptersOf, playerAttrs, themeVars, type State } from './state.js';
 
 export type Tab = 'html' | 'js' | 'svelte' | 'react' | 'vue';
 
@@ -19,8 +19,13 @@ export function snippet(s: State, tab: Tab, origin = ''): string {
 	const attrs = Object.entries(playerAttrs(s, full));
 	const jsx = tab == 'react';
 	const attr = ([k, v]: [string, string | true]) => (v === true ? k : `${k}="${v}"`);
-	const track = s.captions ? `<track kind="subtitles" srclang="en" label="English" src="${full(CAPTIONS)}" default${jsx ? ' /' : ''}>` : '';
-	const inner = track ? `\n\t${track}\n` : '';
+	const chapters = chaptersOf(s);
+	const end = jsx ? ' /' : '';
+	const tracks = [
+		s.captions && `<track kind="subtitles" srclang="en" label="English" src="${full(CAPTIONS)}" default${end}>`,
+		chapters && `<track kind="chapters" src="${full(chapters)}"${end}>`,
+	].filter(Boolean);
+	const inner = tracks.length ? `${tracks.map((t) => `\n\t${t}`).join('')}\n` : '';
 	const vars = themeVars(s.theme);
 	const css = Object.keys(vars).length ? `qyro-player {\n${Object.entries(vars).map(([k, v]) => `\t${k}: ${v};`).join('\n')}\n}` : '';
 
@@ -39,9 +44,10 @@ export function snippet(s: State, tab: Tab, origin = ''): string {
 			return `<script src="${SCRIPT}"></script>\n\n${element()}${style((c) => `<style>\n${indent(c)}\n</style>`)}`;
 		case 'js': {
 			const set = attrs.map(([k, v]) => `player.setAttribute('${k}', '${v === true ? '' : v}');`);
-			const t = s.captions
-				? `\nconst track = Object.assign(document.createElement('track'), { kind: 'subtitles', srclang: 'en', label: 'English', src: '${full(CAPTIONS)}', default: true });\nplayer.append(track);`
-				: '';
+			const t =
+				(s.captions
+					? `\nconst track = Object.assign(document.createElement('track'), { kind: 'subtitles', srclang: 'en', label: 'English', src: '${full(CAPTIONS)}', default: true });\nplayer.append(track);`
+					: '') + (chapters ? `\nplayer.append(Object.assign(document.createElement('track'), { kind: 'chapters', src: '${full(chapters)}' }));` : '');
 			return `// npm install qyro\nimport 'qyro';\n\nconst player = document.createElement('qyro-player');\n${set.join('\n')}${t}\ndocument.querySelector('#video').append(player);${css ? `\n\n/* In your CSS */\n${css}` : ''}`;
 		}
 		case 'svelte':

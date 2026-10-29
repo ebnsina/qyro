@@ -15,6 +15,8 @@ interface Hooks {
 	dragging(on: boolean): void;
 	/** The storyboard image for a time, if the video has any. */
 	thumb(t: number): Thumb | null;
+	/** The chapter title at a time, or '' without one. */
+	chapter(t: number): string;
 }
 
 const images = new Map<string, HTMLImageElement>();
@@ -36,6 +38,7 @@ export class Scrubber {
 	#dragging = false;
 	#bubble: HTMLElement;
 	#time: HTMLElement;
+	#chapter: HTMLElement;
 	#shot: HTMLElement;
 	#shown: Thumb | null = null;
 
@@ -45,6 +48,7 @@ export class Scrubber {
 	) {
 		this.#bubble = el.querySelector('.bubble')!;
 		this.#time = el.querySelector('.bubble-time')!;
+		this.#chapter = el.querySelector('.bubble-chapter')!;
 		this.#shot = el.querySelector('.shot')!;
 		el.addEventListener('pointerdown', this.#down);
 		el.addEventListener('pointermove', this.#move);
@@ -66,7 +70,8 @@ export class Scrubber {
 		this.el.setAttribute('aria-valuemin', String(Math.floor(r.start)));
 		this.el.setAttribute('aria-valuemax', String(Math.floor(r.end)));
 		this.el.setAttribute('aria-valuenow', String(Math.floor(t)));
-		this.el.setAttribute('aria-valuetext', `${speakTime(t - r.start)} of ${speakTime(span)}`);
+		const chapter = this.hooks.chapter(t);
+		this.el.setAttribute('aria-valuetext', `${speakTime(t - r.start)} of ${speakTime(span)}${chapter ? `, ${chapter}` : ''}`);
 	}
 
 	#set(name: string, f: number): void {
@@ -86,6 +91,9 @@ export class Scrubber {
 	#preview(f: number): void {
 		const t = this.#timeAt(f);
 		this.#time.textContent = this.hooks.label(t);
+		const chapter = this.hooks.chapter(t);
+		this.#chapter.textContent = chapter;
+		this.#bubble.toggleAttribute('data-chapter', !!chapter);
 		this.#paintShot(this.hooks.thumb(t));
 		const width = this.el.clientWidth;
 		const half = this.#bubble.offsetWidth / 2;

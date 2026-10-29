@@ -25,6 +25,7 @@ Or with no build step, one file:
 ```html
 <qyro-player src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" poster="/poster.jpg" title="Big Buck Bunny" thumbnails="/storyboard.vtt">
 	<track kind="subtitles" srclang="en" label="English" src="/en.vtt" default />
+	<track kind="chapters" src="/chapters.vtt" />
 </qyro-player>
 ```
 
@@ -37,11 +38,11 @@ player.play();
 
 ## Attributes
 
-`src`, `poster`, `title`, `autoplay`, `muted`, `loop`, `playsinline` (on by default), `start`, `live`, `thumbnails`, `glass="light"`, and for analytics `seyr-key`, `seyr-host`, `video-id`, `series`. Details: [Attributes](https://ebnsina.github.io/qyro/docs/attributes).
+`src`, `poster`, `title`, `autoplay`, `muted`, `loop`, `playsinline` (on by default), `start`, `live`, `thumbnails`, `chapters`, `glass="light"`, and for analytics `seyr-key`, `seyr-host`, `video-id`, `series`. Details: [Attributes](https://ebnsina.github.io/qyro/docs/attributes).
 
 ## API and events
 
-Properties mirror `<video>` (`currentTime`, `duration`, `paused`, `volume`, `muted`, `playbackRate`) plus `live`, `error`, `video`, `ready` and `engine`. Methods: `play()`, `pause()`, `togglePlay()`, `seek()`, `goToLive()`, `addTextTrack()`, `toggleFullscreen()`, `togglePictureInPicture()`, `retry()`. The element fires the standard media events and an `error` event whose `detail` has the error kind and code. Details: [JavaScript API](https://ebnsina.github.io/qyro/docs/api), [Events](https://ebnsina.github.io/qyro/docs/events).
+Properties mirror `<video>` (`currentTime`, `duration`, `paused`, `volume`, `muted`, `playbackRate`) plus `live`, `chapters`, `chapter`, `error`, `video`, `ready` and `engine`. Methods: `play()`, `pause()`, `togglePlay()`, `seek()`, `seekToChapter()`, `goToLive()`, `addTextTrack()`, `toggleFullscreen()`, `togglePictureInPicture()`, `retry()`. The element fires the standard media events, `chapterchange`, and an `error` event whose `detail` has the error kind and code. Details: [JavaScript API](https://ebnsina.github.io/qyro/docs/api), [Events](https://ebnsina.github.io/qyro/docs/events).
 
 ## Theming
 

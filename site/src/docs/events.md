@@ -32,6 +32,10 @@ player.addEventListener('qualitychange', (e) => {
 player.addEventListener('itemchange', (e) => highlightEpisode(e.detail.index));
 ```
 
+## chapterchange
+
+Fires when playback moves into another chapter, with `detail.index` and `detail.chapter` (`-1` and `null` outside any).
+
 ## error
 
 When playback fails, the viewer sees a plain message and a Try again button. Your code gets an `error` event with the details:

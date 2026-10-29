@@ -12,9 +12,13 @@ test('switching templates keeps the same player and updates the URL', async ({ p
 	const tabs = page.getByRole('tablist', { name: 'Template' });
 	await tabs.getByRole('tab', { name: 'Course' }).click();
 	await expect(page).toHaveURL(/\?t=course/);
-	await expect(page.getByRole('navigation', { name: 'Chapters' })).toBeVisible();
 	expect(await player(page).getAttribute('data-mark')).toBe('same');
-	await expect(player(page).locator('track')).toHaveCount(1);
+	// The course's chapters live inside the player, from its chapters track, not in a list beside it.
+	await expect(player(page).locator('track')).toHaveCount(2);
+	await expect(player(page).locator('track[kind="chapters"]')).toHaveAttribute('src', /chapters\.vtt$/);
+	await expect.poll(() => player(page).evaluate((p: any) => p.chapters?.length), { timeout: 30000 }).toBe(6);
+	await expect(page.getByRole('navigation', { name: 'Chapters' })).toHaveCount(0);
+	await expect(page.locator('.pg-code .codeblock')).toContainText('<track kind="chapters"');
 	// Arrow keys move along the tabs and switch too.
 	await page.keyboard.press('ArrowRight');
 	await expect(page).toHaveURL(/\?t=article/);

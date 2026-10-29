@@ -14,6 +14,7 @@ import { Reveal } from '../controls/reveal.js';
 import { Slider } from '../controls/slider.js';
 import { ContextMenu, type MenuItem } from '../controls/context-menu.js';
 import { statRows, SHORTCUTS } from '../controls/stats.js';
+import { chapterAt, loadChapters, type Chapter } from '../controls/chapters.js';
 import { icons } from '../controls/icons.js';
 import { formatTime, splitStart, timeWidth, withStart } from '../controls/time.js';
 import { loadSeyr, type SeyrView } from '../analytics/seyr.js';
@@ -58,6 +59,14 @@ export interface PlaylistItem {
 	videoId?: string;
 }
 
+export type { Chapter };
+
+/** Detail of the `chapterchange` event: the chapter now playing, or index -1 and null outside any. */
+export interface ChapterChange {
+	index: number;
+	chapter: Chapter | null;
+}
+
 /** Detail of the `qualitychange` event. */
 export interface QualityChange {
 	height: number;
@@ -81,6 +90,9 @@ const CRITICAL = 2;
 const LOAD_INTERRUPTED = 7000;
 const LONG_PRESS_MS = 550;
 const STATS_MS = 1000;
+/** The panels that open from the right of the player, and the button each opens from; one shows at a time. */
+const SIDES = { upnext: '.list', chapters: '.toc' } as const;
+type Side = keyof typeof SIDES;
 
 let sheet: CSSStyleSheet | undefined;
 
@@ -97,7 +109,7 @@ function styles(): CSSStyleSheet {
  * Plays HLS, DASH and MP4 from `src`; see the README for every attribute, property and event.
  */
 export class QyroPlayer extends HTMLElement {
-	static observedAttributes = ['src', 'poster', 'title', 'autoplay', 'muted', 'loop', 'playsinline', 'start', 'live', 'thumbnails', 'next-at'];
+	static observedAttributes = ['src', 'poster', 'title', 'autoplay', 'muted', 'loop', 'playsinline', 'start', 'live', 'thumbnails', 'chapters', 'next-at'];
 
 	readonly #root: ShadowRoot;
 	readonly #video: HTMLVideoElement;
@@ -117,6 +129,11 @@ export class QyroPlayer extends HTMLElement {
 	#playNext = false;
 	#nextCancelled = false;
 	#thumbs: Thumb[] = [];
+	#chapters: Chapter[] = [];
+	/** Chapters set from script; they win over the attribute, the track and the stream. */
+	#ownChapters: Chapter[] | null = null;
+	#chaptersId = 0;
+	#chapter: Chapter | null = null;
 	#captionStyle: CaptionStyle = readStyle();
 	#thumbsFor = '';
 	#statsTimer: ReturnType<typeof setInterval> | undefined;
@@ -155,9 +172,12 @@ export class QyroPlayer extends HTMLElement {
 			seek: (t) => this.seek(t),
 			dragging: (on) => (on ? this.#idle.hold() : this.#activity()),
 			thumb: (t) => thumbAt(this.#thumbs, t),
+			chapter: (t) => this.#chapters[chapterAt(this.#chapters, t)]?.title ?? '',
 		});
 		this.#settings = new Settings(q('.sheet'), q('.gear'), () => this.#menus(), (open) => {
 			this.#flag('settings', open);
+			const side = this.#sideOpen();
+			if (open && side) this.#side(side, false);
 			if (open) this.#idle.hold();
 			else this.#activity();
 		});
@@ -184,7 +204,7 @@ export class QyroPlayer extends HTMLElement {
 
 	connectedCallback(): void {
 		// Properties set before the element was defined sit on the instance and hide our setters; replay them.
-		for (const prop of ['src', 'poster', 'autoplay', 'loop', 'muted', 'playsInline', 'start', 'volume', 'playlist'] as const) {
+		for (const prop of ['src', 'poster', 'autoplay', 'loop', 'muted', 'playsInline', 'start', 'volume', 'playlist', 'chapters'] as const) {
 			if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
 			const value = (this as Record<string, unknown>)[prop];
 			delete (this as Record<string, unknown>)[prop];
@@ -235,6 +255,9 @@ export class QyroPlayer extends HTMLElement {
 				break;
 			case 'thumbnails':
 				void this.#loadThumbs();
+				break;
+			case 'chapters':
+				if (old !== value) void this.#loadChapters();
 				break;
 			case 'title':
 				this.#syncLabel();
@@ -350,6 +373,7 @@ export class QyroPlayer extends HTMLElement {
 			await this.#addTracks(player);
 			await this.#addItemCaptions(player);
 			await this.#loadThumbs();
+			await this.#loadChapters();
 			this.#refresh();
 			if (this.autoplay || resume || this.#playNext) this.play().catch(() => {});
 			this.#playNext = false;
@@ -389,7 +413,7 @@ export class QyroPlayer extends HTMLElement {
 	}
 
 	async #addTracks(player: Engine): Promise<void> {
-		const tracks = [...this.querySelectorAll('track')];
+		const tracks = [...this.querySelectorAll('track')].filter((t) => t.kind != 'chapters');
 		for (const t of tracks) {
 			if (!t.src) continue;
 			try {
@@ -403,6 +427,34 @@ export class QyroPlayer extends HTMLElement {
 		const texts = player.getTextTracks();
 		const pick = pickCaption(texts, memory.get('captions'));
 		if (pick !== undefined) player.selectTextTrack(texts.find((t) => t.id == pick?.id) ?? null);
+	}
+
+	/** Chapters: from script first, then the `chapters` attribute, a `<track kind="chapters">`, then the stream's own. */
+	async #loadChapters(): Promise<void> {
+		const id = ++this.#chaptersId;
+		if (this.#ownChapters) return this.#setChapters(this.#ownChapters);
+		const url = this.getAttribute('chapters') || [...this.querySelectorAll('track')].find((t) => t.kind == 'chapters' && t.src)?.src;
+		let list: Chapter[] = [];
+		try {
+			if (url) list = await loadChapters(url, document.baseURI);
+			else {
+				const p = this.#player;
+				for (const track of p?.getChaptersTracks() ?? []) {
+					list = (await p!.getChaptersAsync(track.language)).map((c) => ({ start: c.startTime, end: c.endTime, title: c.title }));
+					if (list.length) break;
+				}
+			}
+		} catch (e) {
+			// The video plays on without chapters; tell the developer their file is broken.
+			console.warn(`qyro: couldn't load the chapters ${url ?? 'from the stream'}; check the URL and that it is WebVTT`, e);
+		}
+		if (id == this.#chaptersId) this.#setChapters(list);
+	}
+
+	#setChapters(list: Chapter[]): void {
+		this.#chapters = [...list].sort((a, b) => a.start - b.start);
+		this.#paintChapters();
+		this.#paint();
 	}
 
 	#chooseCaption(track: { id: number; language: string; label: string | null } | null, choice: string): void {
@@ -650,7 +702,10 @@ export class QyroPlayer extends HTMLElement {
 		v.addEventListener('seeking', () => this.#flag('ended', false));
 		v.addEventListener('seeked', () => this.#paint());
 		v.addEventListener('progress', () => this.#paint());
-		v.addEventListener('durationchange', () => this.#paint());
+		v.addEventListener('durationchange', () => {
+			this.#paintChapters();
+			this.#paint();
+		});
 		v.addEventListener('timeupdate', () => this.#paint());
 		v.addEventListener('loadedmetadata', () => {
 			this.#paint();
@@ -720,8 +775,10 @@ export class QyroPlayer extends HTMLElement {
 		click('.keys .panel-close', () => this.#panel('keys', false));
 		click('.prev', () => this.previous());
 		click('.next', () => this.next());
-		click('.list', () => this.#toggleUpnext(!this.#upnextOpen()));
-		click('.upnext .panel-close', () => this.#toggleUpnext(false, true));
+		click('.list', () => this.#side('upnext', this.#sideOpen() != 'upnext'));
+		click('.upnext .panel-close', () => this.#side('upnext', false, true));
+		click('.toc', () => this.#side('chapters', this.#sideOpen() != 'chapters'));
+		click('.chapters .panel-close', () => this.#side('chapters', false, true));
 		click('.next-play', () => this.next());
 		click('.next-cancel', () => {
 			this.#nextCancelled = true;
@@ -732,7 +789,14 @@ export class QyroPlayer extends HTMLElement {
 			const b = (e.target as Element).closest<HTMLElement>('[data-index]');
 			if (!b) return;
 			this.#go(Number(b.dataset.index), true);
-			this.#toggleUpnext(false);
+			this.#side('upnext', false);
+		});
+		q('.chapter-list').addEventListener('click', (e) => {
+			const b = (e.target as Element).closest<HTMLElement>('[data-index]');
+			if (!b) return;
+			this.seekToChapter(Number(b.dataset.index));
+			this.play().catch(() => {});
+			this.#side('chapters', false, true);
 		});
 		q('.keys-list').innerHTML = SHORTCUTS.map(([k, what]) => `<dt>${k}</dt><dd>${what}</dd>`).join('');
 
@@ -790,9 +854,10 @@ export class QyroPlayer extends HTMLElement {
 		const cancelPress = () => clearTimeout(press);
 		// A drag that started on a slider and ended over the video is not a click on the video.
 		surface.addEventListener('pointerdown', (e) => {
-			// A press outside the Up next list closes it and does nothing else.
-			if (this.#upnextOpen()) {
-				this.#toggleUpnext(false);
+			// A press outside the Up next or Chapters list closes it and does nothing else.
+			const side = this.#sideOpen();
+			if (side) {
+				this.#side(side, false);
 				downOnSurface = false;
 				return;
 			}
@@ -839,7 +904,7 @@ export class QyroPlayer extends HTMLElement {
 	#canHide(): boolean {
 		return !(
 			this.paused ||
-			this.#upnextOpen() ||
+			this.#sideOpen() ||
 			this.#error ||
 			this.#settings.isOpen ||
 			this.#menu.isOpen ||
@@ -856,13 +921,15 @@ export class QyroPlayer extends HTMLElement {
 		if (target.closest?.('.sheet, .menu')) return;
 		if (e.key == 'Escape') {
 			if (this.#settings.isOpen) return this.#settings.close(true);
-			if (this.#upnextOpen()) return this.#toggleUpnext(false, true);
+			const side = this.#sideOpen();
+			if (side) return this.#side(side, false, true);
 			if (this.#panelOpen('keys')) return this.#panel('keys', false);
 			if (this.#panelOpen('stats')) return this.#panel('stats', false);
 		}
-		// Inside the Up next list, up and down move between videos; nothing else is a shortcut there.
-		if (target.closest?.('.upnext')) {
-			const items = [...this.#root.querySelectorAll<HTMLElement>('.upnext [data-index], .upnext .panel-close')];
+		// Inside the Up next or Chapters list, up and down move between rows; nothing else is a shortcut there.
+		const panel = target.closest?.('.upnext, .chapters');
+		if (panel) {
+			const items = [...panel.querySelectorAll<HTMLElement>('[data-index], .panel-close')];
 			const step = { ArrowDown: 1, ArrowUp: -1 }[e.key];
 			if (step) {
 				e.preventDefault();
@@ -927,6 +994,70 @@ export class QyroPlayer extends HTMLElement {
 			clearTimeout(Number(el.dataset.timer));
 			el.dataset.timer = String(setTimeout(() => el.removeAttribute('data-on'), 650));
 		}
+	}
+
+	// ---------- Chapters ----------
+
+	/** The chapters, sorted by start. Setting them overrides the file and the stream's; `null` goes back to those. */
+	get chapters(): Chapter[] {
+		return this.#chapters.map((c) => ({ ...c }));
+	}
+	set chapters(list: Chapter[] | null) {
+		const valid = (c: Chapter) => c && Number.isFinite(c.start) && c.start >= 0 && typeof c.title == 'string' && (c.end === undefined || c.end > c.start);
+		if (list !== null && (!Array.isArray(list) || !list.every(valid))) {
+			throw new TypeError('qyro: chapters must be an array of { start, end?, title } with start in seconds');
+		}
+		this.#ownChapters = list && list.map((c) => ({ ...c }));
+		void this.#loadChapters();
+	}
+
+	/** The chapter playing now, or null. */
+	get chapter(): Chapter | null {
+		const c = this.#chapters[chapterAt(this.#chapters, this.currentTime)];
+		return c ? { ...c } : null;
+	}
+
+	/** Seeks to the start of chapter `i` (from 0). */
+	seekToChapter(i: number): void {
+		const c = this.#chapters[i];
+		if (!c) throw new RangeError(`qyro: there is no chapter ${i}; this video has ${this.#chapters.length}`);
+		this.seek(c.start);
+		this.#say(`Chapter: ${c.title}`);
+	}
+
+	/** The button, the list in the panel, the current title by the time and the gaps in the seek bar. */
+	#paintChapters(): void {
+		const list = this.#chapters;
+		const q = <T extends HTMLElement = HTMLElement>(s: string) => this.#root.querySelector<T>(s)!;
+		q('.toc').hidden = !list.length;
+		this.#flag('has-chapters', !!list.length);
+		if (!list.length && this.#sideOpen() == 'chapters') this.#side('chapters', false);
+		const d = this.#video.duration;
+		const scale = Number.isFinite(d) ? d : (list.at(-1)?.start ?? 0);
+		const current = this.#chapter ? list.indexOf(this.#chapter) : -1;
+		q('.chapter-list').innerHTML = list
+			.map((c, i) => `<li><button data-index="${i}" aria-current="${i == current}"><span class="at">${formatTime(c.start, scale)}</span><span class="t">${esc(c.title)}</span></button></li>`)
+			.join('');
+		q('.chapter-now').innerHTML = list.map((c, i) => `<span${i == current ? ' data-on' : ''}>${esc(c.title)}</span>`).join('');
+		// A small cut in the bar where each chapter starts, the bar itself staying as thin as before.
+		const r = this.#range();
+		const span = r.end - r.start;
+		const cuts = this.live || !(span > 0) ? [] : list.map((c) => ((c.start - r.start) / span) * 100).filter((f) => f > 0 && f < 100);
+		const mask = cuts.length ? `linear-gradient(to right, ${cuts.map((f) => `#000 calc(${f}% - 1px), transparent 0 calc(${f}% + 1px), #000 0`).join(', ')})` : '';
+		const track = q('.scrubber .track');
+		track.style.setProperty('mask-image', mask);
+		track.style.setProperty('-webkit-mask-image', mask);
+	}
+
+	/** Marks the chapter playing at `t` and fires `chapterchange` when it changes. */
+	#paintChapter(t: number): void {
+		const c = this.#chapters[chapterAt(this.#chapters, t)] ?? null;
+		if (c === this.#chapter) return;
+		this.#chapter = c;
+		const i = c ? this.#chapters.indexOf(c) : -1;
+		this.#root.querySelectorAll<HTMLElement>('.chapter-list [data-index]').forEach((b) => b.setAttribute('aria-current', String(Number(b.dataset.index) == i)));
+		this.#root.querySelectorAll('.chapter-now span').forEach((el, j) => el.toggleAttribute('data-on', j == i));
+		this.dispatchEvent(new CustomEvent<ChapterChange>('chapterchange', { detail: { index: i, chapter: c && { ...c } } }));
 	}
 
 	// ---------- Playlist ----------
@@ -1036,21 +1167,26 @@ export class QyroPlayer extends HTMLElement {
 				return `<li><button data-index="${i}" aria-current="${i == this.#index}"><span class="n">${i + 1}</span><span class="pic"${pic}></span><span class="meta"><span class="t">${esc(item.title ?? `Video ${i + 1}`)}</span><span class="d">${len}</span></span></button></li>`;
 			})
 			.join('');
-		if (!on) this.#toggleUpnext(false);
+		if (!on) this.#side('upnext', false);
 	}
 
-	#upnextOpen(): boolean {
-		return this.#ui.hasAttribute('data-upnext');
+	#sideOpen(): Side | null {
+		return (Object.keys(SIDES) as Side[]).find((name) => this.#ui.hasAttribute(`data-${name}`)) ?? null;
 	}
 
-	#toggleUpnext(open: boolean, returnFocus = false): void {
-		const el = this.#root.querySelector<HTMLElement>('.upnext')!;
-		this.#flag('upnext', open);
+	/** Opens or closes the Up next or Chapters panel; opening one closes the other and the settings. */
+	#side(name: Side, open: boolean, returnFocus = false): void {
+		const el = this.#root.querySelector<HTMLElement>(`.panel.${name}`)!;
+		const button = this.#root.querySelector<HTMLElement>(SIDES[name])!;
+		const other = this.#sideOpen();
+		if (open && other && other != name) this.#side(other, false);
+		if (open) this.#settings.close();
+		this.#flag(name, open);
 		el.inert = !open;
-		this.#root.querySelector('.list')!.setAttribute('aria-expanded', String(open));
+		button.setAttribute('aria-expanded', String(open));
 		// Focus once the panel is shown; WebKit won't focus inside it in the same frame.
-		if (open) requestAnimationFrame(() => requestAnimationFrame(() => el.querySelector<HTMLElement>('[aria-current="true"]')?.focus()));
-		else if (returnFocus) this.#root.querySelector<HTMLElement>('.list')?.focus();
+		if (open) requestAnimationFrame(() => requestAnimationFrame(() => (el.querySelector<HTMLElement>('[aria-current="true"]') ?? el.querySelector<HTMLElement>('[data-index]'))?.focus()));
+		else if (returnFocus) button.focus();
 		this.#activity();
 	}
 
@@ -1303,6 +1439,7 @@ export class QyroPlayer extends HTMLElement {
 		const edge = this.live ? this.#range().end : 0;
 		this.#scrubber.update(this.live && edge - t < LIVE_EDGE_S ? edge : t, buffered);
 		this.#paintNextCard(t);
+		this.#paintChapter(t);
 		const q = (s: string) => this.#root.querySelector(s)!;
 		const r = this.#range();
 		const scale = r.end - r.start;

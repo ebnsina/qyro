@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { initial, parse, playerAttrs, serialize, themeVars } from './state';
+import { chaptersOf, initial, parse, playerAttrs, serialize, themeVars } from './state';
 import { snippet, TABS } from './code';
 
 const templates = ['standard', 'course', 'live', 'hero'];
@@ -54,6 +54,18 @@ describe('code panel', () => {
 			expect(code).not.toMatch(/shaka/i);
 		}
 		expect(snippet(s, 'html', 'https://site.test')).toContain('\n\tmuted\n');
+	});
+
+	it('gives the Course template its chapters track, only on the film they were made for', () => {
+		const s = initial('course');
+		expect(chaptersOf(s)).toBe('/media/bbb/chapters.vtt');
+		expect(snippet(s, 'html', 'https://site.test')).toContain('<track kind="chapters" src="https://site.test/media/bbb/chapters.vtt">');
+		expect(snippet(s, 'react', 'https://site.test')).toContain('<track kind="chapters" src="https://site.test/media/bbb/chapters.vtt" />');
+		expect(snippet(s, 'js', 'https://site.test')).toContain("kind: 'chapters'");
+		s.source = 'sintel';
+		expect(chaptersOf(s)).toBeUndefined();
+		expect(chaptersOf(initial('standard'))).toBeUndefined();
+		expect(snippet(initial('standard'), 'html')).not.toContain('kind="chapters"');
 	});
 
 	it('adds CSS only when the theme changed', () => {

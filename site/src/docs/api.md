@@ -34,6 +34,8 @@ player.play();
 | `error` | `PlayerError \| null` | The current error, if any. |
 | `video` | `HTMLVideoElement` | The video inside the player. |
 | `ready` | `Promise` | Resolves once the playback engine has started. |
+| `chapters` | `Chapter[]` | `{ start, end?, title }` in seconds, sorted. Set them, or `null` for the file's. See [Chapters](/docs/chapters). |
+| `chapter` | `Chapter \| null` | The chapter playing now. Read only. |
 | `engine` | object or `null` | Advanced escape hatch: the playback engine itself. Most sites never need it. |
 
 ## Methods
@@ -48,6 +50,7 @@ player.play();
 | `addTextTrack(src, language, label?, kind?)` | Adds a caption file. Resolves when it's loaded. |
 | `toggleFullscreen()` | Enters or leaves full screen (native full screen on iPhone). |
 | `togglePictureInPicture()` | Enters or leaves picture in picture. |
+| `seekToChapter(index)` | Seeks to the start of a chapter, from 0. |
 | `retry()` | Loads again after an error, from where it stopped. |
 
 ## Playlists

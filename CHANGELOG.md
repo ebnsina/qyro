@@ -9,6 +9,7 @@ The first version.
 ### Added
 
 - Playlists: `player.playlist`, `next()`, `previous()`, `index`, `autoadvance` and `next-at`, with previous and next buttons, an Up next list inside the player, and an Up next card that counts down near the end.
+- Chapters from a WebVTT `<track kind="chapters">` or `chapters` attribute, from the stream, or from `player.chapters`, with `player.chapter`, `seekToChapter()` and a `chapterchange` event. A Chapters button opens a list inside the player, like Up next; the seek bar has a small gap at each chapter, the preview shows the chapter's title, and wide players show the current chapter by the time.
 - Settings → Captions → Caption style holds size, background and text color, so the top level is Quality, Speed, Captions and Audio.
 
 - `<qyro-player>`, a web component that plays HLS, DASH, live streams and MP4 in plain HTML and any framework.

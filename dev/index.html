@@ -22,7 +22,7 @@
 				q.set('poster', 'https://peach.blender.org/wp-content/uploads/bbb-splash.png');
 				q.set('thumbnails', '/site/static/media/bbb/storyboard.vtt');
 			}
-			for (const [k, v] of q) if (k != 'captions' && k != 'tracks') p.setAttribute(k, v);
+			for (const [k, v] of q) if (k != 'captions' && k != 'tracks' && k != 'chapter-track') p.setAttribute(k, v);
 			const track = (src, srclang, label) => p.append(Object.assign(document.createElement('track'), { kind: 'subtitles', src, srclang, label }));
 			if (q.has('captions')) track(q.get('captions'), 'en', 'English');
 			// ?tracks: English WebVTT plus Spanish SRT, for the language tests.
@@ -30,6 +30,8 @@
 				track('/test/fixtures/captions.vtt', 'en', 'English');
 				track('/test/fixtures/captions.es.srt', 'es', 'Español');
 			}
+			// ?chapter-track=<url>: chapters from a <track kind="chapters"> child.
+			if (q.has('chapter-track')) p.append(Object.assign(document.createElement('track'), { kind: 'chapters', src: q.get('chapter-track') }));
 			document.body.append(p);
 			window.player = p;
 		</script>
