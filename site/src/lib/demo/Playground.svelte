@@ -118,6 +118,15 @@
 	const EVENTS = ['loadedmetadata', 'play', 'playing', 'pause', 'waiting', 'seeking', 'seeked', 'ended', 'ratechange', 'volumechange', 'qualitychange', 'error', 'enterpictureinpicture', 'leavepictureinpicture'];
 	let log = $state<{ id: number; at: string; name: string; detail: string }[]>([]);
 	let seq = 0;
+	// Times count from the first event, not the playhead: live streams sit on a clock decades long.
+	let since = 0;
+
+	function elapsed(): string {
+		const now = performance.now();
+		if (!log.length) since = now;
+		const s = (now - since) / 1000;
+		return `${Math.floor(s / 60)}:${(s % 60).toFixed(1).padStart(4, '0')}`;
+	}
 
 	function describe(e: Event): string {
 		const p = e.target as PlayerEl & { volume: number; playbackRate: number };
@@ -133,9 +142,7 @@
 		const p = player;
 		if (!p) return;
 		const on = (e: Event) => {
-			const t = p.currentTime || 0;
-			const at = `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
-			log = [{ id: ++seq, at, name: e.type, detail: describe(e) }, ...log].slice(0, 60);
+			log = [{ id: ++seq, at: elapsed(), name: e.type, detail: describe(e) }, ...log].slice(0, 60);
 		};
 		for (const name of EVENTS) p.addEventListener(name, on);
 		return () => EVENTS.forEach((name) => p.removeEventListener(name, on));
@@ -553,7 +560,7 @@
 
 	.pg-log li {
 		display: grid;
-		grid-template-columns: 3.5rem 10rem minmax(0, 1fr);
+		grid-template-columns: 4.5rem 10rem minmax(0, 1fr);
 		gap: 0.75rem;
 		padding: 0.3rem 0;
 		border-bottom: 1px solid var(--ui-line);
@@ -561,7 +568,14 @@
 
 	.pg-log .at,
 	.pg-log .detail {
+		overflow: hidden;
 		color: var(--ui-muted);
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.pg-log .at {
+		font-variant-numeric: tabular-nums;
 	}
 
 	.pg-log .empty {
@@ -594,7 +608,7 @@
 		}
 
 		.pg-log li {
-			grid-template-columns: 3rem 7.5rem minmax(0, 1fr);
+			grid-template-columns: 4rem 7.5rem minmax(0, 1fr);
 			gap: 0.5rem;
 		}
 	}

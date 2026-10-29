@@ -62,6 +62,18 @@ test('the events log shows play and pause', async ({ page }) => {
 	await expect(page.getByRole('log')).toContainText('Play the video');
 });
 
+test('event times count from the first event and fit their column, even on live', async ({ page }) => {
+	await page.goto('/demo?t=live');
+	await ready(page);
+	await player(page).evaluate((p: any) => p.play());
+	await expect(page.getByRole('log')).toContainText('play');
+	const times = page.getByRole('log').locator('.at');
+	for (const at of await times.all()) {
+		await expect(at).toHaveText(/^\d+:\d\d\.\d$/);
+		expect(await at.evaluate((e) => e.scrollWidth <= e.clientWidth)).toBe(true);
+	}
+});
+
 test('old demo pages open the playground on that template', async ({ page }) => {
 	await page.goto('/demo/live');
 	await expect(page).toHaveURL(/\/demo\?t=live/);
