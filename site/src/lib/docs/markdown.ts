@@ -37,7 +37,7 @@ export function blocks(body: string): Block[] {
 	};
 	const tokens = marked.lexer(body);
 	for (const t of tokens) {
-		const preview = t.type == 'html' && /<!-- preview:(\w+) -->/.exec((t as Tokens.HTML).raw);
+		const preview = t.type == 'html' && /<!-- (?:preview|ai):(\w+) -->/.exec((t as Tokens.HTML).raw);
 		if (t.type == 'code') {
 			flush();
 			const lang = LANGS[(t as Tokens.Code).lang ?? ''] ?? 'shell';
