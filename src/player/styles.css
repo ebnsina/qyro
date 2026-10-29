@@ -162,8 +162,10 @@ video {
 	border-radius: inherit;
 }
 
-/* When the picture's shape is within a few percent of the player's, fill it: no hairline bars. */
-video[data-fill] {
+/* When the picture's shape is within a few percent of the player's, fill it: no hairline bars.
+   The poster always fills, since posters are rarely made at the video's exact shape. */
+video[data-fill],
+.root[data-fresh] video {
 	object-fit: cover;
 }
 

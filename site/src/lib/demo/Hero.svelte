@@ -1,73 +1,40 @@
 <script lang="ts">
+	import { getContext } from 'svelte';
 	import Button from '#lib/sinaui/ui/Button.svelte';
-	import { media } from '#lib/site/links.js';
+	import type { PlaygroundContext } from './context.js';
 
-	let player = $state<HTMLElement & { muted: boolean; play(): Promise<void>; seek(t: number): void; toggleFullscreen(): Promise<void> }>();
+	const ctx = getContext<PlaygroundContext>('playground');
 
 	// The background loop has no controls; "Watch" turns the sound on and goes full screen.
 	async function watch() {
-		if (!player) return;
-		player.muted = false;
-		player.seek(0);
-		await player.toggleFullscreen();
+		const p = ctx.player;
+		if (!p) return;
+		p.muted = false;
+		p.seek(0);
+		await p.toggleFullscreen();
 	}
 </script>
 
-<section class="hero-demo">
-	<qyro-player bind:this={player} src={media.tos.hls} autoplay muted loop class="hero-demo-video" style="--qyro-radius: 0"></qyro-player>
-	<div class="hero-demo-copy">
-		<p class="hero-demo-kicker">Now showing</p>
-		<h2>Tears of Steel</h2>
-		<p>A short film about a group of warriors and scientists in a future Amsterdam.</p>
-		<Button size="lg" onclick={watch}>Watch</Button>
-	</div>
-</section>
+<div class="side-over hero-copy">
+	<p class="kicker">Now showing</p>
+	<h2>Tears of Steel</h2>
+	<p>A short film about warriors and scientists in a future Amsterdam.</p>
+	<Button size="lg" onclick={watch}>Watch</Button>
+</div>
 
 <style>
-	.hero-demo {
-		position: relative;
-		margin-inline: calc(50% - 50vw);
-		min-height: min(80vh, 44rem);
-		display: grid;
-		align-items: end;
-		overflow: hidden;
-		background: #000;
-	}
-
-	:global(.hero-demo-video) {
-		position: absolute !important;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		aspect-ratio: auto !important;
-	}
-
-	/* A background loop: no controls, no pointer, just the film. */
-	:global(.hero-demo-video::part(controls)),
-	:global(.hero-demo-video::part(big-play-button)),
-	:global(.hero-demo-video::part(top-bar)) {
-		display: none;
-	}
-
-	:global(.hero-demo-video::part(video)) {
-		object-fit: cover;
-	}
-
-	.hero-demo-copy {
-		position: relative;
-		width: min(100% - 2rem, 72rem);
-		margin: 0 auto;
-		padding: 8rem 0 3rem;
+	.hero-copy {
+		padding: 6rem 1.5rem 1.75rem;
 		color: #fff;
-		pointer-events: none;
 		background: linear-gradient(to top, rgb(0 0 0 / 0.7), transparent);
+		pointer-events: none;
 	}
 
-	.hero-demo-copy :global(.btn) {
+	.hero-copy :global(.btn) {
 		pointer-events: auto;
 	}
 
-	.hero-demo-kicker {
+	.kicker {
 		margin: 0;
 		font-size: 0.8125rem;
 		letter-spacing: 0.08em;
@@ -75,16 +42,16 @@
 		opacity: 0.8;
 	}
 
-	.hero-demo-copy h2 {
+	h2 {
 		margin: 0.25rem 0 0.5rem;
-		font-size: clamp(2.25rem, 6vw, 4rem);
+		font-size: clamp(2rem, 8cqi, 4rem);
 		letter-spacing: -0.04em;
 		line-height: 1;
 	}
 
-	.hero-demo-copy p:not(.hero-demo-kicker) {
+	p:not(.kicker) {
 		max-width: 40ch;
-		margin: 0 0 1.5rem;
+		margin: 0 0 1.25rem;
 		opacity: 0.9;
 	}
 </style>
