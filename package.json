@@ -1,7 +1,7 @@
 {
 	"name": "qyro",
 	"version": "0.1.0",
-	"description": "A liquid glass video player web component for HLS, DASH, live and MP4.",
+	"description": "A beautiful video player for any website: HLS, DASH, live and MP4 with captions, thumbnails and accessibility, in one web component.",
 	"license": "MIT",
 	"author": "ebnsina <ebnsina.me@gmail.com>",
 	"repository": { "type": "git", "url": "git+https://github.com/ebnsina/qyro.git" },

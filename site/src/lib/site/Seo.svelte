@@ -8,7 +8,7 @@
 	}
 
 	let { title, description }: Props = $props();
-	const full = $derived(title == 'Qyro' ? 'Qyro: a liquid glass video player' : `${title} · Qyro`);
+	const full = $derived(title == 'Qyro' ? 'Qyro: a beautiful video player for any website' : `${title} · Qyro`);
 	const url = $derived(SITE + page.url.pathname);
 </script>
 

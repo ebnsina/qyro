@@ -37,17 +37,17 @@
 	];
 </script>
 
-<Seo title="Qyro" description="Qyro is a liquid glass video player for the web: one HTML element for HLS, DASH, live and MP4, with captions, thumbnails, keyboard and touch." />
+<Seo title="Qyro" description="Qyro is a beautiful video player for any website. Streaming, live, captions and accessibility work everywhere, from one HTML element." />
 
 <Header />
 
 <main id="main">
 	<section class="hero site-wrap">
 		<Badge tone="neutral" icon={false}>Open source · MIT</Badge>
-		<h1>A video player made of glass.</h1>
+		<h1>A beautiful video player for any website.</h1>
 		<p class="site-lede">
-			Qyro is one HTML element that plays HLS, DASH, live streams and MP4 behind calm, liquid glass controls, with captions,
-			thumbnails, and full keyboard and touch support.
+			Adaptive streaming, live, captions and thumbnails that work in every browser, on every phone, with a keyboard or a
+			screen reader. One HTML element, ready in a minute.
 		</p>
 		<div class="hero-actions">
 			<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>

@@ -144,6 +144,7 @@
 
 <style>
 	.field {
+		--thumb: 1.125rem;
 		display: grid;
 		/* Label stays tight when a neighbor is taller. */
 		align-content: start;
@@ -151,10 +152,12 @@
 		font: var(--ui-font-size)/1.5 var(--ui-font);
 		color: var(--ui-fg);
 	}
+	/* Inset like the track, so the value sits over the track's end, not past it. */
 	.head {
 		display: flex;
 		justify-content: space-between;
 		gap: 1rem;
+		padding-inline-end: calc(var(--thumb) / 2);
 	}
 	label {
 		font-weight: 500;
@@ -165,7 +168,6 @@
 	}
 	.slider {
 		--track: 0.375rem;
-		--thumb: 1.125rem;
 		position: relative;
 		/* Tall enough to grab; the track itself stays thin. */
 		block-size: 1.75rem;

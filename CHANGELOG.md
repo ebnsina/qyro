@@ -9,7 +9,7 @@ The first version.
 ### Added
 
 - `<qyro-player>`, a web component that plays HLS, DASH, live streams and MP4 in plain HTML and any framework.
-- Liquid glass controls: a thin seek bar with buffered range, a glass bead thumb, a position dot and a time or thumbnail preview; play, volume (the slider grows out of the icon), captions, settings, picture in picture and full screen in floating capsules; times on the seek bar's line that never shift it.
+- Frosted glass controls: a thin seek bar with buffered range, a glass bead thumb, a position dot and a time or thumbnail preview; play, volume (the slider grows out of the icon), captions, settings, picture in picture and full screen in floating capsules; times on the seek bar's line that never shift it.
 - Settings for quality (Auto shows the current resolution), speed, captions with Auto by device language, caption size, background and color, and audio language. Rows with no real choice are hidden.
 - Storyboard thumbnails from a WebVTT sprite (`thumbnails`) or the stream's own image track.
 - Captions from `<track>` children (WebVTT, SRT, TTML), from the stream, and from `addTextTrack()`; choices are remembered in the browser.

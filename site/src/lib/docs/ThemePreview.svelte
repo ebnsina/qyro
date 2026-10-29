@@ -46,9 +46,11 @@
 		margin: 1.5rem 0 2rem;
 	}
 
+	/* One grid, one row gap: a slider's grab area already pads its track, so rows sit close. */
 	.theme-controls {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-		gap: 1rem 1.5rem;
+		align-items: start;
+		gap: 0.5rem 1.5rem;
 	}
 </style>

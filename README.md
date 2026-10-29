@@ -1,6 +1,6 @@
 # Qyro
 
-A liquid glass video player for the web. One element, `<qyro-player>`, plays HLS, DASH, live streams and MP4 with frosted glass controls, captions, storyboard thumbnails, and full keyboard and touch support. It works in plain HTML and in every framework.
+A beautiful video player for any website. One element, `<qyro-player>`, streams HLS, DASH, live and MP4 with captions, storyboard thumbnails, and full keyboard, touch and screen reader support. It works in plain HTML and in every framework, and its controls are frosted glass.
 
 **Docs and demos:** https://ebnsina.github.io/qyro · **For AI agents:** [`skills/qyro/SKILL.md`](skills/qyro/SKILL.md) and https://ebnsina.github.io/qyro/llms.txt
 
