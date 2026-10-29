@@ -42,6 +42,7 @@ export const SHORTCUTS: [string, string][] = [
 	['M', 'Mute'],
 	['C', 'Captions'],
 	['F', 'Full screen'],
+	['Shift + N / Shift + P', 'Next or previous video in a playlist'],
 	['?', 'Show these shortcuts'],
 	['Shift + F10', 'Player menu'],
 ];

@@ -9,12 +9,17 @@ export interface Menu {
 	/** What the row shows on the main page, e.g. "Auto (720p)". */
 	value(): string;
 	select(value: number): void;
+	/** Rows under the choices that open their own page, e.g. Captions → Caption style. */
+	more?(): Menu[];
 }
 
-/** The settings sheet: a main page of menus, each opening a page of choices that slides in. */
+const hasChoice = (m: Menu) => m.options().length > 1 || !!m.more?.().length;
+
+/** The settings sheet: a main page of menus, each opening a page of choices that slides in, and deeper. */
 export class Settings {
 	#open = false;
-	#menu: Menu | null = null;
+	/** The pages opened from the main page, deepest last. */
+	#stack: Menu[] = [];
 	#main: HTMLElement;
 	#sub: HTMLElement;
 
@@ -39,7 +44,7 @@ export class Settings {
 
 	/** Menus with a real choice to make; a stream with one audio track shows no audio row. */
 	visible(): Menu[] {
-		return this.menus().filter((m) => m.options().length > 1);
+		return this.menus().filter(hasChoice);
 	}
 
 	toggle(): void {
@@ -50,7 +55,7 @@ export class Settings {
 	open(): void {
 		if (!this.visible().length) return;
 		this.#open = true;
-		this.#menu = null;
+		this.#stack = [];
 		this.render();
 		this.sheet.inert = false;
 		this.button.setAttribute('aria-expanded', 'true');
@@ -78,51 +83,74 @@ export class Settings {
 	}
 
 	#draw(): void {
-		this.#main.innerHTML = this.visible()
-			.map(
-				(m) =>
-					`<button class="item" role="menuitem" aria-haspopup="menu" data-menu="${m.id}"><span class="label">${m.label}</span><span class="value">${esc(m.value())}</span>${icons.next}</button>`,
-			)
-			.join('');
-		this.#main.dataset.state = this.#menu ? 'left' : '';
-		this.#sub.dataset.state = this.#menu ? '' : 'right';
-		this.#main.inert = !!this.#menu;
-		this.#sub.inert = !this.#menu;
-		if (!this.#menu) return;
-		const m = this.#menu;
+		this.#main.innerHTML = this.visible().map(row).join('');
+		const m = this.#stack.at(-1);
+		this.#main.dataset.state = m ? 'left' : '';
+		this.#sub.dataset.state = m ? '' : 'right';
+		this.#main.inert = !!m;
+		this.#sub.inert = !m;
+		if (!m) return;
+		const parent = this.#stack.at(-2);
 		this.#sub.setAttribute('aria-label', m.label);
 		this.#sub.innerHTML =
-			`<button class="item head" role="menuitem" data-back aria-label="Back to settings">${icons.back}<span>${m.label}</span></button>` +
+			`<button class="item head" role="menuitem" data-back aria-label="Back to ${parent ? esc(parent.label) : 'settings'}">${icons.back}<span>${m.label}</span></button>` +
 			m
 				.options()
 				.map(
 					(o) =>
 						`<button class="item" role="menuitemradio" aria-checked="${o.active}" data-value="${o.value}"><span class="check">${icons.check}</span><span class="label">${esc(o.label)}</span>${o.badge ? `<span class="badge">${esc(o.badge)}</span>` : ''}</button>`,
 				)
-				.join('');
+				.join('') +
+			(m.more?.() ?? []).filter(hasChoice).map(row).join('');
 	}
 
-	#show(menu: Menu | null): void {
-		const from = this.#menu?.id;
-		this.#menu = menu;
+	/** Opens a page one level deeper. */
+	#push(menu: Menu): void {
+		this.#stack.push(menu);
+		this.#slide();
 		this.render();
-		if (menu) this.#focusFirst(this.#sub, '[aria-checked="true"]');
-		else this.#main.querySelector<HTMLElement>(`[data-menu="${from}"]`)?.focus();
+		this.#focusFirst(this.#sub, '[aria-checked="true"]');
+	}
+
+	/** Goes back one level, focusing the row that opened the page. */
+	#pop(): void {
+		const from = this.#stack.pop();
+		if (this.#stack.length) this.#slide();
+		this.render();
+		const page = this.#stack.length ? this.#sub : this.#main;
+		page.querySelector<HTMLElement>(`[data-menu="${from?.id}"]`)?.focus();
+	}
+
+	// Replays the slide when one sub page replaces another.
+	#slide(): void {
+		if (this.#stack.length < 2 && this.#sub.dataset.state != '') return;
+		this.#sub.dataset.state = 'right';
+		void this.#sub.offsetWidth;
+	}
+
+	#find(id: string): Menu | undefined {
+		const top = this.#stack.at(-1);
+		return (top ? (top.more?.() ?? []) : this.visible()).find((m) => m.id == id);
 	}
 
 	#click = (e: Event) => {
 		const item = (e.target as Element).closest<HTMLElement>('.item');
 		if (!item) return;
-		if (item.dataset.menu) return this.#show(this.visible().find((m) => m.id == item.dataset.menu) ?? null);
-		if ('back' in item.dataset) return this.#show(null);
-		if (item.dataset.value !== undefined && this.#menu) {
-			this.#menu.select(Number(item.dataset.value));
-			this.#show(null);
+		if (item.dataset.menu) {
+			const m = this.#find(item.dataset.menu);
+			return m && this.#push(m);
+		}
+		if ('back' in item.dataset) return this.#pop();
+		const top = this.#stack.at(-1);
+		if (item.dataset.value !== undefined && top) {
+			top.select(Number(item.dataset.value));
+			this.#pop();
 		}
 	};
 
 	#key = (e: KeyboardEvent) => {
-		const page = this.#menu ? this.#sub : this.#main;
+		const deep = this.#stack.length > 0;
+		const page = deep ? this.#sub : this.#main;
 		const items = [...page.querySelectorAll<HTMLElement>('.item')];
 		const i = items.indexOf(e.composedPath()[0] as HTMLElement);
 		const go = (n: number) => items[(n + items.length) % items.length]?.focus();
@@ -140,13 +168,13 @@ export class Settings {
 				go(-1);
 				break;
 			case 'ArrowLeft':
-				if (this.#menu) this.#show(null);
+				if (deep) this.#pop();
 				break;
 			case 'ArrowRight':
-				if (!this.#menu) items[i]?.click();
+				if (items[i]?.dataset.menu) items[i].click();
 				break;
 			case 'Escape':
-				if (this.#menu) this.#show(null);
+				if (deep) this.#pop();
 				else this.close(true);
 				break;
 			case 'Tab':
@@ -164,6 +192,10 @@ export class Settings {
 	#focusFirst(page: HTMLElement, selector = '.item'): void {
 		(page.querySelector<HTMLElement>(selector) ?? page.querySelector<HTMLElement>('.item'))?.focus();
 	}
+}
+
+function row(m: Menu): string {
+	return `<button class="item" role="menuitem" aria-haspopup="menu" data-menu="${m.id}"><span class="label">${m.label}</span><span class="value">${esc(m.value())}</span>${icons.next}</button>`;
 }
 
 function focusKey(el: HTMLElement): string | null {

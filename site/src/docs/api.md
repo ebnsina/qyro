@@ -50,6 +50,27 @@ player.play();
 | `togglePictureInPicture()` | Enters or leaves picture in picture. |
 | `retry()` | Loads again after an error, from where it stopped. |
 
+## Playlists
+
+```js
+player.playlist = [
+	{ src: '/ep1.m3u8', title: 'Episode 1', poster: '/ep1.jpg', duration: 1520, videoId: 'ep-1' },
+	{ src: '/ep2.m3u8', title: 'Episode 2', captions: [{ src: '/ep2.en.vtt', srclang: 'en', label: 'English' }] },
+];
+player.next();
+player.previous(); // back to the start, or the video before when this one has just begun
+player.index = 1; // play the second one
+```
+
+With a playlist, previous and next buttons sit beside play, and an Up next list opens from the list button. Near the end, an Up next card counts down with Play now and Cancel. Each item is its own view in analytics. <kbd>Shift</kbd> + <kbd>N</kbd> and <kbd>Shift</kbd> + <kbd>P</kbd> move through it.
+
+| Property or method | What it does |
+| --- | --- |
+| `playlist` | The items; setting it starts the first one. Each needs `src`; `title`, `poster`, `duration`, `thumbnails`, `captions` and `videoId` are optional. |
+| `index` | The item playing, or -1. Setting it plays that item. |
+| `autoadvance` | Plays the next item when one ends. `true` unless `autoadvance="false"`. |
+| `next()`, `previous()` | Move through the list. |
+
 ## Types
 
 ```ts

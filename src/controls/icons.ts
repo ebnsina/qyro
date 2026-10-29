@@ -22,6 +22,9 @@ import KeyboardIcon from '@hugeicons/core-free-icons/KeyboardIcon';
 import Cancel01Icon from '@hugeicons/core-free-icons/Cancel01Icon';
 import Activity01Icon from '@hugeicons/core-free-icons/Activity01Icon';
 import RefreshCcwIcon from '@hugeicons/core-free-icons/RefreshCcwIcon';
+import PlayListIcon from '@hugeicons/core-free-icons/PlayListIcon';
+import PreviousIcon from '@hugeicons/core-free-icons/PreviousIcon';
+import NextIcon from '@hugeicons/core-free-icons/NextIcon';
 
 type IconNode = readonly (readonly [string, Record<string, string | number>])[];
 
@@ -66,4 +69,7 @@ export const icons = {
 	close: svg(Cancel01Icon as IconNode),
 	stats: svg(Activity01Icon as IconNode),
 	replay: svg(RefreshCcwIcon as IconNode),
+	playlist: svg(PlayListIcon as IconNode),
+	previous: svg(PreviousIcon as IconNode, true),
+	nextItem: svg(NextIcon as IconNode, true),
 };

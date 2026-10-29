@@ -58,6 +58,8 @@ Set these in HTML or with `setAttribute`. Most have a matching property (see [Ja
 | `start` | seconds | Where playback starts. |
 | `live` | boolean | Treat the stream as live. Live streams are found on their own; use this only when a stream doesn't say so. |
 | `thumbnails` | URL | A WebVTT storyboard for the seek preview. See [Thumbnails](https://ebnsina.github.io/qyro/docs/thumbnails.md). |
+| `autoadvance` | `"false"` to turn off | With a playlist, plays the next video when one ends. On by default. |
+| `next-at` | seconds | With a playlist, shows the Up next card from this time (say, when the credits start) and moves on ten seconds later. Without it, the card shows in the last ten seconds. |
 | `glass` | `"light"` | Milky glass with dark glyphs, for bright videos. Dark glass is the default. |
 | `seyr-key` | text | Turns on [Seyr analytics](https://ebnsina.github.io/qyro/docs/analytics.md) with this project key. |
 | `seyr-host` | URL | Where your Seyr server runs. |
@@ -126,6 +128,28 @@ player.play();
 | `retry()` | Loads again after an error, from where it stopped. |
 
 
+### Playlists
+
+```js
+player.playlist = [
+	{ src: '/ep1.m3u8', title: 'Episode 1', poster: '/ep1.jpg', duration: 1520, videoId: 'ep-1' },
+	{ src: '/ep2.m3u8', title: 'Episode 2', captions: [{ src: '/ep2.en.vtt', srclang: 'en', label: 'English' }] },
+];
+player.next();
+player.previous(); // back to the start, or the video before when this one has just begun
+player.index = 1; // play the second one
+```
+
+With a playlist, previous and next buttons sit beside play, and an Up next list opens from the list button. Near the end, an Up next card counts down with Play now and Cancel. Each item is its own view in analytics. <kbd>Shift</kbd> + <kbd>N</kbd> and <kbd>Shift</kbd> + <kbd>P</kbd> move through it.
+
+| Property or method | What it does |
+| --- | --- |
+| `playlist` | The items; setting it starts the first one. Each needs `src`; `title`, `poster`, `duration`, `thumbnails`, `captions` and `videoId` are optional. |
+| `index` | The item playing, or -1. Setting it plays that item. |
+| `autoadvance` | Plays the next item when one ends. `true` unless `autoadvance="false"`. |
+| `next()`, `previous()` | Move through the list. |
+
+
 ### Types
 
 ```ts
@@ -160,6 +184,15 @@ Fires when the picture changes resolution, whether the viewer chose it or Auto d
 player.addEventListener('qualitychange', (e) => {
 	const { height, width, bitrate, auto } = e.detail; // e.g. 720, 1280, 2149280, true
 });
+```
+
+
+### playlistchange and itemchange
+
+`playlistchange` fires when `playlist` is set (`detail.length`), and `itemchange` each time another item starts (`detail.index`, `detail.item`).
+
+```js
+player.addEventListener('itemchange', (e) => highlightEpisode(e.detail.index));
 ```
 
 
