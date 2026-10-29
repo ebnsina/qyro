@@ -1,0 +1,7 @@
+1
+00:00:00,000 --> 00:00:06,000
+Los subtítulos están activados.
+
+2
+00:00:06,000 --> 00:00:12,000
+Siguen aquí, seis segundos después.

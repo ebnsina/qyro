@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+		<script>
+			// Before first paint: the saved theme, and a flag that JavaScript runs (scroll reveals only arm then).
+			try {
+				const t = localStorage.getItem('theme');
+				if (t) document.documentElement.dataset.theme = t;
+			} catch {}
+			document.documentElement.classList.add('js');
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

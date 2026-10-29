@@ -3,3 +3,7 @@ dist/
 /docs/
 /data/
 .DS_Store
+test-results/
+playwright-report/
+.playwright-cli/
+/.*.mjs
