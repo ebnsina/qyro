@@ -270,29 +270,47 @@ kbd {
 
 /* ---------- Docs prose ---------- */
 
+/*
+ * One vertical rhythm for everything in a docs page. A column with a gap spaces every block the
+ * same, whatever margins components carry; headings add room above themselves on top of it.
+ */
 .site-prose {
+	--flow: 1.125rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--flow);
 	max-width: var(--site-measure);
 	min-width: 0;
 }
 
+.site-prose > * {
+	margin-block: 0;
+	min-width: 0;
+}
+
 .site-prose h1 {
-	margin: 0 0 1rem;
 	font-size: clamp(2rem, 4vw, 2.5rem);
 	letter-spacing: -0.03em;
 	line-height: 1.1;
 	font-weight: 650;
 }
 
-.site-prose h2 {
-	margin: 2.75rem 0 0.75rem;
+.site-prose > h2 {
+	margin-block-start: calc(2.5rem - var(--flow));
 	font-size: 1.375rem;
+	line-height: 1.25;
 	letter-spacing: -0.02em;
 	font-weight: 620;
 }
 
-.site-prose h3 {
-	margin: 2rem 0 0.5rem;
+.site-prose > h3 {
+	margin-block-start: calc(1.5rem - var(--flow));
 	font-size: 1.0625rem;
+}
+
+/* A heading sits closer to what it introduces than to what came before. */
+.site-prose > :is(h2, h3) + * {
+	margin-block-start: calc(0.5rem - var(--flow));
 }
 
 .site-prose p,
@@ -311,41 +329,35 @@ kbd {
 	background: var(--ui-subtle);
 }
 
-.site-prose table {
+.site-prose > table {
 	display: block;
 	overflow-x: auto;
 	width: 100%;
-	margin: 1.25rem 0;
 	border-collapse: collapse;
 	font-size: 0.9375rem;
 }
 
-.site-prose th,
-.site-prose td {
+.site-prose > table :is(th, td) {
 	padding: 0.6rem 0.9rem 0.6rem 0;
 	border-bottom: 1px solid var(--ui-line);
 	text-align: left;
 	vertical-align: top;
 }
 
-.site-prose th {
+.site-prose > table th {
 	font-weight: 600;
 	white-space: nowrap;
 }
 
-.site-prose td:first-child {
+.site-prose > table td:first-child {
 	white-space: nowrap;
 }
 
-.site-prose .codeblock {
-	margin: 1.25rem 0;
-}
-
-.site-prose ol,
-.site-prose ul {
+/* Lists in the prose only; a code block's line numbers are a list too and keep their own spacing. */
+.site-prose > :is(ol, ul) {
 	padding-left: 1.25rem;
 }
 
-.site-prose li + li {
-	margin-top: 0.3rem;
+.site-prose > :is(ol, ul) > li + li {
+	margin-top: 0.35rem;
 }

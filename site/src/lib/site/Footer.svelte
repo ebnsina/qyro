@@ -15,7 +15,7 @@
 	<div class="site-footer-inner">
 		<div class="site-footer-brand">
 			<Mark />
-			<p>A liquid glass video player for the web. Free and open source.</p>
+			<p>A beautiful video player for any website. Free and open source.</p>
 			<ThemeToggle size="sm" />
 		</div>
 		{#each columns as col (col.title)}
