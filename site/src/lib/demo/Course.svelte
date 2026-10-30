@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { file, media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
 
 	const chapters = [
 		{ t: 0, title: 'Opening: morning in the meadow' },
@@ -43,7 +43,7 @@
 
 <div class="course">
 	<div>
-		<qyro-player bind:this={player} src={media.bbb.hls} poster={media.bbb.poster} title="Lesson 3: Storytelling with animals" thumbnails={file(media.bbb.storyboard)} ontimeupdate={track}></qyro-player>
+		<Player bind:el={player} extra={{ title: 'Lesson 3: Storytelling with animals' }} ontimeupdate={track} />
 		{#if resume}
 			<p class="course-resume">You stopped at {fmt(resume)}. <button onclick={() => (jump(resume!), (resume = null))}>Resume</button></p>
 		{/if}
@@ -127,7 +127,7 @@
 		min-width: 3ch;
 	}
 
-	@media (max-width: 860px) {
+	@container frame (max-width: 760px) {
 		.course {
 			grid-template-columns: minmax(0, 1fr);
 		}

@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
 </script>
 
 <div class="vertical">
-	<qyro-player src={media.bbb.hls} poster={media.bbb.poster} title="A minute in the meadow" start="95" loop style="--qyro-aspect-ratio: 9 / 16; --qyro-radius: 24px"></qyro-player>
+	<Player style="--qyro-aspect-ratio: 9 / 16" />
 	<p>Short-form, 9:16. The controls reflow for a narrow player; double-tap the sides to skip.</p>
 </div>
 

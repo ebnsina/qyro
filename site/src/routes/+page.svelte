@@ -16,6 +16,7 @@
 	import Footer from '#lib/site/Footer.svelte';
 	import Header from '#lib/site/Header.svelte';
 	import Seo from '#lib/site/Seo.svelte';
+	import AiGuide from '#lib/ai/AiGuide.svelte';
 		import { file, media, to } from '#lib/site/links.js';
 	import { reveal } from '#lib/site/reveal.js';
 
@@ -37,17 +38,17 @@
 	];
 </script>
 
-<Seo title="Qyro" description="Qyro is a liquid glass video player for the web: one HTML element for HLS, DASH, live and MP4, with captions, thumbnails, keyboard and touch." />
+<Seo title="Qyro" description="Qyro is a beautiful video player for any website. Streaming, live, captions and accessibility work everywhere, from one HTML element." />
 
 <Header />
 
 <main id="main">
 	<section class="hero site-wrap">
 		<Badge tone="neutral" icon={false}>Open source · MIT</Badge>
-		<h1>A video player made of glass.</h1>
+		<h1>A beautiful video player for any website.</h1>
 		<p class="site-lede">
-			Qyro is one HTML element that plays HLS, DASH, live streams and MP4 behind calm, liquid glass controls, with captions,
-			thumbnails, and full keyboard and touch support.
+			Adaptive streaming, live, captions and thumbnails that work in every browser, on every phone, with a keyboard or a
+			screen reader. One HTML element, ready in a minute.
 		</p>
 		<div class="hero-actions">
 			<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
@@ -107,13 +108,13 @@
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap install">
 			<div>
-				<h2>Works with your coding agent</h2>
+				<h2>Build it with your AI</h2>
 				<p class="site-lede">
-					Give Claude Code, Codex or any agent the Qyro skill or llms.txt, and it adds, themes and wires up the player correctly.
+					Claude Code, Codex, Cursor, Copilot and the rest add Qyro correctly with its skill. Copy a prompt and paste it into yours.
 				</p>
-				<Button variant="outline" href={to('/docs/ai')}>Use with AI</Button>
+				<Button variant="outline" href={to('/docs/ai')}>Install the skill</Button>
 			</div>
-			<CodeBlock code={`Add a Qyro video player playing /film.m3u8 with English captions\nand a storyboard. Use the Qyro skill.`} lang="shell" />
+			<AiGuide show="compact" />
 		</div>
 	</section>
 </main>

@@ -1,9 +1,10 @@
 import { pages, sections, page } from './pages';
 import { SITE } from '#lib/site/links.js';
+import { expand } from '#lib/ai/ai.js';
 
 /** llms.txt in the llmstxt.org format: a title, a summary, and links to every page as Markdown. */
 export function llms(base: string): string {
-	const lines = ['# Qyro', '', '> A liquid glass video player web component: one <qyro-player> element for HLS, DASH, live and MP4, with captions, storyboard thumbnails, keyboard and touch controls, theming and optional Seyr analytics.', ''];
+	const lines = ['# Qyro', '', '> A beautiful video player for any website: one <qyro-player> element that streams HLS, DASH, live and MP4 with captions, thumbnails, keyboard, touch and screen reader support in every browser, plus theming and optional private analytics.', ''];
 	for (const s of sections) {
 		lines.push(`## ${s.title}`, '');
 		for (const slug of s.slugs) {
@@ -17,5 +18,5 @@ export function llms(base: string): string {
 
 /** Every docs page in one file. */
 export function llmsFull(): string {
-	return ['# Qyro', '', ...pages.map((p) => p.body.replace(/^# .*\n/, `# ${p.title}\n`))].join('\n');
+	return ['# Qyro', '', ...pages.map((p) => expand(p.body).replace(/^# .*\n/, `# ${p.title}\n`))].join('\n');
 }

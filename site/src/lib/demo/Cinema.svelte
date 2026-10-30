@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
+	import { media } from '#lib/site/media.js';
 </script>
 
 <div class="cinema">
-	<qyro-player src={media.sintel.hls} title={media.sintel.title} style="--qyro-radius: 0; --qyro-aspect-ratio: 21 / 9"></qyro-player>
+	<Player style="--qyro-radius: 0; --qyro-aspect-ratio: 21 / 9" />
 	<div class="cinema-info">
 		<h2>Sintel</h2>
 		<p>2010 · Fantasy · 15 min · {media.sintel.credit}</p>
@@ -12,15 +13,13 @@
 
 <style>
 	.cinema {
-		margin-inline: calc(50% - 50vw);
-		padding: clamp(1rem, 4vw, 3rem) 0 2.5rem;
+		padding: 1.5rem 0 2rem;
 		background: #050506;
 		color: #eee;
 	}
 
 	.cinema-info {
-		width: min(100% - 2rem, 72rem);
-		margin: 1.5rem auto 0;
+		padding: 1.25rem 1.25rem 0;
 	}
 
 	.cinema-info h2 {

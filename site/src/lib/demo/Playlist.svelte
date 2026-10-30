@@ -1,5 +1,12 @@
 <script lang="ts">
-	import { file, media } from '#lib/site/links.js';
+	import { getContext } from 'svelte';
+	import { file } from '#lib/site/links.js';
+	import { media } from '#lib/site/media.js';
+	import { CAPTIONS } from './state.js';
+	import type { PlayerContext } from './context.js';
+
+	// A playlist brings its own videos; the playground's other settings still apply.
+	const ctx = getContext<PlayerContext>('player');
 
 	const episodes = [
 		{ id: 'bbb', title: media.bbb.title, src: media.bbb.hls, poster: media.bbb.poster, thumbnails: file(media.bbb.storyboard), length: '10:34' },
@@ -9,7 +16,6 @@
 	let index = $state(0);
 	const now = $derived(episodes[index]);
 	const next = $derived(episodes[index + 1]);
-	let player = $state<HTMLElement & { play(): Promise<void> }>();
 
 	// Changing src loads the next episode; autoplay carries on from the one that ended.
 	function play(i: number) {
@@ -19,7 +25,9 @@
 
 <div class="playlist">
 	<div>
-		<qyro-player bind:this={player} src={now.src} poster={now.poster} title={now.title} thumbnails={now.thumbnails} autoplay={index > 0} onended={() => next && play(index + 1)}></qyro-player>
+		<qyro-player {...ctx.attrs} src={now.src} poster={now.poster} title={now.title} thumbnails={now.thumbnails} autoplay={index > 0 || ctx.attrs.autoplay ? true : undefined} onended={() => next && play(index + 1)}>
+			{#if ctx.captions}<track kind="subtitles" srclang="en" label="English" src={file(CAPTIONS)} default />{/if}
+		</qyro-player>
 		{#if next}<p class="playlist-next">Up next: {next.title}</p>{/if}
 	</div>
 	<ol aria-label="Episodes">
@@ -84,7 +92,7 @@
 		flex: 1;
 	}
 
-	@media (max-width: 860px) {
+	@container frame (max-width: 760px) {
 		.playlist {
 			grid-template-columns: minmax(0, 1fr);
 		}

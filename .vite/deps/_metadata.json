@@ -1,0 +1,159 @@
+{
+  "hash": "8acc0d91",
+  "configHash": "08ef1c3d",
+  "lockfileHash": "1b39086b",
+  "browserHash": "ff2089c6",
+  "optimized": {
+    "@hugeicons/core-free-icons/Activity01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Activity01Icon.js",
+      "file": "@hugeicons_core-free-icons_Activity01Icon.js",
+      "fileHash": "d996c3cb",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Alert02Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Alert02Icon.js",
+      "file": "@hugeicons_core-free-icons_Alert02Icon.js",
+      "fileHash": "9798004b",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/ArrowLeft01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/ArrowLeft01Icon.js",
+      "file": "@hugeicons_core-free-icons_ArrowLeft01Icon.js",
+      "fileHash": "b60917b5",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/ArrowRight01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/ArrowRight01Icon.js",
+      "file": "@hugeicons_core-free-icons_ArrowRight01Icon.js",
+      "fileHash": "1bb2e28f",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Cancel01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Cancel01Icon.js",
+      "file": "@hugeicons_core-free-icons_Cancel01Icon.js",
+      "fileHash": "eacffa0c",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/ClosedCaptionIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/ClosedCaptionIcon.js",
+      "file": "@hugeicons_core-free-icons_ClosedCaptionIcon.js",
+      "fileHash": "43fb12e6",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Copy01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Copy01Icon.js",
+      "file": "@hugeicons_core-free-icons_Copy01Icon.js",
+      "fileHash": "ebfe15cc",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/FullScreenIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/FullScreenIcon.js",
+      "file": "@hugeicons_core-free-icons_FullScreenIcon.js",
+      "fileHash": "39013063",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/GoBackward10SecIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/GoBackward10SecIcon.js",
+      "file": "@hugeicons_core-free-icons_GoBackward10SecIcon.js",
+      "fileHash": "c616041b",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/GoForward10SecIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/GoForward10SecIcon.js",
+      "file": "@hugeicons_core-free-icons_GoForward10SecIcon.js",
+      "fileHash": "34ef8f62",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/KeyboardIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/KeyboardIcon.js",
+      "file": "@hugeicons_core-free-icons_KeyboardIcon.js",
+      "fileHash": "384af26e",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Link01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Link01Icon.js",
+      "file": "@hugeicons_core-free-icons_Link01Icon.js",
+      "fileHash": "ba0427fc",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/MinimizeScreenIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/MinimizeScreenIcon.js",
+      "file": "@hugeicons_core-free-icons_MinimizeScreenIcon.js",
+      "fileHash": "aa4d930f",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/PauseIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/PauseIcon.js",
+      "file": "@hugeicons_core-free-icons_PauseIcon.js",
+      "fileHash": "4ca0338c",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/PictureInPictureOnIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/PictureInPictureOnIcon.js",
+      "file": "@hugeicons_core-free-icons_PictureInPictureOnIcon.js",
+      "fileHash": "32ad14db",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/PlayIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/PlayIcon.js",
+      "file": "@hugeicons_core-free-icons_PlayIcon.js",
+      "fileHash": "d1b47324",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Refresh01Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Refresh01Icon.js",
+      "file": "@hugeicons_core-free-icons_Refresh01Icon.js",
+      "fileHash": "8bb951b0",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/RefreshCcwIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/RefreshCcwIcon.js",
+      "file": "@hugeicons_core-free-icons_RefreshCcwIcon.js",
+      "fileHash": "4bdb0e96",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/RepeatIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/RepeatIcon.js",
+      "file": "@hugeicons_core-free-icons_RepeatIcon.js",
+      "fileHash": "cdd83cf4",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Settings02Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Settings02Icon.js",
+      "file": "@hugeicons_core-free-icons_Settings02Icon.js",
+      "fileHash": "e7b598f6",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/Tick02Icon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/Tick02Icon.js",
+      "file": "@hugeicons_core-free-icons_Tick02Icon.js",
+      "fileHash": "bd4894a5",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/VolumeHighIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/VolumeHighIcon.js",
+      "file": "@hugeicons_core-free-icons_VolumeHighIcon.js",
+      "fileHash": "061698d5",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/VolumeLowIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/VolumeLowIcon.js",
+      "file": "@hugeicons_core-free-icons_VolumeLowIcon.js",
+      "fileHash": "029b2e62",
+      "needsInterop": false
+    },
+    "@hugeicons/core-free-icons/VolumeOffIcon": {
+      "src": "../../node_modules/.pnpm/@hugeicons+core-free-icons@4.4.0/node_modules/@hugeicons/core-free-icons/dist/esm/VolumeOffIcon.js",
+      "file": "@hugeicons_core-free-icons_VolumeOffIcon.js",
+      "fileHash": "5cc0bfc1",
+      "needsInterop": false
+    },
+    "shaka-player/dist/shaka-player.compiled-es2021.js": {
+      "src": "../../node_modules/.pnpm/shaka-player@5.3.2/node_modules/shaka-player/dist/shaka-player.compiled-es2021.js",
+      "file": "shaka-player_dist_shaka-player__compiled-es2021__js.js",
+      "fileHash": "a90bf865",
+      "needsInterop": true
+    }
+  },
+  "chunks": {}
+}

@@ -9,15 +9,9 @@ Most people add Qyro by asking their coding agent. Give the agent the Qyro skill
 
 ## Install the skill
 
-The skill is one folder, `skills/qyro/`, in the Qyro repository and the npm package (`node_modules/qyro/skills/qyro`).
+The skill is one folder, `skills/qyro/`, in the npm package (`node_modules/qyro/skills/qyro`) and in the [Qyro repository](https://github.com/ebnsina/qyro/tree/main/skills/qyro). Pick your tool:
 
-- **Claude Code**: copy it to `.claude/skills/qyro/` in your project, or `~/.claude/skills/qyro/` for every project.
-- **Codex**: copy it to `.agents/skills/qyro/` in your project, or `~/.agents/skills/qyro/`.
-- **Other agents**: point them at `SKILL.md`, or paste it into your `AGENTS.md`.
-
-```shell
-mkdir -p .claude/skills && cp -r node_modules/qyro/skills/qyro .claude/skills/
-```
+<!-- ai:tools -->
 
 ## llms.txt
 
@@ -27,25 +21,9 @@ mkdir -p .claude/skills && cp -r node_modules/qyro/skills/qyro .claude/skills/
 
 ## Prompts to copy
 
-```text
-Add a Qyro video player (npm package "qyro") to this page playing <URL>, with a poster and title. Use the Qyro skill.
-```
+Each prompt is complete on its own: the task, where to read about Qyro, the rules to follow, and how to check the result. Fill in the parts in angle brackets.
 
-```text
-Theme the Qyro player to match our brand: accent <color>, corner radius <px>, our body font. Only use --qyro-* tokens and ::part().
-```
-
-```text
-Add English and Spanish captions (<en.vtt>, <es.srt>) and a storyboard thumbnail track (<storyboard.vtt>) to our Qyro player.
-```
-
-```text
-Set up a Qyro player for our live stream <URL>: muted autoplay, the LIVE badge, and a fallback message when it ends.
-```
-
-```text
-Enable Seyr video analytics on our Qyro players: seyr-key <key>, seyr-host <url>, a stable video-id per video.
-```
+<!-- ai:prompts -->
 
 ## Framework snippets
 

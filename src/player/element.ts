@@ -44,6 +44,16 @@ export const MEDIA_EVENTS = [
 	'leavepictureinpicture',
 ] as const;
 
+/** Detail of the `qualitychange` event. */
+export interface QualityChange {
+	height: number;
+	width: number;
+	/** Bits per second. */
+	bitrate: number;
+	/** True when Auto picked it. */
+	auto: boolean;
+}
+
 const IDLE_MS = 2600;
 const DOUBLE_TAP_MS = 280;
 const LIVE_EDGE_S = 6;
@@ -626,6 +636,18 @@ export class QyroPlayer extends HTMLElement {
 			if (detail?.severity == CRITICAL) this.#fail(detail);
 		});
 		for (const t of ['trackschanged', 'variantchanged', 'adaptation', 'textchanged', 'abrstatuschanged', 'audiotrackschanged']) on(t, () => this.#refresh());
+		// One public event for any rendition change, picked by the viewer or by Auto.
+		let last = '';
+		const quality = () => {
+			const t = p.getVariantTracks().find((v) => v.active);
+			if (!t?.height) return;
+			const detail: QualityChange = { height: t.height, width: t.width ?? 0, bitrate: t.bandwidth, auto: p.getConfiguration().abr.enabled };
+			const key = `${detail.height}|${detail.bitrate}|${detail.auto}`;
+			if (key == last) return;
+			last = key;
+			this.dispatchEvent(new CustomEvent<QualityChange>('qualitychange', { detail }));
+		};
+		for (const t of ['adaptation', 'variantchanged', 'trackschanged', 'abrstatuschanged']) on(t, quality);
 	}
 
 	#wireControls(): void {

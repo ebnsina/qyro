@@ -1,24 +1,24 @@
 <script lang="ts">
 	import Button from '#lib/sinaui/ui/Button.svelte';
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
 
-	let player = $state<HTMLElement & { muted: boolean; play(): Promise<void>; seek(t: number): void; toggleFullscreen(): Promise<void> }>();
+	let el = $state<HTMLElement & { muted: boolean; seek(t: number): void; toggleFullscreen(): Promise<void> }>();
 
 	// The background loop has no controls; "Watch" turns the sound on and goes full screen.
 	async function watch() {
-		if (!player) return;
-		player.muted = false;
-		player.seek(0);
-		await player.toggleFullscreen();
+		if (!el) return;
+		el.muted = false;
+		el.seek(0);
+		await el.toggleFullscreen();
 	}
 </script>
 
 <section class="hero-demo">
-	<qyro-player bind:this={player} src={media.tos.hls} autoplay muted loop class="hero-demo-video" style="--qyro-radius: 0"></qyro-player>
+	<Player bind:el class="hero-demo-video" style="--qyro-radius: 0" />
 	<div class="hero-demo-copy">
 		<p class="hero-demo-kicker">Now showing</p>
 		<h2>Tears of Steel</h2>
-		<p>A short film about a group of warriors and scientists in a future Amsterdam.</p>
+		<p>A short film about warriors and scientists in a future Amsterdam.</p>
 		<Button size="lg" onclick={watch}>Watch</Button>
 	</div>
 </section>
@@ -26,8 +26,7 @@
 <style>
 	.hero-demo {
 		position: relative;
-		margin-inline: calc(50% - 50vw);
-		min-height: min(80vh, 44rem);
+		min-height: 32rem;
 		display: grid;
 		align-items: end;
 		overflow: hidden;
@@ -42,7 +41,7 @@
 		aspect-ratio: auto !important;
 	}
 
-	/* A background loop: no controls, no pointer, just the film. */
+	/* A background loop: no controls, just the film. */
 	:global(.hero-demo-video::part(controls)),
 	:global(.hero-demo-video::part(big-play-button)),
 	:global(.hero-demo-video::part(top-bar)) {
@@ -55,9 +54,7 @@
 
 	.hero-demo-copy {
 		position: relative;
-		width: min(100% - 2rem, 72rem);
-		margin: 0 auto;
-		padding: 8rem 0 3rem;
+		padding: 8rem 1.5rem 2rem;
 		color: #fff;
 		pointer-events: none;
 		background: linear-gradient(to top, rgb(0 0 0 / 0.7), transparent);
@@ -77,7 +74,7 @@
 
 	.hero-demo-copy h2 {
 		margin: 0.25rem 0 0.5rem;
-		font-size: clamp(2.25rem, 6vw, 4rem);
+		font-size: clamp(2rem, 8cqi, 4rem);
 		letter-spacing: -0.04em;
 		line-height: 1;
 	}

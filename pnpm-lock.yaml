@@ -61,6 +61,9 @@ importers:
       qyro:
         specifier: workspace:*
         version: link:..
+      simple-icons:
+        specifier: ^16.36.0
+        version: 16.36.0
       svelte:
         specifier: ^5.57.1
         version: 5.57.3
@@ -654,6 +657,10 @@ packages:
 
   siginfo@2.0.0:
     resolution: {integrity: sha512-ybx0WO1/8bSBLEWXZvEd7gMW3Sn3JFlW3TvX1nREbDLRNQNaeNN8WK0meBwPdAaOI7TtRRRJn/Es1zhrrCHu7g==}
+
+  simple-icons@16.36.0:
+    resolution: {integrity: sha512-+VNPPkqSOLidFeSgBKUWX4n50WPpDC09hav+BgS26anIF1oQOlGBb8LvwGR+6fYRjo+B6CiKzNBceMPkSVXANQ==}
+    engines: {node: '>=0.12.18'}
 
   sirv@3.0.2:
     resolution: {integrity: sha512-2wcC/oGxHis/BoHkkPwldgiPSYcpZK3JU28WoMVv55yHJgcZ8rlXvuG9iZggz+sU1d4bRgIGASwyWqjxu3FM0g==}
@@ -1304,6 +1311,8 @@ snapshots:
   shaka-player@5.3.2: {}
 
   siginfo@2.0.0: {}
+
+  simple-icons@16.36.0: {}
 
   sirv@3.0.2:
     dependencies:

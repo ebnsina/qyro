@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
+	import { media } from '#lib/site/media.js';
 
 	// A demo audience number that drifts like a real one; a real site would read it from its server.
 	let viewers = $state(1284);
@@ -11,7 +12,7 @@
 </script>
 
 <div class="live-demo">
-	<qyro-player src={media.live.dash} title="Opening keynote" muted autoplay></qyro-player>
+	<Player />
 	<div class="live-demo-bar">
 		<div>
 			<h2>Opening keynote</h2>

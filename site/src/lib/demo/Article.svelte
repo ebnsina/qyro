@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
+	import { media } from '#lib/site/media.js';
 </script>
 
 <article class="article">
@@ -10,7 +11,7 @@
 		made: the film, the models, the source files. Anyone can remix it.
 	</p>
 	<figure>
-		<qyro-player src={media.sintel.hls} title="Sintel, the trailer moment" start="20"></qyro-player>
+		<Player />
 		<figcaption>{media.sintel.credit}</figcaption>
 	</figure>
 	<p>

@@ -1,11 +1,11 @@
 <script lang="ts">
 	import Button from '#lib/sinaui/ui/Button.svelte';
-	import { media } from '#lib/site/links.js';
+	import Player from './Player.svelte';
 	const price = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(29);
 </script>
 
 <div class="product">
-	<qyro-player src={media.bbb.hls} poster={media.bbb.poster} title="See it in action" muted loop start="95"></qyro-player>
+	<Player extra={{ title: 'See it in action' }} />
 	<div>
 		<p class="product-kicker">Plush toy</p>
 		<h2>Buck, the big bunny</h2>
@@ -40,7 +40,7 @@
 		margin: 0.25rem 0 1rem;
 	}
 
-	@media (max-width: 760px) {
+	@container frame (max-width: 640px) {
 		.product {
 			grid-template-columns: minmax(0, 1fr);
 		}
