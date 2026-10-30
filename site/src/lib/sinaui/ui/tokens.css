@@ -91,6 +91,8 @@
 	--ui-sidebar-title-tracking: normal;
 	/* A side sheet's width (Dialog with side="start" or "end"); phones keep a strip of page beside it. */
 	--ui-sheet-width: 20rem;
+	/* Room a sheet leaves beside it on narrow screens, to see and tap the page behind; 0 fills the screen. */
+	--ui-sheet-inset: 3rem;
 
 	/* Motion: enter fast and settle, exit quicker than you came. --ui-ease-out is the everyday curve. */
 	--ui-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
