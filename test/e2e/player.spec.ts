@@ -258,6 +258,8 @@ test('qualitychange fires with the new resolution when the viewer picks one', as
 		p.addEventListener('qualitychange', (e: CustomEvent) => p.changes.push(e.detail));
 	});
 	await play(player);
+	// A viewer moves the pointer to reveal the controls; the idle timer hides them while playing.
+	await player.hover();
 	await player.locator('.gear').click();
 	await player.getByRole('menuitem', { name: /Quality/ }).click();
 	await player.getByRole('menuitemradio', { name: '360p', exact: true }).click();
