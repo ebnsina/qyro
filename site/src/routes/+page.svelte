@@ -21,7 +21,7 @@
 	import { reveal } from '#lib/site/reveal.js';
 
 	const steps = [
-		{ title: 'Add the script', text: 'Install from npm, or drop in one script tag. Nothing else to set up.', code: `npm install qyro\n\nimport 'qyro';`, lang: 'shell' as const },
+		{ title: 'Add the script', text: 'Install from npm, or drop in one script tag. Nothing else to set up.', code: `npm install @ebnsina/qyro\n\nimport '@ebnsina/qyro';`, lang: 'shell' as const },
 		{ title: 'Set the source', text: 'HLS, DASH, live or MP4. Captions are plain track elements.', code: `<qyro-player\n  src="/film.m3u8"\n  title="My film"\n  thumbnails="/film/storyboard.vtt"\n>\n  <track srclang="en" label="English" src="/en.vtt" />\n</qyro-player>`, lang: 'html' as const },
 		{ title: 'Make it yours', text: 'Every color, radius and blur is a CSS custom property.', code: `qyro-player {\n  --qyro-accent: #ffd60a;\n  --qyro-radius: 24px;\n}`, lang: 'css' as const },
 	];
@@ -99,8 +99,8 @@
 				<p class="site-lede">From npm for your bundler, or one script tag for any page.</p>
 			</div>
 			<div class="install-code">
-				<CodeBlock code={`npm install qyro`} lang="shell" />
-				<CodeBlock code={`<script src="https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.iife.js"></${"script"}>`} lang="html" />
+				<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
+				<CodeBlock code={`<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></${"script"}>`} lang="html" />
 			</div>
 		</div>
 	</section>

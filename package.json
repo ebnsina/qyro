@@ -1,5 +1,5 @@
 {
-	"name": "qyro",
+	"name": "@ebnsina/qyro",
 	"version": "0.1.0",
 	"description": "A beautiful video player for any website: HLS, DASH, live and MP4 with captions, thumbnails and accessibility, in one web component.",
 	"license": "MIT",
@@ -26,6 +26,7 @@
 		"check": "tsc -p . && node scripts/skill.mjs --check",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
+		"prepublishOnly": "pnpm build && pnpm check && pnpm test",
 		"skill": "node scripts/skill.mjs",
 		"fixtures": "scripts/fixtures.sh"
 	},

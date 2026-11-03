@@ -16,17 +16,17 @@ Qyro is one custom element, `<qyro-player>`, that plays HLS, DASH, live and MP4 
 With a bundler (Vite, SvelteKit, React, Vue, Astro, anything):
 
 ```shell
-npm install qyro
+npm install @ebnsina/qyro
 ```
 
 ```js
-import 'qyro';
+import '@ebnsina/qyro';
 ```
 
 Without a bundler, one script tag gives you everything in a single file:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>
 ```
 
 
@@ -82,8 +82,8 @@ WebVTT, SRT and TTML files work. See [Captions](https://ebnsina.github.io/qyro/d
 ## JavaScript API
 
 ```ts
-import 'qyro';
-import type { QyroPlayer } from 'qyro';
+import '@ebnsina/qyro';
+import type { QyroPlayer } from '@ebnsina/qyro';
 
 const player = document.querySelector('qyro-player') as QyroPlayer;
 await player.ready;
@@ -235,7 +235,7 @@ Plain HTML:
 
 ```html
 <script type="module">
-	import 'https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.js';
+	import 'https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.js';
 </script>
 <qyro-player src="/video.m3u8" title="My video"></qyro-player>
 ```
@@ -245,7 +245,7 @@ SvelteKit (load it in the browser only):
 ```svelte
 <script>
 	import { onMount } from 'svelte';
-	onMount(() => import('qyro'));
+	onMount(() => import('@ebnsina/qyro'));
 </script>
 
 <qyro-player src="/video.m3u8" title="My video"></qyro-player>
@@ -258,7 +258,7 @@ import { useEffect } from 'react';
 
 export function Video({ src }: { src: string }) {
 	useEffect(() => {
-		import('qyro');
+		import('@ebnsina/qyro');
 	}, []);
 	return <qyro-player src={src} title="My video" />;
 }
@@ -268,7 +268,7 @@ Vue (tell Vue it's a custom element with `compilerOptions.isCustomElement: (tag)
 
 ```vue
 <script setup>
-import 'qyro';
+import '@ebnsina/qyro';
 </script>
 
 <template>
@@ -289,8 +289,8 @@ Qyro looks for the Seyr video SDK in this order:
    ```
 
    ```js
-   import 'qyro';
-   import 'qyro/seyr';
+   import '@ebnsina/qyro';
+   import '@ebnsina/qyro/seyr';
    ```
 
    Your bundler puts the SDK in its own chunk, fetched only by players that have `seyr-key`.

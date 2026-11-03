@@ -104,11 +104,14 @@ function styles(): CSSStyleSheet {
 	return sheet;
 }
 
+// Without a DOM (server rendering) the base is an empty stub, so importing qyro doesn't throw; it is never constructed there.
+const Base: typeof HTMLElement = typeof HTMLElement === 'undefined' ? (class {} as never) : HTMLElement;
+
 /**
  * `<qyro-player>`: a Liquid Glass video player around Shaka Player.
  * Plays HLS, DASH and MP4 from `src`; see the README for every attribute, property and event.
  */
-export class QyroPlayer extends HTMLElement {
+export class QyroPlayer extends Base {
 	static observedAttributes = ['src', 'poster', 'title', 'autoplay', 'muted', 'loop', 'playsinline', 'start', 'live', 'thumbnails', 'chapters', 'next-at'];
 
 	readonly #root: ShadowRoot;

@@ -11,7 +11,7 @@ Yes. It is a standard custom element. Import `qyro` once, then use `<qyro-player
 
 ## How big is it?
 
-About 20 kB gzipped for Qyro itself. The playback engine for HLS and DASH loads on demand the first time a player needs it.
+About 32 kB gzipped for Qyro itself. The playback engine for HLS and DASH loads on demand the first time a player needs it.
 
 ## Can I use my own controls?
 

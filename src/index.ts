@@ -5,4 +5,4 @@ export type { QualityChange, PlaylistItem, Chapter, ChapterChange } from './play
 export type { PlayerError, ErrorKind } from './engine/errors.js';
 export type { Engine } from './engine/shaka.js';
 
-if (!customElements.get('qyro-player')) customElements.define('qyro-player', QyroPlayer);
+if (typeof customElements !== 'undefined' && !customElements.get('qyro-player')) customElements.define('qyro-player', QyroPlayer);

@@ -16,7 +16,7 @@ test('with seyr-key, Qyro loads the SDK from seyr-host and reports the view', as
 		await r.fulfill({ status: 202 });
 	});
 	const q = new URLSearchParams({ src: '/test/fixtures/hls/main.m3u8', muted: '', 'seyr-key': 'demo-key', 'seyr-host': HOST, 'video-id': 'bbb-clip', title: 'Big Buck Bunny', series: 'Open movies' });
-	await page.goto(`/dev/index.html?${q}`);
+	await page.goto(`/playground/index.html?${q}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	await player.locator('.big-play').click();
@@ -43,7 +43,7 @@ test('with seyr-key, Qyro loads the SDK from seyr-host and reports the view', as
 test('without seyr-key, nothing is loaded or sent', async ({ page }) => {
 	const requests: string[] = [];
 	page.on('request', (r) => requests.push(r.url()));
-	await page.goto('/dev/index.html?src=/test/fixtures/hls/main.m3u8&muted');
+	await page.goto('/playground/index.html?src=/test/fixtures/hls/main.m3u8&muted');
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine)).toBe(true);
 	await player.locator('.big-play').click();

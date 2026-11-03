@@ -11,7 +11,7 @@ export const TABS: { id: Tab; label: string }[] = [
 	{ id: 'vue', label: 'Vue' },
 ];
 
-const SCRIPT = 'https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.iife.js';
+const SCRIPT = 'https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js';
 
 /** `origin` turns the site's own files (captions, storyboard, MP4) into full URLs people can copy. */
 export function snippet(s: State, tab: Tab, origin = ''): string {
@@ -48,14 +48,14 @@ export function snippet(s: State, tab: Tab, origin = ''): string {
 				(s.captions
 					? `\nconst track = Object.assign(document.createElement('track'), { kind: 'subtitles', srclang: 'en', label: 'English', src: '${full(CAPTIONS)}', default: true });\nplayer.append(track);`
 					: '') + (chapters ? `\nplayer.append(Object.assign(document.createElement('track'), { kind: 'chapters', src: '${full(chapters)}' }));` : '');
-			return `// npm install qyro\nimport 'qyro';\n\nconst player = document.createElement('qyro-player');\n${set.join('\n')}${t}\ndocument.querySelector('#video').append(player);${css ? `\n\n/* In your CSS */\n${css}` : ''}`;
+			return `// npm install @ebnsina/qyro\nimport '@ebnsina/qyro';\n\nconst player = document.createElement('qyro-player');\n${set.join('\n')}${t}\ndocument.querySelector('#video').append(player);${css ? `\n\n/* In your CSS */\n${css}` : ''}`;
 		}
 		case 'svelte':
-			return `<script>\n\timport { onMount } from 'svelte';\n\tonMount(() => import('qyro'));\n</script>\n\n${element()}${style((c) => `<style>\n${indent(c.replace(/^qyro-player/, ':global(qyro-player)'))}\n</style>`)}`;
+			return `<script>\n\timport { onMount } from 'svelte';\n\tonMount(() => import('@ebnsina/qyro'));\n</script>\n\n${element()}${style((c) => `<style>\n${indent(c.replace(/^qyro-player/, ':global(qyro-player)'))}\n</style>`)}`;
 		case 'react':
-			return `import { useEffect } from 'react';\n\nexport function Video() {\n\tuseEffect(() => {\n\t\timport('qyro');\n\t}, []);\n\treturn (\n${element('\t\t')}\n\t);\n}${css ? `\n\n/* In your CSS */\n${css}` : ''}`;
+			return `import { useEffect } from 'react';\n\nexport function Video() {\n\tuseEffect(() => {\n\t\timport('@ebnsina/qyro');\n\t}, []);\n\treturn (\n${element('\t\t')}\n\t);\n}${css ? `\n\n/* In your CSS */\n${css}` : ''}`;
 		case 'vue':
-			return `<script setup>\nimport 'qyro';\n</script>\n\n<template>\n${element('\t')}\n</template>${style((c) => `<style>\n${indent(c)}\n</style>`)}`;
+			return `<script setup>\nimport '@ebnsina/qyro';\n</script>\n\n<template>\n${element('\t')}\n</template>${style((c) => `<style>\n${indent(c)}\n</style>`)}`;
 	}
 }
 

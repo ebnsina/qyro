@@ -45,7 +45,7 @@ test('source, captions and the code panel stay in step, and the URL round-trips'
 	await expect(code).toContainText('useEffect');
 	await page.locator('.pg-code').getByRole('button', { name: 'Copy code' }).click();
 	const copied = await page.evaluate(() => navigator.clipboard.readText());
-	expect(copied).toContain("import('qyro')");
+	expect(copied).toContain("import('@ebnsina/qyro')");
 	expect(copied).not.toMatch(/\n\s*$/);
 	const url = page.url();
 	expect(url).toContain('src=sintel');

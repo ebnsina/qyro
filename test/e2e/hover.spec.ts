@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 // Interactions that must not collapse or hide halfway through: hover zones, drags, menus.
 
 async function playing(page: Page): Promise<Locator> {
-	await page.goto('/dev/index.html?src=/test/fixtures/hls/main.m3u8&muted&loop');
+	await page.goto('/playground/index.html?src=/test/fixtures/hls/main.m3u8&muted&loop');
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	await player.locator('.big-play').click();
