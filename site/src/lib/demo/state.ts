@@ -13,16 +13,14 @@ export interface Source {
 	/** A WebVTT chapters file, shown by the Course template. */
 	chapters?: string;
 	live?: boolean;
-	/** The picture's shape, given up front so the player is the right size before the video loads. */
-	aspect?: string;
 }
 
 export const sources: Source[] = [
 	{ id: 'bbb-hls', label: 'Big Buck Bunny (HLS)', src: media.bbb.hls, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard, chapters: media.bbb.chapters },
 	{ id: 'bbb-dash', label: 'Big Buck Bunny (DASH)', src: media.bbb.dash, title: media.bbb.title, poster: media.bbb.poster, storyboard: media.bbb.storyboard, chapters: media.bbb.chapters },
 	{ id: 'bbb-mp4', label: 'Big Buck Bunny clip (MP4)', src: '/media/bbb/clip.mp4', title: 'Big Buck Bunny clip', poster: media.bbb.poster },
-	{ id: 'sintel', label: 'Sintel (HLS)', src: media.sintel.hls, title: media.sintel.title, poster: media.sintel.poster, aspect: '2.35' },
-	{ id: 'tos', label: 'Tears of Steel (HLS)', src: media.tos.hls, title: media.tos.title, poster: media.tos.poster, aspect: '2.4' },
+	{ id: 'sintel', label: 'Sintel (HLS)', src: media.sintel.hls, title: media.sintel.title, poster: media.sintel.poster },
+	{ id: 'tos', label: 'Tears of Steel (HLS)', src: media.tos.hls, title: media.tos.title, poster: media.tos.poster },
 	{ id: 'live', label: 'Live test stream (DASH)', src: media.live.dash, title: 'Opening keynote', live: true },
 	{ id: 'custom', label: 'Your own URL', src: '', title: 'My video' },
 ];
@@ -147,7 +145,6 @@ export function playerAttrs(s: State, asset: (p: string) => string = (p) => p): 
 	if (s.start > 0) a.start = String(s.start);
 	for (const b of ['autoplay', 'muted', 'loop', 'live'] as const) if (s[b]) a[b] = true;
 	if (s.theme.glass == 'light') a.glass = 'light';
-	if (src.aspect && s.source != 'custom') a.style = `--qyro-aspect-ratio: ${src.aspect}`;
 	return a;
 }
 

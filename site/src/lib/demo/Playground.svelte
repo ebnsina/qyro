@@ -71,13 +71,10 @@
 		});
 	});
 
-	// The same player stays; only its settings and the layout around it change, with a soft cross-fade.
+	// The same player stays where it is; only its settings and the text around it change.
 	function pick(slug: string) {
 		if (slug == s.t) return;
-		const apply = () => (s = { ...initial(slug), theme: s.theme });
-		const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (document.startViewTransition && !still) document.startViewTransition(apply);
-		else apply();
+		s = { ...initial(slug), theme: s.theme };
 	}
 
 	// ---------- Preview frame: device presets, a drag handle, light or dark ----------
@@ -321,7 +318,6 @@
 		background: var(--ui-bg);
 		color: var(--ui-fg);
 		overflow: hidden;
-		view-transition-name: pg-frame;
 	}
 
 	.pg-frame[data-scheme='dark'] {
@@ -367,23 +363,10 @@
 		z-index: 1;
 	}
 
-	/* Beside the player when there's room: the episode list, product details. */
-	@container frame (min-width: 760px) {
-		.pg-layout[data-t='playlist'] {
-			grid-template-columns: minmax(0, 1fr) 16rem;
-			grid-template-areas: 'player aside' 'after aside';
-		}
-
-		.pg-layout[data-t='product'] {
-			grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-			grid-template-areas: 'player aside';
-			align-items: center;
-		}
-	}
-
-	.pg-layout[data-t='article'] {
+	/* The text is a narrower measure, but it starts on the same edge as the player. */
+	.pg-layout[data-t='article'] .pg-side :global(.side-before),
+	.pg-layout[data-t='article'] .pg-side :global(.side-after) {
 		max-width: 42rem;
-		margin-inline: auto;
 	}
 
 	.pg-layout[data-t='vertical'] .pg-player {
@@ -401,24 +384,7 @@
 		color-scheme: dark;
 	}
 
-	/* The hero: the player fills the stage as a background loop with the headline over it. */
-	.pg-layout[data-t='hero'] {
-		margin: -1rem;
-		min-height: 30rem;
-		grid-template-areas: 'player';
-	}
-
-	.pg-layout[data-t='hero'] .pg-player {
-		position: relative;
-	}
-
-	.pg-layout[data-t='hero'] qyro-player {
-		position: absolute;
-		inset: 0;
-		height: 100%;
-		aspect-ratio: auto;
-	}
-
+	/* The hero: a background loop with the headline over the bottom of the same player box. */
 	.pg-layout[data-t='hero'] qyro-player::part(controls),
 	.pg-layout[data-t='hero'] qyro-player::part(big-play-button),
 	.pg-layout[data-t='hero'] qyro-player::part(top-bar) {
@@ -603,10 +569,6 @@
 			padding: 0.5rem;
 		}
 
-		.pg-layout[data-t='hero'] {
-			margin: -0.5rem;
-		}
-
 		.pg-handle {
 			display: none;
 		}
@@ -617,9 +579,4 @@
 		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.pg-frame {
-			view-transition-name: none;
-		}
-	}
 </style>
