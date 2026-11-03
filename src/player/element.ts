@@ -146,6 +146,8 @@ export class QyroPlayer extends Base {
 	readonly #sr: HTMLElement;
 
 	#player: Engine | null = null;
+	/** The audio group the viewer chose; the quality list follows it, not the track playing. */
+	#audioId: number | null | undefined = undefined;
 	#ready!: Promise<Engine>;
 	#resolveReady!: (p: Engine) => void;
 	#rejectReady!: (e: unknown) => void;
@@ -1331,7 +1333,7 @@ export class QyroPlayer extends Base {
 	#menus(): Menu[] {
 		const p = this.#player;
 		if (!p) return [];
-		const variants = () => qualityOptions(p.getVariantTracks());
+		const variants = () => qualityOptions(p.getVariantTracks(), this.#audioId);
 		const abr = () => p.getConfiguration().abr.enabled;
 		const current = () => qualityLabel(p.getVariantTracks().find((t) => t.active) ?? { height: null, frameRate: null });
 		return [
@@ -1393,6 +1395,7 @@ export class QyroPlayer extends Base {
 				select: (i) => {
 					const track = p.getAudioTracks()[i];
 					if (!track) return;
+					this.#audioId = track.id;
 					p.selectAudioTrack(track);
 					this.#say(`Audio: ${track.label || track.language}`);
 					this.#refresh();

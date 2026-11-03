@@ -23,9 +23,21 @@ describe('qualityOptions', () => {
 		expect(list.find((o) => o.active)?.label).toBe('720p');
 	});
 
-	it('keeps only tracks for the audio now playing', () => {
+	it('lists the resolutions of the audio the viewer chose, not the one playing', () => {
 		const tracks = [v(720, 2e6, { audioId: 1, active: true }), v(720, 2.1e6, { audioId: 2 }), v(480, 1e6, { audioId: 2 })];
-		expect(qualityOptions(tracks).map((o) => o.label)).toEqual(['720p']);
+		expect(qualityOptions(tracks, 2).map((o) => o.label)).toEqual(['720p', '480p']);
+	});
+
+	it('stays the same when adaptive streaming moves to a track in another audio group', () => {
+		const before = [v(720, 2.1e6, { audioId: 2, active: true }), v(480, 1e6, { audioId: 2 }), v(360, 500e3, { audioId: 3 })];
+		const after = before.map((t) => ({ ...t, active: t.audioId == 3 && t.height == 360 }));
+		expect(qualityOptions(after, 2).map((o) => o.label)).toEqual(qualityOptions(before, 2).map((o) => o.label));
+		expect(qualityOptions(after, 2).map((o) => o.label)).toEqual(['720p', '480p']);
+	});
+
+	it('without a choice, lists the audio of the highest-bandwidth track', () => {
+		const tracks = [v(720, 2e6, { audioId: 1, active: true }), v(720, 2.1e6, { audioId: 2 }), v(480, 1e6, { audioId: 2 })];
+		expect(qualityOptions(tracks).map((o) => o.label)).toEqual(['720p', '480p']);
 	});
 
 	it('picks the highest bitrate at a height unless another is active', () => {
