@@ -501,7 +501,7 @@ video::-webkit-media-controls {
 		transform var(--_dur) var(--_ease);
 }
 
-/* A glass square like the keys, with a ring on it: a faint track and a bright dash that turns clockwise. */
+/* A glass square like the keys, with a ring in it: a faint full ring and a bright segment that turns clockwise. */
 .spinner::before {
 	content: '';
 	position: absolute;
@@ -514,28 +514,10 @@ video::-webkit-media-controls {
 
 .spinner .ring {
 	position: absolute;
-	inset: 0;
-	width: 100%;
-	height: 100%;
-	overflow: visible;
-}
-
-.spinner .track,
-.spinner .arc {
-	fill: none;
-	stroke-width: 3;
-}
-
-.spinner .track {
-	stroke: var(--_track);
-}
-
-.spinner .arc {
-	stroke: var(--_fg);
-	stroke-linecap: round;
-	stroke-dasharray: 26 100;
-	transform-box: view-box;
-	transform-origin: 50% 50%;
+	inset: 14px;
+	border: 3px solid var(--_track);
+	border-top-color: var(--_fg);
+	border-radius: 50%;
 	animation: turn 0.9s linear infinite;
 }
 
@@ -2006,7 +1988,7 @@ video::-webkit-media-controls {
 		animation-iteration-count: 1 !important;
 	}
 
-	.spinner .arc {
+	.spinner .ring {
 		animation: turn 2.4s linear infinite !important;
 	}
 

@@ -18,7 +18,7 @@ export const template = `
 		<button class="glass round big-play" part="big-play-button" aria-label="Play">${morph}</button>
 		<button class="glass round skip" data-action="forward" part="skip-forward-button" aria-label="Forward 10 seconds" tabindex="-1">${icons.forward}</button>
 	</div>
-	<div class="spinner" part="spinner" role="status" aria-label="Loading"><svg class="ring" viewBox="0 0 52 52" aria-hidden="true"><rect class="track" x="3" y="3" width="46" height="46" rx="12"/><rect class="arc" x="3" y="3" width="46" height="46" rx="12" pathLength="100"/></svg><p class="spinner-note">Still loading…</p></div>
+	<div class="spinner" part="spinner" role="status" aria-label="Loading"><span class="ring"></span><p class="spinner-note">Still loading…</p></div>
 	<div class="dock" part="controls">
 		<div class="timeline glass" part="timeline">
 			<span class="current" part="time current-time" aria-hidden="true">0:00</span>
