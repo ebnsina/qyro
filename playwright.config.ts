@@ -7,7 +7,8 @@ export default defineConfig({
 	testDir: 'test/e2e',
 	fullyParallel: true,
 	// Every test plays real video; more workers than this starve each other on one laptop.
-	workers: process.env.CI ? undefined : 4,
+	// One worker on CI: the runner has few cores, and parallel browsers starve the live-stream encoder and time out.
+	workers: process.env.CI ? 1 : 4,
 	reporter: process.env.CI ? 'github' : 'list',
 	use: { baseURL: 'http://localhost:5311', trace: 'retain-on-failure' },
 	projects: [
