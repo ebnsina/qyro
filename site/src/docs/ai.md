@@ -9,7 +9,7 @@ Most people add Qyro by asking their coding agent. Give the agent the Qyro skill
 
 ## Install the skill
 
-The skill is one folder, `skills/qyro/`, in the npm package (`node_modules/@ebnsina/qyro/skills/qyro`) and in the [Qyro repository](https://github.com/ebnsina/qyro/tree/main/skills/qyro). Pick your tool:
+The skill is one folder, `skills/qyro/`, in the [Qyro repository](https://github.com/ebnsina/qyro/tree/main/skills/qyro). The commands below fetch that folder straight from GitHub, so you don't need the npm package installed. Pick your tool:
 
 <!-- ai:tools -->
 

@@ -18,6 +18,7 @@ import { chapterAt, loadChapters, type Chapter } from '../controls/chapters.js';
 import { icons } from '../controls/icons.js';
 import { formatTime, splitStart, timeWidth, withStart } from '../controls/time.js';
 import { loadSeyr, type SeyrView } from '../analytics/seyr.js';
+import { focusQuietly } from '../controls/focus.js';
 
 declare const __VERSION__: string;
 export const version = __VERSION__;
@@ -145,6 +146,8 @@ export class QyroPlayer extends Base {
 	readonly #sr: HTMLElement;
 
 	#player: Engine | null = null;
+	/** The audio group the viewer chose; the quality list follows it, not the track playing. */
+	#audioId: number | null | undefined = undefined;
 	#ready!: Promise<Engine>;
 	#resolveReady!: (p: Engine) => void;
 	#rejectReady!: (e: unknown) => void;
@@ -936,7 +939,7 @@ export class QyroPlayer extends Base {
 			const step = { ArrowDown: 1, ArrowUp: -1 }[e.key];
 			if (step) {
 				e.preventDefault();
-				items[(items.indexOf(target) + step + items.length) % items.length]?.focus();
+				focusQuietly(items[(items.indexOf(target) + step + items.length) % items.length]);
 			}
 			return;
 		}
@@ -1188,8 +1191,8 @@ export class QyroPlayer extends Base {
 		el.inert = !open;
 		button.setAttribute('aria-expanded', String(open));
 		// Focus once the panel is shown; WebKit won't focus inside it in the same frame.
-		if (open) requestAnimationFrame(() => requestAnimationFrame(() => (el.querySelector<HTMLElement>('[aria-current="true"]') ?? el.querySelector<HTMLElement>('[data-index]'))?.focus()));
-		else if (returnFocus) button.focus();
+		if (open) requestAnimationFrame(() => requestAnimationFrame(() => focusQuietly(el.querySelector<HTMLElement>('[aria-current="true"]') ?? el.querySelector<HTMLElement>('[data-index]'))));
+		else if (returnFocus) focusQuietly(button);
 		this.#activity();
 	}
 
@@ -1250,7 +1253,7 @@ export class QyroPlayer extends Base {
 				this.#statsTimer = setInterval(() => this.#paintStats(), STATS_MS);
 			}
 		}
-		if (open) el.querySelector<HTMLElement>('.panel-close')?.focus();
+		if (open) focusQuietly(el.querySelector<HTMLElement>('.panel-close'));
 		else if (el.contains(this.#root.activeElement)) this.focus();
 	}
 
@@ -1330,7 +1333,7 @@ export class QyroPlayer extends Base {
 	#menus(): Menu[] {
 		const p = this.#player;
 		if (!p) return [];
-		const variants = () => qualityOptions(p.getVariantTracks());
+		const variants = () => qualityOptions(p.getVariantTracks(), this.#audioId);
 		const abr = () => p.getConfiguration().abr.enabled;
 		const current = () => qualityLabel(p.getVariantTracks().find((t) => t.active) ?? { height: null, frameRate: null });
 		return [
@@ -1392,6 +1395,7 @@ export class QyroPlayer extends Base {
 				select: (i) => {
 					const track = p.getAudioTracks()[i];
 					if (!track) return;
+					this.#audioId = track.id;
 					p.selectAudioTrack(track);
 					this.#say(`Audio: ${track.label || track.language}`);
 					this.#refresh();

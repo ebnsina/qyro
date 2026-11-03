@@ -78,7 +78,7 @@ test('event times count from the first event and fit their column, even on live'
 	}
 });
 
-test('the player keeps its size from first paint to playback, at the film\'s own shape', async ({ page }) => {
+test('the player keeps its 16:9 box from first paint to playback, whatever the film\'s shape', async ({ page }) => {
 	await page.goto('/demo?t=standard&src=tos');
 	const box = () => player(page).evaluate((p: any) => p.getBoundingClientRect().height);
 	const before = await box();
@@ -87,7 +87,7 @@ test('the player keeps its size from first paint to playback, at the film\'s own
 	await page.waitForTimeout(1500);
 	expect(Math.abs((await box()) - before)).toBeLessThan(0.5);
 	const r = await player(page).evaluate((p: any) => p.getBoundingClientRect().width / p.getBoundingClientRect().height);
-	expect(r).toBeCloseTo(2.4, 1);
+	expect(r).toBeCloseTo(16 / 9, 2);
 });
 
 test('old demo pages open the playground on that template', async ({ page }) => {

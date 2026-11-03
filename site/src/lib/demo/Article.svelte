@@ -17,14 +17,12 @@
 	.caption {
 		margin: 0;
 		color: var(--ui-muted);
-		font-size: 0.875rem;
+		font-size: var(--type-small);
 	}
 
 	h2 {
 		margin: 0.5rem 0 0.75rem;
 		font-size: clamp(1.5rem, 4cqi, 2.25rem);
-		line-height: 1.15;
-		letter-spacing: -0.03em;
 	}
 
 	p {

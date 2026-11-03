@@ -14,8 +14,7 @@
 <style>
 	h2 {
 		margin: 0.25rem 0;
-		font-size: 1.75rem;
-		letter-spacing: -0.03em;
+		font-size: var(--type-heading);
 	}
 
 	.kicker {
@@ -25,7 +24,7 @@
 
 	.price {
 		font-family: var(--ui-font-mono);
-		font-size: 1.25rem;
+		font-size: var(--type-subheading);
 		margin: 0.25rem 0 1rem;
 	}
 </style>

@@ -10,6 +10,7 @@
 	import Select from '#lib/sinaui/ui/Select.svelte';
 	import Switch from '#lib/sinaui/ui/Switch.svelte';
 	import * as Tabs from '#lib/sinaui/ui/tabs/index.js';
+	import { media } from '#lib/site/links.js';
 	import { isDark } from '#lib/sinaui/ui/theme.js';
 	import ThemeControls from './ThemeControls.svelte';
 	import { snippet, TABS, type Tab } from './code.js';
@@ -70,13 +71,10 @@
 		});
 	});
 
-	// The same player stays; only its settings and the layout around it change, with a soft cross-fade.
+	// The same player stays where it is; only its settings and the text around it change.
 	function pick(slug: string) {
 		if (slug == s.t) return;
-		const apply = () => (s = { ...initial(slug), theme: s.theme });
-		const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (document.startViewTransition && !still) document.startViewTransition(apply);
-		else apply();
+		s = { ...initial(slug), theme: s.theme };
 	}
 
 	// ---------- Preview frame: device presets, a drag handle, light or dark ----------
@@ -210,14 +208,14 @@
 
 	<div class="pg-below">
 		<aside class="pg-controls" aria-label="Player settings">
-			<h2>Video</h2>
+			<h2 class="site-label">Video</h2>
 			<Select label="Source" bind:value={s.source}>
 				{#each sources as src (src.id)}<option value={src.id}>{src.label}</option>{/each}
 			</Select>
 			{#if s.source == 'custom'}
 				<Input label="Video URL" type="url" placeholder="https://…/video.m3u8" bind:value={draftUrl} hint="HLS, DASH or MP4. Press Enter to load." onchange={() => (s.url = draftUrl)} />
 			{/if}
-			<h2>Attributes</h2>
+			<h2 class="site-label">Attributes</h2>
 			<div class="pg-switches">
 				<Switch bind:checked={s.autoplay}>Autoplay</Switch>
 				<Switch bind:checked={s.muted}>Muted</Switch>
@@ -230,7 +228,7 @@
 			{#if !hasStoryboard}<p class="pg-hint">Thumbnails: only the Big Buck Bunny streams have a storyboard.</p>{/if}
 			<Input label="Start at (seconds)" type="number" min="0" value={s.start} onchange={(e: Event) => (s.start = Math.max(0, Number((e.currentTarget as HTMLInputElement).value) || 0))} />
 			{#if s.t != 'theming'}
-				<h2>Theme</h2>
+				<h2 class="site-label">Theme</h2>
 				<ThemeControls bind:theme={s.theme} />
 			{/if}
 		</aside>
@@ -251,7 +249,7 @@
 
 			<section class="pg-log" aria-labelledby="pg-log-title">
 				<div class="pg-log-head">
-					<h2 id="pg-log-title">Events</h2>
+					<h2 id="pg-log-title" class="site-label">Events</h2>
 					<button type="button" class="pg-clear" onclick={() => (log = [])} disabled={!log.length}><Icon icon={Delete02Icon} size={16} />Clear</button>
 				</div>
 				<ol role="log" aria-live="off">
@@ -264,9 +262,16 @@
 			</section>
 		</div>
 	</div>
+	<p class="pg-credit">Demo films: {media.bbb.credit}. {media.sintel.credit}. {media.tos.credit}.</p>
 </div>
 
 <style>
+	.pg-credit {
+		margin: 1.5rem 0 0;
+		color: var(--ui-muted);
+		font-size: var(--type-small);
+	}
+
 	.pg {
 		display: grid;
 		gap: 1rem;
@@ -274,11 +279,7 @@
 
 	h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		font-weight: 600;
 		color: var(--ui-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
 	}
 
 	/* ---------- Tabs, sticky so the player is always right below them ---------- */
@@ -309,15 +310,15 @@
 
 	.pg-frame {
 		container: frame / inline-size;
+		position: relative;
 		min-width: 0;
 		max-width: 100%;
-		padding: 1rem;
+		/* No inset: the player's edge lines up with the heading, tabs and controls, in every template. */
 		border-radius: var(--ui-radius);
-		box-shadow: inset 0 0 0 1px var(--ui-line);
 		background: var(--ui-bg);
 		color: var(--ui-fg);
-		overflow: hidden;
-		view-transition-name: pg-frame;
+		/* Visible, so text that sits on the edge (the article kicker) is not clipped; the player clips its own corners. */
+		overflow: visible;
 	}
 
 	.pg-frame[data-scheme='dark'] {
@@ -332,7 +333,6 @@
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas: 'before' 'player' 'after' 'aside';
-		gap: 1rem;
 	}
 
 	.pg-player {
@@ -345,16 +345,20 @@
 		display: contents;
 	}
 
+	/* Space sits on the side pieces, not in the grid, so an empty row never adds a gap above the player. */
 	.pg-side :global(.side-before) {
 		grid-area: before;
+		margin-block-end: 1rem;
 	}
 
 	.pg-side :global(.side-after) {
 		grid-area: after;
+		margin-block-start: 1rem;
 	}
 
 	.pg-side :global(.side-aside) {
 		grid-area: aside;
+		margin-block-start: 1rem;
 	}
 
 	.pg-side :global(.side-over) {
@@ -363,23 +367,10 @@
 		z-index: 1;
 	}
 
-	/* Beside the player when there's room: the episode list, product details. */
-	@container frame (min-width: 760px) {
-		.pg-layout[data-t='playlist'] {
-			grid-template-columns: minmax(0, 1fr) 16rem;
-			grid-template-areas: 'player aside' 'after aside';
-		}
-
-		.pg-layout[data-t='product'] {
-			grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-			grid-template-areas: 'player aside';
-			align-items: center;
-		}
-	}
-
-	.pg-layout[data-t='article'] {
+	/* The text is a narrower measure, but it starts on the same edge as the player. */
+	.pg-layout[data-t='article'] .pg-side :global(.side-before),
+	.pg-layout[data-t='article'] .pg-side :global(.side-after) {
 		max-width: 42rem;
-		margin-inline: auto;
 	}
 
 	.pg-layout[data-t='vertical'] .pg-player {
@@ -391,30 +382,8 @@
 		object-fit: cover;
 	}
 
-	.pg-frame:has(.pg-layout[data-t='cinema']) {
-		background: #050506;
-		color: #eee;
-		color-scheme: dark;
-	}
 
-	/* The hero: the player fills the stage as a background loop with the headline over it. */
-	.pg-layout[data-t='hero'] {
-		margin: -1rem;
-		min-height: 30rem;
-		grid-template-areas: 'player';
-	}
-
-	.pg-layout[data-t='hero'] .pg-player {
-		position: relative;
-	}
-
-	.pg-layout[data-t='hero'] qyro-player {
-		position: absolute;
-		inset: 0;
-		height: 100%;
-		aspect-ratio: auto;
-	}
-
+	/* The hero: a background loop with the headline over the bottom of the same player box. */
 	.pg-layout[data-t='hero'] qyro-player::part(controls),
 	.pg-layout[data-t='hero'] qyro-player::part(big-play-button),
 	.pg-layout[data-t='hero'] qyro-player::part(top-bar) {
@@ -501,7 +470,7 @@
 	.pg-hint {
 		margin: -0.25rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 	}
 
 	.pg-controls :global(.theme-controls) {
@@ -514,9 +483,13 @@
 		min-width: 0;
 	}
 
+	/* The same surface as the code panel beside it. */
 	.pg-log {
 		display: grid;
 		gap: 0.5rem;
+		padding: 1rem 1.25rem;
+		border-radius: var(--ui-radius);
+		background: var(--ui-subtle);
 	}
 
 	.pg-log-head {
@@ -536,7 +509,7 @@
 		background: none;
 		color: var(--ui-muted);
 		font: inherit;
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 		cursor: pointer;
 	}
 
@@ -556,8 +529,7 @@
 		margin: 0;
 		padding: 0;
 		list-style: none;
-		border-top: 1px solid var(--ui-line);
-		font: 0.8125rem/1.5 var(--ui-font-mono);
+		font: var(--type-small)/1.5 var(--ui-font-mono);
 	}
 
 	.pg-log li {
@@ -565,7 +537,6 @@
 		grid-template-columns: 4.5rem 10rem minmax(0, 1fr);
 		gap: 0.75rem;
 		padding: 0.3rem 0;
-		border-bottom: 1px solid var(--ui-line);
 	}
 
 	.pg-log .at,
@@ -597,14 +568,6 @@
 	}
 
 	@media (max-width: 600px) {
-		.pg-frame {
-			padding: 0.5rem;
-		}
-
-		.pg-layout[data-t='hero'] {
-			margin: -0.5rem;
-		}
-
 		.pg-handle {
 			display: none;
 		}
@@ -615,9 +578,4 @@
 		}
 	}
 
-	@media (prefers-reduced-motion: reduce) {
-		.pg-frame {
-			view-transition-name: none;
-		}
-	}
 </style>

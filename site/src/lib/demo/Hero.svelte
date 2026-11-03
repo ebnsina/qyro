@@ -16,7 +16,7 @@
 </script>
 
 <div class="side-over hero-copy">
-	<p class="kicker">Now showing</p>
+	<p class="kicker site-label">Now showing</p>
 	<h2>Tears of Steel</h2>
 	<p>A short film about warriors and scientists in a future Amsterdam.</p>
 	<Button size="lg" onclick={watch}>Watch</Button>
@@ -36,17 +36,13 @@
 
 	.kicker {
 		margin: 0;
-		font-size: 0.8125rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 		opacity: 0.8;
 	}
 
 	h2 {
 		margin: 0.25rem 0 0.5rem;
 		font-size: clamp(2rem, 8cqi, 4rem);
-		letter-spacing: -0.04em;
-		line-height: 1;
+		line-height: var(--leading-display);
 	}
 
 	p:not(.kicker) {
