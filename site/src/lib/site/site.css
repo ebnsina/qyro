@@ -108,7 +108,7 @@ kbd {
 	font-family: var(--site-display);
 	font-size: 1.25rem;
 	font-weight: 600;
-	letter-spacing: -0.01em;
+	letter-spacing: 0.01em;
 }
 
 .site-header nav {
@@ -178,7 +178,7 @@ kbd {
 	margin: 0 0 0.75rem;
 	font-size: clamp(1.75rem, 3.6vw, 2.5rem);
 	line-height: 1.12;
-	letter-spacing: -0.03em;
+	letter-spacing: 0.01em;
 	font-weight: 650;
 	text-wrap: balance;
 }
@@ -309,7 +309,7 @@ kbd {
 
 .site-prose h1 {
 	font-size: clamp(2rem, 4vw, 2.5rem);
-	letter-spacing: -0.03em;
+	letter-spacing: 0.01em;
 	line-height: 1.1;
 	font-weight: 650;
 }
@@ -318,7 +318,7 @@ kbd {
 	margin-block-start: calc(2.5rem - var(--flow));
 	font-size: 1.375rem;
 	line-height: 1.25;
-	letter-spacing: -0.02em;
+	letter-spacing: 0.01em;
 	font-weight: 620;
 }
 

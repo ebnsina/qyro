@@ -240,7 +240,7 @@
 		margin: 1.25rem 0 0;
 		font-size: clamp(2.5rem, 4.8vw, 4.25rem);
 		line-height: 1;
-		letter-spacing: -0.02em;
+		letter-spacing: 0.01em;
 		text-wrap: balance;
 	}
 
@@ -505,7 +505,7 @@
 		font-family: var(--site-display);
 		font-size: clamp(2.5rem, 5vw, 3.5rem);
 		font-weight: 600;
-		letter-spacing: -0.02em;
+		letter-spacing: 0.01em;
 		line-height: 1;
 	}
 

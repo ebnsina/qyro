@@ -92,7 +92,7 @@
 		margin: 0;
 		font-size: clamp(2.25rem, 5vw, 3.25rem);
 		line-height: 1.08;
-		letter-spacing: -0.01em;
+		letter-spacing: 0.01em;
 	}
 
 	.lede {
@@ -105,7 +105,7 @@
 		margin: 3rem 0 0.75rem;
 		font-size: 1.75rem;
 		line-height: 1.15;
-		letter-spacing: -0.005em;
+		letter-spacing: 0.01em;
 	}
 
 	p,
