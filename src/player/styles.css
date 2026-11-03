@@ -278,6 +278,23 @@ video::-webkit-media-controls {
 		var(--_shadow);
 }
 
+/* Scrolling panels: an absolute rim would scroll with the list, so their hairline is an inset shadow. */
+.sheet.glass::before,
+.menu.glass::before,
+.panel.glass::before {
+	display: none;
+}
+
+.sheet.glass,
+.menu.glass,
+.panel.glass {
+	box-shadow:
+		inset 0 0 0 1px var(--_rim),
+		inset 0 1px 0 var(--_highlight),
+		inset 0 -0.5px 0 rgb(255 255 255 / 0.12),
+		var(--_shadow);
+}
+
 /* A hairline rim, brightest top left and bottom right, as if lit from above. */
 .glass::before {
 	content: '';
