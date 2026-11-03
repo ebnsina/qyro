@@ -501,11 +501,21 @@ video::-webkit-media-controls {
 		transform var(--_dur) var(--_ease);
 }
 
-/* A rounded-square ring, the same radius as the keys. Only the bright arc turns; the square stays put. */
+/* A glass square like the keys, so the ring reads over any picture. Only the arc turns; the square stays put. */
 @property --spin {
 	syntax: '<angle>';
 	inherits: false;
 	initial-value: 0deg;
+}
+
+.spinner::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: var(--_panel-radius);
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
 }
 
 .spinner span {
@@ -513,7 +523,7 @@ video::-webkit-media-controls {
 	inset: 0;
 	padding: 3px;
 	border-radius: var(--_panel-radius);
-	background: conic-gradient(from var(--spin), transparent 0 15%, #fff);
+	background: conic-gradient(from var(--spin), transparent 0 25%, var(--_fg));
 	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
 	-webkit-mask-composite: xor;
 	mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
@@ -526,6 +536,30 @@ video::-webkit-media-controls {
 	opacity: 1;
 	transform: none;
 	transition-delay: 250ms;
+}
+
+/* After a long stall the viewer is told it's still working, not left wondering. */
+.spinner-note {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin: 10px 0 0;
+	transform: translateX(-50%);
+	white-space: nowrap;
+	font: var(--_fs-meta) var(--_font);
+	color: var(--_fg);
+	text-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
+	opacity: 0;
+}
+
+.root[data-buffering]:not([data-error]) .spinner-note {
+	animation: note-in 300ms ease-out 6s forwards;
+}
+
+@keyframes note-in {
+	to {
+		opacity: 1;
+	}
 }
 
 @keyframes spin {

@@ -317,7 +317,8 @@
 		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 		color: var(--ui-fg);
-		overflow: hidden;
+		/* Visible, so text that sits on the edge (the article kicker) is not clipped; the player clips its own corners. */
+		overflow: visible;
 	}
 
 	.pg-frame[data-scheme='dark'] {
@@ -482,9 +483,13 @@
 		min-width: 0;
 	}
 
+	/* The same surface as the code panel beside it. */
 	.pg-log {
 		display: grid;
 		gap: 0.5rem;
+		padding: 1rem 1.25rem;
+		border-radius: var(--ui-radius);
+		background: var(--ui-subtle);
 	}
 
 	.pg-log-head {
