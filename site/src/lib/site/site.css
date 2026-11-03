@@ -12,8 +12,8 @@
 	--ui-radius: clamp(0.625rem, 1.2vw, 0.875rem);
 	--ui-radius-control: 0.5rem;
 	/* Large buttons: wider than sinaui default, so CTAs read as buttons. */
-	--ui-button-pad-lg: 2.25rem;
-	--ui-control-h-lg: 3.5rem;
+	--ui-button-pad-lg: 1.75rem;
+	--ui-control-h-lg: 3.25rem;
 	/* Alternate section tint: one step off the page colour. */
 	--site-tint: light-dark(#f4f4f5, #232627);
 	--ui-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
