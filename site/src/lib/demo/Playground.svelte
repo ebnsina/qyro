@@ -313,15 +313,25 @@
 
 	.pg-frame {
 		container: frame / inline-size;
+		position: relative;
 		min-width: 0;
 		max-width: 100%;
 		padding: 1rem;
 		border-radius: var(--ui-radius);
-		box-shadow: inset 0 0 0 1px var(--ui-line);
 		background: var(--ui-bg);
 		color: var(--ui-fg);
 		overflow: hidden;
 		view-transition-name: pg-frame;
+	}
+
+	/* Drawn on top: the hero layout pulls the player into the padding, which would cover an inset border. */
+	.pg-frame::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		box-shadow: inset 0 0 0 1px var(--ui-line);
+		pointer-events: none;
 	}
 
 	.pg-frame[data-scheme='dark'] {

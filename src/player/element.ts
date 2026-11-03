@@ -18,6 +18,7 @@ import { chapterAt, loadChapters, type Chapter } from '../controls/chapters.js';
 import { icons } from '../controls/icons.js';
 import { formatTime, splitStart, timeWidth, withStart } from '../controls/time.js';
 import { loadSeyr, type SeyrView } from '../analytics/seyr.js';
+import { focusQuietly } from '../controls/focus.js';
 
 declare const __VERSION__: string;
 export const version = __VERSION__;
@@ -936,7 +937,7 @@ export class QyroPlayer extends Base {
 			const step = { ArrowDown: 1, ArrowUp: -1 }[e.key];
 			if (step) {
 				e.preventDefault();
-				items[(items.indexOf(target) + step + items.length) % items.length]?.focus();
+				focusQuietly(items[(items.indexOf(target) + step + items.length) % items.length]);
 			}
 			return;
 		}
@@ -1188,8 +1189,8 @@ export class QyroPlayer extends Base {
 		el.inert = !open;
 		button.setAttribute('aria-expanded', String(open));
 		// Focus once the panel is shown; WebKit won't focus inside it in the same frame.
-		if (open) requestAnimationFrame(() => requestAnimationFrame(() => (el.querySelector<HTMLElement>('[aria-current="true"]') ?? el.querySelector<HTMLElement>('[data-index]'))?.focus()));
-		else if (returnFocus) button.focus();
+		if (open) requestAnimationFrame(() => requestAnimationFrame(() => focusQuietly(el.querySelector<HTMLElement>('[aria-current="true"]') ?? el.querySelector<HTMLElement>('[data-index]'))));
+		else if (returnFocus) focusQuietly(button);
 		this.#activity();
 	}
 
@@ -1250,7 +1251,7 @@ export class QyroPlayer extends Base {
 				this.#statsTimer = setInterval(() => this.#paintStats(), STATS_MS);
 			}
 		}
-		if (open) el.querySelector<HTMLElement>('.panel-close')?.focus();
+		if (open) focusQuietly(el.querySelector<HTMLElement>('.panel-close'));
 		else if (el.contains(this.#root.activeElement)) this.focus();
 	}
 

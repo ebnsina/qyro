@@ -150,9 +150,18 @@ for (const width of [300, 320, 360, 414]) {
 				}),
 		);
 		const host = (await player.boundingBox())!;
-		for (const b of boxes) expect(b.r, b.c).toBeLessThanOrEqual(host.x + host.width + 0.5);
+		for (const b of boxes) {
+			expect(b.r, b.c).toBeLessThanOrEqual(host.x + host.width + 0.5);
+			expect(b.t, `${b.c} clipped at the top`).toBeGreaterThanOrEqual(host.y - 0.5);
+		}
+		// Control groups may sit in a row or a column; they just must not share any area.
 		const caps = boxes.filter((b) => b.c.includes('cap'));
-		for (let i = 1; i < caps.length; i++) expect(caps[i].l, `${caps[i].c} overlaps`).toBeGreaterThanOrEqual(caps[i - 1].r);
+		for (let i = 0; i < caps.length; i++)
+			for (let j = i + 1; j < caps.length; j++) {
+				const [a, b] = [caps[i], caps[j]];
+				const hit = a.l < b.r - 0.5 && b.l < a.r - 0.5 && a.t < b.b - 0.5 && b.t < a.b - 0.5;
+				expect(hit, `${a.c} overlaps ${b.c}`).toBe(false);
+			}
 	});
 }
 

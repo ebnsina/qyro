@@ -413,3 +413,15 @@ kbd {
 .site-prose > :is(ol, ul) > li + li {
 	margin-top: 0.35rem;
 }
+
+/* The icon box on a card: a tinted accent chip, or a neutral mark for brand logos. */
+.chip,
+.mark {
+	display: grid;
+	place-items: center;
+	width: 2.5rem;
+	height: 2.5rem;
+	border-radius: var(--ui-radius-control);
+	color: var(--ui-accent);
+	background: color-mix(in oklab, var(--ui-accent) 14%, transparent);
+}

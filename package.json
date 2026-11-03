@@ -4,25 +4,56 @@
 	"description": "A beautiful video player for any website: HLS, DASH, live and MP4 with captions, thumbnails and accessibility, in one web component.",
 	"license": "MIT",
 	"author": "ebnsina <ebnsina.me@gmail.com>",
-	"repository": { "type": "git", "url": "git+https://github.com/ebnsina/qyro.git" },
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ebnsina/qyro.git"
+	},
 	"homepage": "https://github.com/ebnsina/qyro#readme",
-	"keywords": ["video", "player", "web-component", "custom-element", "hls", "dash", "live", "captions"],
+	"keywords": [
+		"video",
+		"player",
+		"web-component",
+		"custom-element",
+		"hls",
+		"dash",
+		"live",
+		"captions"
+	],
 	"type": "module",
 	"packageManager": "pnpm@11.23.0",
-	"sideEffects": ["./dist/qyro.js", "./dist/qyro.iife.js", "./dist/seyr.js", "./src/index.ts", "./src/seyr.ts"],
-	"files": ["dist", "skills", "licenses", "CHANGELOG.md"],
+	"sideEffects": [
+		"./dist/qyro.js",
+		"./dist/qyro.iife.js",
+		"./dist/seyr.js",
+		"./src/index.ts",
+		"./src/seyr.ts"
+	],
+	"files": [
+		"dist",
+		"skills",
+		"licenses",
+		"CHANGELOG.md"
+	],
 	"main": "./dist/qyro.js",
 	"module": "./dist/qyro.js",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
-		".": { "types": "./dist/types/index.d.ts", "source": "./src/index.ts", "default": "./dist/qyro.js" },
-		"./seyr": { "types": "./dist/types/seyr.d.ts", "source": "./src/seyr.ts", "default": "./dist/seyr.js" },
+		".": {
+			"types": "./dist/types/index.d.ts",
+			"source": "./src/index.ts",
+			"default": "./dist/qyro.js"
+		},
+		"./seyr": {
+			"types": "./dist/types/seyr.d.ts",
+			"source": "./src/seyr.ts",
+			"default": "./dist/seyr.js"
+		},
 		"./script": "./dist/qyro.iife.js",
 		"./package.json": "./package.json"
 	},
 	"scripts": {
 		"dev": "vite --port 5310",
-		"build": "vite build && vite build --mode script && tsc -p tsconfig.build.json && node scripts/size.mjs",
+		"build": "vite build && vite build --mode script && node scripts/engine.mjs && tsc -p tsconfig.build.json && node scripts/size.mjs",
 		"check": "tsc -p . && node scripts/skill.mjs --check",
 		"test": "vitest run",
 		"test:e2e": "playwright test",
@@ -37,10 +68,11 @@
 		"@seyr/video": ">=0.1.0"
 	},
 	"peerDependenciesMeta": {
-		"@seyr/video": { "optional": true }
+		"@seyr/video": {
+			"optional": true
+		}
 	},
 	"devDependencies": {
-		"@hugeicons/core-free-icons": "4.4.0",
 		"@playwright/test": "~1.63.0",
 		"@types/node": "^24.19.2",
 		"typescript": "~5.9.3",

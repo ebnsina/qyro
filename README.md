@@ -14,7 +14,7 @@ npm install @ebnsina/qyro
 import '@ebnsina/qyro';
 ```
 
-Or with no build step, one file:
+Or with no build step, one script tag. The engine is a second file, `qyro-engine.js`, which the script fetches from the same folder:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>
@@ -80,7 +80,7 @@ Current and previous Chrome, Edge, Firefox and Safari on desktop, iOS, iPadOS an
 
 ## Sizes
 
-Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) loads the first time a player needs it. The single-file script build has both: about 279 kB gzipped. `pnpm build` prints the current numbers.
+Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) loads when the first player starts, as a separate file in the script build too, so the script tag's own download stays about 33 kB. `pnpm build` prints the current numbers.
 
 ## Develop
 

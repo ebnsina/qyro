@@ -93,6 +93,19 @@ test('settings: switches quality, then back to Auto', async ({ page }) => {
 	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('settings: a click outside closes the sheet, a click on its button toggles it', async ({ page }) => {
+	const player = await open(page);
+	await play(player);
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
+	await page.mouse.click(5, 5);
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('settings: speed and captions', async ({ page }) => {
 	const player = await open(page, { captions: '/test/fixtures/captions.vtt' });
 	await expect(player.locator('.cc')).toBeVisible();

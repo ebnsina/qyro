@@ -278,6 +278,23 @@ video::-webkit-media-controls {
 		var(--_shadow);
 }
 
+/* Scrolling panels: an absolute rim would scroll with the list, so their hairline is an inset shadow. */
+.sheet.glass::before,
+.menu.glass::before,
+.panel.glass::before {
+	display: none;
+}
+
+.sheet.glass,
+.menu.glass,
+.panel.glass {
+	box-shadow:
+		inset 0 0 0 1px var(--_rim),
+		inset 0 1px 0 var(--_highlight),
+		inset 0 -0.5px 0 rgb(255 255 255 / 0.12),
+		var(--_shadow);
+}
+
 /* A hairline rim, brightest top left and bottom right, as if lit from above. */
 .glass::before {
 	content: '';
@@ -364,7 +381,7 @@ video::-webkit-media-controls {
 .round {
 	display: grid;
 	place-items: center;
-	border-radius: var(--_r-pill);
+	border-radius: var(--_panel-radius);
 	pointer-events: auto;
 	transition:
 		opacity var(--_dur) var(--_ease-out),
@@ -373,9 +390,10 @@ video::-webkit-media-controls {
 }
 
 .big-play {
-	width: clamp(48px, 8cqi, 68px);
-	height: clamp(48px, 8cqi, 68px);
+	width: clamp(44px, 6cqi, 56px);
+	height: clamp(44px, 6cqi, 56px);
 	--_tint: rgb(28 28 32 / 0.3);
+	box-shadow: none;
 }
 
 .big-play svg {
@@ -475,13 +493,22 @@ video::-webkit-media-controls {
 		transform var(--_dur) var(--_ease);
 }
 
+/* A rounded-square ring, the same radius as the keys. Only the bright arc turns; the square stays put. */
+@property --spin {
+	syntax: '<angle>';
+	inherits: false;
+	initial-value: 0deg;
+}
+
 .spinner span {
 	position: absolute;
 	inset: 0;
-	border-radius: 50%;
-	background: conic-gradient(from 0deg, transparent 0 15%, #fff);
-	-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
-	mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+	padding: 3px;
+	border-radius: var(--_panel-radius);
+	background: conic-gradient(from var(--spin), transparent 0 15%, #fff);
+	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 	filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.4));
 	animation: spin 0.9s linear infinite;
 }
@@ -495,7 +522,7 @@ video::-webkit-media-controls {
 
 @keyframes spin {
 	to {
-		transform: rotate(1turn);
+		--spin: 1turn;
 	}
 }
 
@@ -1968,4 +1995,243 @@ video::-webkit-media-controls {
 	:host([glass='light']) .glass {
 		background: rgb(250 250 252 / 0.92);
 	}
+}
+
+/* ---------- Player look: the rail (the default) ---------- */
+
+/* Keys and dropdowns share one radius, so the rail reads as one family. */
+:host {
+	--_panel-radius: var(--qyro-panel-radius, 14px);
+}
+
+/* Rail: controls stack in a column on the right, above a full-width bar; each key sits in its own dark disc. */
+:host {
+	--_track: rgb(255 255 255 / 0.35);
+	--_buffered: rgb(255 255 255 / 0.2);
+	--_accent: #fff;
+	--_scrim: rgb(0 0 0 / 0.7);
+}
+
+:host .dock .glass {
+	background: none;
+	box-shadow: none;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+
+:host .dock .glass::before {
+	display: none;
+}
+
+:host .timeline {
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+:host .row {
+	position: absolute;
+	right: 0;
+	bottom: calc(100% + 12px);
+	flex-direction: column;
+	align-items: center;
+	height: auto;
+	gap: 10px;
+}
+
+:host .spacer {
+	display: none;
+}
+
+:host .cap {
+	flex-direction: column;
+	height: auto;
+	gap: 10px;
+}
+
+:host .btn {
+	background: rgb(12 13 14 / 0.6);
+	border-radius: var(--_panel-radius);
+}
+
+:host .btn:focus-visible {
+	border-radius: var(--_panel-radius);
+}
+
+:host .btn::before {
+	background: rgb(255 255 255 / 0.18);
+	border-radius: calc(var(--_panel-radius) - 3px);
+}
+
+
+/* Rail: panels open beside the rail column they came from, not in the corner (on phones they stay bottom sheets). */
+:host {
+	--_rail-right: calc(var(--_gap) + var(--_control) + 12px);
+	--_rail-bottom: calc(var(--_gap) + var(--_control) + 20px);
+}
+
+@container (min-width: 441px) {
+	:host .sheet,
+	:host .upnext,
+	:host .chapters {
+		right: var(--_rail-right);
+		bottom: var(--_rail-bottom);
+		transform-origin: bottom right;
+	}
+
+	:host .sheet {
+		max-height: calc(100% - var(--_rail-bottom) - var(--_gap));
+		overflow: hidden auto;
+	}
+
+	:host .upnext,
+	:host .chapters {
+		max-height: calc(100% - var(--_rail-bottom) - var(--_gap));
+	}
+}
+
+/* Rail volume: a pill that slides out to the left of the mute key. */
+:host .volume-pop {
+	position: absolute;
+	top: 50%;
+	right: calc(100% + 10px);
+	height: var(--_control);
+	transform: translateY(-50%);
+	background: rgb(12 13 14 / 0.7);
+	border-radius: var(--_panel-radius);
+}
+
+:host .volume[data-open] .volume-pop {
+	width: 92px;
+}
+
+
+/* Rail thumb: one clean white dot with a dark keyline, no glass highlight. */
+:host .thumb {
+	left: -6px;
+	width: 12px;
+	height: 12px;
+	margin-top: -6px;
+	background: #fff;
+	box-shadow: 0 0 0 3px rgb(0 0 0 / 0.35);
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+
+/* Touch: keys reach the 44px target size, with a little room so rounding never leaves them just under it. */
+@media (pointer: coarse) {
+	:host .btn {
+		width: 46px;
+		height: 46px;
+	}
+}
+
+/* Narrow players: a column can't fit a short player, so the keys run in a row above the bar, as in the classic layout. */
+@container (max-width: 440px) {
+	:host .volume,
+	:host .pip {
+		display: none;
+	}
+
+	/* Pages take their full height, so the sheet itself scrolls. A page can't inherit the sheet's max-height: it clamps to one row. */
+:host .page {
+	max-height: none;
+}
+
+/* The sheet opens above the 46px keys, at the right, at a width that leaves the picture visible. */
+	:host .sheet {
+		left: auto;
+		right: var(--_gap);
+		bottom: calc(var(--_gap) - 2px + 2 * 46px + 16px);
+		width: min(var(--_panel-w), calc(100% - 2 * var(--_gap)));
+		max-height: calc(100% - var(--_gap) - 2 * 46px - 16px - var(--_gap));
+		overflow-y: auto;
+	}
+
+	:host .row,
+	:host .cap {
+		flex-direction: row;
+		gap: 8px;
+	}
+
+	:host .btn {
+		width: 46px;
+		height: 46px;
+		--_icon: 14px;
+	}
+}
+
+/* Very narrow players: the centre play button already plays and pauses, so the row's play key would sit under it. */
+@container (max-width: 340px) {
+	:host .row > .cap:first-child {
+		display: none;
+	}
+}
+
+/* Phones: the keys move to the top right, the seek bar stays at the bottom, and the settings sheet opens downward from the keys. */
+@container (max-width: 440px) {
+	/* The dock spans the player so its keys can sit at the top; only its children take pointer events. */
+	:host .dock {
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		pointer-events: none;
+	}
+
+	:host .timeline {
+		position: absolute;
+		left: var(--_gap);
+		right: var(--_gap);
+		bottom: calc(var(--_gap) - 2px);
+		margin: 0;
+		pointer-events: auto;
+	}
+
+	:host .row {
+		position: absolute;
+		top: var(--_gap);
+		right: var(--_gap);
+		bottom: auto;
+		height: auto;
+		align-items: center;
+		pointer-events: auto;
+	}
+
+	:host .sheet {
+		top: calc(var(--_gap) + 46px + 8px);
+		bottom: auto;
+		max-height: calc(100% - var(--_gap) - 46px - 8px - var(--_gap));
+		transform-origin: top right;
+	}
+
+	.root[data-idle] .timeline,
+	.root[data-idle] .row,
+	.root[data-fresh] .timeline,
+	.root[data-fresh] .row,
+	.root[data-error] .timeline,
+	.root[data-error] .row {
+		pointer-events: none;
+	}
+}
+
+/* Touch: settings rows reach the 44px target, with less padding before the label. */
+@media (pointer: coarse) {
+	.item {
+		min-height: max(44px, var(--_item-h));
+		padding-left: 8px;
+	}
+}
+
+/* After a mouse or touch open, focus moves without its style; a key press brings it back. */
+:host([data-pointer]) :focus-visible {
+	outline: none;
+}
+
+:host([data-pointer]) .item:focus-visible {
+	background: none;
+}
+
+/* A page just changed under a resting pointer: its rows don't show hover until the pointer moves. */
+:host([data-paging]) .item:hover {
+	background: none;
 }

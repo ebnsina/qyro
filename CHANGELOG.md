@@ -2,6 +2,12 @@
 
 All notable changes to Qyro. The format follows [Keep a Changelog](https://keepachangelog.com), and versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Changed
+
+- The script-tag build (`dist/qyro.iife.js`) no longer contains the playback engine. It is shipped as `dist/qyro-engine.js` beside it and fetched when a player starts, so the script tag's download drops from about 279 kB to about 33 kB gzipped. Serve both files from the same folder.
+
 ## [0.1.0] - 2026-10-29
 
 The first version.

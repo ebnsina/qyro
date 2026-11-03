@@ -2,7 +2,9 @@
 	import {
 		AccessIcon,
 		ClosedCaptionIcon,
+		CpuIcon,
 		Image01Icon,
+		PackageIcon,
 		KeyboardIcon,
 		LiveStreaming02Icon,
 		PlayIcon,
@@ -18,9 +20,12 @@
 	import Footer from '#lib/site/Footer.svelte';
 	import Header from '#lib/site/Header.svelte';
 	import Seo from '#lib/site/Seo.svelte';
+	import Stat from '#lib/site/Stat.svelte';
 	import { accordion } from '#lib/site/accordion.js';
 	import { file, media, to } from '#lib/site/links.js';
 	import { reveal } from '#lib/site/reveal.js';
+
+	const kilobytes: Intl.NumberFormatOptions = { style: 'unit', unit: 'kilobyte', unitDisplay: 'short' };
 
 	const steps = [
 		{ title: 'Add the script', text: 'Install from npm, or drop in one script tag. There is no build step to set up.', code: `npm install @ebnsina/qyro\n\nimport '@ebnsina/qyro';`, lang: 'shell' as const },
@@ -117,8 +122,10 @@
 			<ul class="features">
 				{#each features as f, i (f.title)}
 					<li data-reveal-item style:--i={i}>
-						<span class="chip"><Icon icon={f.icon} size={20} /></span>
-						<h3>{f.title}</h3>
+						<div class="card-head">
+							<h3>{f.title}</h3>
+							<span class="chip"><Icon icon={f.icon} size={20} /></span>
+						</div>
 						<p>{f.text}</p>
 					</li>
 				{/each}
@@ -134,8 +141,10 @@
 			<ul class="agents">
 				{#each agents as t, i (t.id)}
 					<li data-reveal-item style:--i={i}>
-						<span class="mark"><ToolMark tool={t} size={20} /></span>
-						<h3>{t.name}</h3>
+						<div class="card-head">
+							<h3>{t.name}</h3>
+							<span class="mark"><ToolMark tool={t} size={20} /></span>
+						</div>
 						<p>{blurbs[t.id]}</p>
 						<p class="path">Skill in <code>{t.where}</code></p>
 					</li>
@@ -145,7 +154,7 @@
 		</div>
 	</section>
 
-	<section class="site-section tint" {@attach reveal}>
+	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap compat">
 			<div>
 				<p class="site-label eyebrow">Compatibility</p>
@@ -163,14 +172,14 @@
 		</div>
 	</section>
 
-	<section class="site-section" {@attach reveal}>
+	<section class="site-section tint" {@attach reveal}>
 		<div class="site-wrap">
 			<p class="site-label eyebrow">Weight and privacy</p>
 			<h2>Small on the page, and nothing is tracked unless you turn it on.</h2>
 			<ul class="numbers">
-				<li data-reveal-item style:--i={0}><strong class="site-display">32 kB</strong><span>The player, gzipped.</span></li>
-				<li data-reveal-item style:--i={1}><strong class="site-display">255 kB</strong><span>The playback engine, loaded the first time a video plays.</span></li>
-				<li data-reveal-item style:--i={2}><strong class="site-display">0</strong><span>Trackers. Analytics stay off unless you set <code>seyr-key</code>, and then they go to your own server.</span></li>
+				<Stat value={32} format={kilobytes} icon={PackageIcon} i={0}>The player, gzipped.</Stat>
+				<Stat value={255} format={kilobytes} icon={CpuIcon} i={1}>The playback engine, loaded when the first player starts.</Stat>
+				<Stat value={0} icon={Shield01Icon} i={2}>Trackers. Analytics stay off unless you set <code>seyr-key</code>, and then they go to your own server.</Stat>
 			</ul>
 		</div>
 	</section>
@@ -180,7 +189,7 @@
 			<div>
 				<p class="site-label eyebrow">Install</p>
 				<h2>From npm, or one script tag.</h2>
-				<p class="site-lede sub">Use the package in your bundler, or load the single file on any page.</p>
+				<p class="site-lede sub">Use the package in your bundler, or add one script tag to any page.</p>
 			</div>
 			<div class="options">
 				<div class="option">
@@ -205,8 +214,10 @@
 			<ul class="features">
 				{#each principles as p, i (p.title)}
 					<li data-reveal-item style:--i={i}>
-						<span class="chip"><Icon icon={p.icon} size={20} /></span>
-						<h3>{p.title}</h3>
+						<div class="card-head">
+							<h3>{p.title}</h3>
+							<span class="chip"><Icon icon={p.icon} size={20} /></span>
+						</div>
 						<p>{p.text}</p>
 					</li>
 				{/each}
@@ -245,8 +256,14 @@
 		width: 100%;
 	}
 
+	/* Sized to the copy column so the headline sets on two lines on desktop; it scales down on phones. */
+	.hero-copy {
+		container-type: inline-size;
+	}
+
 	.hero h1 {
 		margin: 1.25rem 0 0;
+		font-size: clamp(1.75rem, 6.5cqi, 4.5rem);
 	}
 
 	.pill {
@@ -364,25 +381,21 @@
 		background: var(--site-tint);
 	}
 
-	.chip,
-	.mark {
-		display: grid;
-		place-items: center;
-		width: 2.5rem;
-		height: 2.5rem;
-		border-radius: var(--ui-radius-control);
-		color: var(--ui-accent);
-		background: color-mix(in oklab, var(--ui-accent) 14%, transparent);
-	}
-
 	.mark {
 		color: var(--ui-fg);
 		background: var(--ui-subtle);
 	}
 
+	.card-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
 	.features h3,
 	.agents h3 {
-		margin: 0.25rem 0 0;
+		margin: 0;
 	}
 
 	.features p,
@@ -482,16 +495,6 @@
 
 	.numbers {
 		margin-top: 3.5rem;
-	}
-
-	.numbers strong {
-		display: block;
-	}
-
-	.numbers span {
-		display: block;
-		margin-top: 0.75rem;
-		color: var(--ui-muted);
 	}
 
 	.install {
