@@ -174,7 +174,7 @@
 		</div>
 	</section>
 
-	<section class="site-section tint" {@attach reveal}>
+	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap install">
 			<div>
 				<p class="eyebrow">Install</p>
