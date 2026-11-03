@@ -181,9 +181,17 @@
 				<h2>From npm, or one script tag.</h2>
 				<p class="sub">Use the package in your bundler, or load the single file on any page.</p>
 			</div>
-			<div class="stack">
-				<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
-				<CodeBlock code={`<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></${'script'}>`} lang="html" />
+			<div class="options">
+				<div class="option">
+					<p class="option-label">With npm, for bundlers such as Vite, Next.js and Astro</p>
+					<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
+				</div>
+				<div class="option">
+					<p class="option-label">With a script tag, for any page and no build step</p>
+					<CodeBlock code={`<script
+  src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"
+></${'script'}>`} lang="html" />
+				</div>
 			</div>
 		</div>
 	</section>
@@ -522,9 +530,15 @@
 		align-items: start;
 	}
 
-	.stack {
+	.options {
 		display: grid;
-		gap: 1rem;
+		gap: 2.25rem;
+	}
+
+	.option-label {
+		margin: 0 0 0.75rem;
+		color: var(--ui-muted);
+		font-size: 1rem;
 	}
 
 	.cta {
