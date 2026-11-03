@@ -95,6 +95,10 @@ pnpm --filter qyro-site dev   # the website
 
 The docs live in `site/src/docs/*.md`; the website, `llms.txt`, the Markdown copies and `skills/qyro/SKILL.md` are all made from them (`pnpm skill` rebuilds the skill, `pnpm check` fails if it's stale).
 
+## Principles
+
+Qyro is free and open source under the MIT licence, which allows any use. The maintainers ask that it is not used to host, stream or promote anything Islam prohibits, such as gambling or obscene content. Qyro also has no dark patterns, no hidden fees, and no trackers unless the site owner turns analytics on.
+
 ## Licence
 
 MIT, see [LICENSE](LICENSE). The bundled playback engine is Apache-2.0 and the icons are MIT; see [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES). Demo films are from the Blender Foundation under CC BY 3.0.

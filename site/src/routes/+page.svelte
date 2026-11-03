@@ -6,6 +6,9 @@
 		KeyboardIcon,
 		LiveStreaming02Icon,
 		PlayIcon,
+		SecurityCheckIcon,
+		Shield01Icon,
+		Tick02Icon,
 	} from '@hugeicons/core-free-icons';
 	import { tools } from '#lib/ai/ai.js';
 	import ToolMark from '#lib/ai/ToolMark.svelte';
@@ -44,6 +47,13 @@
 		windsurf: 'AI editor with Cascade.',
 	};
 	const agents = tools.filter((t) => t.id in blurbs);
+
+	// What Qyro is for, and what it is not for. Stated as the maintainers' commitment, since MIT licensing can't restrict use.
+	const principles = [
+		{ icon: Shield01Icon, title: 'Nothing that Islam prohibits', text: 'Qyro must not be used to host, stream or promote gambling, obscene or sexual content, alcohol or drug promotion, or anything else haram.' },
+		{ icon: Tick02Icon, title: 'No dark patterns', text: 'No hidden fees, no tricks to keep people watching, and no selling of viewers\' data. Clear pricing, with nothing added at checkout.' },
+		{ icon: SecurityCheckIcon, title: 'No tracking by default', text: 'Analytics are off unless the site owner turns them on, and then they go to a server the owner runs.' },
+	];
 
 	const compat = [
 		{ name: 'Plain HTML', text: 'One script tag, or an import in any bundler.' },
@@ -175,6 +185,23 @@
 				<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
 				<CodeBlock code={`<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></${'script'}>`} lang="html" />
 			</div>
+		</div>
+	</section>
+
+	<section class="site-section tint" {@attach reveal}>
+		<div class="site-wrap">
+			<p class="eyebrow">Principles</p>
+			<h2>Built to serve good use, and never to be used for harm.</h2>
+			<p class="sub">Qyro is free and open source under the MIT licence. These are the commitments behind it, and a request to everyone who uses it.</p>
+			<ul class="features">
+				{#each principles as p, i (p.title)}
+					<li data-reveal-item style:--i={i}>
+						<span class="chip"><Icon icon={p.icon} size={20} /></span>
+						<h3>{p.title}</h3>
+						<p>{p.text}</p>
+					</li>
+				{/each}
+			</ul>
 		</div>
 	</section>
 
