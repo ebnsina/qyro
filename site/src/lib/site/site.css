@@ -3,7 +3,25 @@
 :root {
 	--site-width: 72rem;
 	--site-gutter: clamp(1rem, 4vw, 1.5rem);
-	--site-measure: 65ch;
+	/* Line length for running text: ~65 characters in Cabin Condensed (ch is far wider than its average letter). */
+	--site-measure: 25em;
+	/* Type scale: every text size, line height, tracking and weight on the site comes from here. */
+	--type-display: clamp(2.5rem, 5vw, 4rem);
+	--type-title: clamp(2rem, 4vw, 2.5rem);
+	--type-section: clamp(1.75rem, 3.6vw, 2.5rem);
+	--type-heading: 1.5rem;
+	--type-subheading: 1.25rem;
+	--type-lede: clamp(1.125rem, 1.6vw, 1.3125rem);
+	--type-body: 1.0625rem;
+	--type-ui: 0.9375rem;
+	--type-small: 0.8125rem;
+	--type-wordmark: 1.25rem;
+	--leading-display: 1.05;
+	--leading-heading: 1.15;
+	--leading-body: 1.6;
+	--tracking-heading: 0.01em;
+	--tracking-label: 0.08em;
+	--weight-heading: 600;
 	--ui-font: 'Cabin Condensed', ui-sans-serif, system-ui, sans-serif;
 	--site-display: 'Clash Display', 'Cabin Condensed', ui-sans-serif, system-ui, sans-serif;
 	/* Brand: pink, on the sinaui tokens, so every component follows it. */
@@ -22,11 +40,45 @@
 	--qyro-font-mono: var(--ui-font-mono);
 }
 
+/* Headings, the wordmark and the display numbers share one face and tracking. */
 h1,
 h2,
-h3 {
+h3,
+.site-face,
+.site-display,
+.site-home {
 	font-family: var(--site-display);
-	font-weight: 600;
+	font-weight: var(--weight-heading);
+	letter-spacing: var(--tracking-heading);
+	line-height: var(--leading-heading);
+}
+
+h1 {
+	font-size: var(--type-title);
+	text-wrap: balance;
+}
+
+h2 {
+	font-size: var(--type-heading);
+}
+
+h3 {
+	font-size: var(--type-subheading);
+}
+
+.site-display {
+	font-size: var(--type-display);
+	line-height: var(--leading-display);
+}
+
+/* Uppercase labels, eyebrows and column titles: mono, small, tracked out. */
+.site-label {
+	font-family: var(--ui-font-mono);
+	font-size: var(--type-small);
+	font-weight: 500;
+	letter-spacing: var(--tracking-label);
+	line-height: var(--leading-body);
+	text-transform: uppercase;
 }
 
 html {
@@ -39,8 +91,8 @@ html {
 body {
 	margin: 0;
 	background: var(--ui-bg);
-	line-height: 1.6;
-	font-size: 1rem;
+	line-height: var(--leading-body);
+	font-size: var(--type-body);
 }
 
 a {
@@ -109,10 +161,7 @@ kbd {
 .site-home {
 	text-decoration: none;
 	color: var(--ui-fg);
-	font-family: var(--site-display);
-	font-size: 1.25rem;
-	font-weight: 600;
-	letter-spacing: 0.01em;
+	font-size: var(--type-wordmark);
 }
 
 .site-header nav {
@@ -133,7 +182,7 @@ kbd {
 	padding: 0.4rem 0.65rem;
 	border-radius: var(--ui-radius-control);
 	color: var(--ui-muted);
-	font-size: 0.9375rem;
+	font-size: var(--type-ui);
 	text-decoration: none;
 	white-space: nowrap;
 }
@@ -181,18 +230,16 @@ kbd {
 
 .site-section h2 {
 	margin: 0 0 0.75rem;
-	font-size: clamp(1.75rem, 3.6vw, 2.5rem);
-	line-height: 1.12;
-	letter-spacing: 0.01em;
-	font-weight: 650;
-	text-wrap: balance;
+	font-size: var(--type-section);
 }
 
+/* Intro paragraph under a heading. Pages set their own spacing around it. */
 .site-lede {
 	max-width: var(--site-measure);
-	margin: 0 0 2.5rem;
+	margin: 0;
 	color: var(--ui-muted);
-	font-size: 1.125rem;
+	font-size: var(--type-lede);
+	line-height: var(--leading-body);
 	text-wrap: pretty;
 }
 
@@ -232,7 +279,7 @@ kbd {
 .site-footer {
 	border-top: 1px solid var(--ui-line);
 	padding-block: 3.5rem 2rem;
-	font-size: 0.9375rem;
+	font-size: var(--type-ui);
 }
 
 .site-footer-inner {
@@ -251,11 +298,7 @@ kbd {
 
 .site-footer h2 {
 	margin: 0 0 0.75rem;
-	font-size: 0.8125rem;
-	font-weight: 600;
 	color: var(--ui-muted);
-	text-transform: uppercase;
-	letter-spacing: 0.06em;
 }
 
 .site-footer ul {
@@ -296,33 +339,25 @@ kbd {
 	display: flex;
 	flex-direction: column;
 	gap: var(--flow);
-	max-width: var(--site-measure);
 	min-width: 0;
 }
 
+/* Running text gets the measure; code blocks and tables keep the full column. */
 .site-prose > * {
 	margin-block: 0;
 	min-width: 0;
 }
 
-.site-prose h1 {
-	font-size: clamp(2rem, 4vw, 2.5rem);
-	letter-spacing: 0.01em;
-	line-height: 1.1;
-	font-weight: 650;
+.site-prose > :is(p, ol, ul, h1, h2, h3, h4) {
+	max-width: var(--site-measure);
 }
 
 .site-prose > h2 {
 	margin-block-start: calc(2.5rem - var(--flow));
-	font-size: 1.375rem;
-	line-height: 1.25;
-	letter-spacing: 0.01em;
-	font-weight: 620;
 }
 
 .site-prose > h3 {
 	margin-block-start: calc(1.5rem - var(--flow));
-	font-size: 1.0625rem;
 }
 
 /* A heading sits closer to what it introduces than to what came before. */
@@ -351,7 +386,7 @@ kbd {
 	overflow-x: auto;
 	width: 100%;
 	border-collapse: collapse;
-	font-size: 0.9375rem;
+	font-size: var(--type-ui);
 }
 
 .site-prose > table :is(th, td) {

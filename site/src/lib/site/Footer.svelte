@@ -17,7 +17,7 @@
 		</div>
 		{#each columns as col (col.title)}
 			<div class="site-footer-col">
-				<h2>{col.title}</h2>
+				<h2 class="site-label">{col.title}</h2>
 				<ul>
 					{#each col.links as [label, href] (href)}
 						<li><a {href}>{label}</a></li>

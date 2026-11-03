@@ -211,14 +211,14 @@
 
 	<div class="pg-below">
 		<aside class="pg-controls" aria-label="Player settings">
-			<h2>Video</h2>
+			<h2 class="site-label">Video</h2>
 			<Select label="Source" bind:value={s.source}>
 				{#each sources as src (src.id)}<option value={src.id}>{src.label}</option>{/each}
 			</Select>
 			{#if s.source == 'custom'}
 				<Input label="Video URL" type="url" placeholder="https://…/video.m3u8" bind:value={draftUrl} hint="HLS, DASH or MP4. Press Enter to load." onchange={() => (s.url = draftUrl)} />
 			{/if}
-			<h2>Attributes</h2>
+			<h2 class="site-label">Attributes</h2>
 			<div class="pg-switches">
 				<Switch bind:checked={s.autoplay}>Autoplay</Switch>
 				<Switch bind:checked={s.muted}>Muted</Switch>
@@ -231,7 +231,7 @@
 			{#if !hasStoryboard}<p class="pg-hint">Thumbnails: only the Big Buck Bunny streams have a storyboard.</p>{/if}
 			<Input label="Start at (seconds)" type="number" min="0" value={s.start} onchange={(e: Event) => (s.start = Math.max(0, Number((e.currentTarget as HTMLInputElement).value) || 0))} />
 			{#if s.t != 'theming'}
-				<h2>Theme</h2>
+				<h2 class="site-label">Theme</h2>
 				<ThemeControls bind:theme={s.theme} />
 			{/if}
 		</aside>
@@ -252,7 +252,7 @@
 
 			<section class="pg-log" aria-labelledby="pg-log-title">
 				<div class="pg-log-head">
-					<h2 id="pg-log-title">Events</h2>
+					<h2 id="pg-log-title" class="site-label">Events</h2>
 					<button type="button" class="pg-clear" onclick={() => (log = [])} disabled={!log.length}><Icon icon={Delete02Icon} size={16} />Clear</button>
 				</div>
 				<ol role="log" aria-live="off">
@@ -272,7 +272,7 @@
 	.pg-credit {
 		margin: 1.5rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 	}
 
 	.pg {
@@ -282,11 +282,7 @@
 
 	h2 {
 		margin: 0;
-		font-size: 0.8125rem;
-		font-weight: 600;
 		color: var(--ui-muted);
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
 	}
 
 	/* ---------- Tabs, sticky so the player is always right below them ---------- */
@@ -509,7 +505,7 @@
 	.pg-hint {
 		margin: -0.25rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 	}
 
 	.pg-controls :global(.theme-controls) {
@@ -544,7 +540,7 @@
 		background: none;
 		color: var(--ui-muted);
 		font: inherit;
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 		cursor: pointer;
 	}
 
@@ -565,7 +561,7 @@
 		padding: 0;
 		list-style: none;
 		border-top: 1px solid var(--ui-line);
-		font: 0.8125rem/1.5 var(--ui-font-mono);
+		font: var(--type-small)/1.5 var(--ui-font-mono);
 	}
 
 	.pg-log li {

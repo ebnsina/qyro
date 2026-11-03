@@ -32,9 +32,9 @@
 <Header />
 
 <main id="main" class="page site-wrap">
-	<p class="eyebrow">Ethos</p>
+	<p class="site-label eyebrow">Ethos</p>
 	<h1>Built for good video.</h1>
-	<p class="lede">
+	<p class="site-lede">
 		Qyro is a player. What a site shows through it is the site owner's choice, but the player itself should never help with what Islam
 		prohibits, and it should treat every viewer fairly.
 	</p>
@@ -82,45 +82,30 @@
 	.eyebrow {
 		margin: 0 0 1rem;
 		color: var(--ui-accent);
-		font-family: var(--ui-font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 
 	h1 {
 		margin: 0;
-		font-size: clamp(2.25rem, 5vw, 3.25rem);
-		line-height: 1.08;
-		letter-spacing: 0.01em;
 	}
 
-	.lede {
+	.site-lede {
 		margin: 1.25rem 0 0;
 		color: var(--ui-muted);
-		font-size: 1.1875rem;
 	}
 
 	h2 {
 		margin: 3rem 0 0.75rem;
-		font-size: 1.75rem;
-		line-height: 1.15;
-		letter-spacing: 0.01em;
-	}
-
-	p,
-	li {
-		font-size: 1.0625rem;
-		line-height: 1.7;
 	}
 
 	p {
 		margin: 0.75rem 0 0;
+		max-width: var(--site-measure);
 	}
 
 	ul {
 		margin: 0;
 		padding-left: 1.25rem;
+		max-width: var(--site-measure);
 	}
 
 	li + li {

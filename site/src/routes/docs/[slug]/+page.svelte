@@ -52,12 +52,12 @@
 		display: grid;
 		gap: 0.15rem;
 		text-decoration: none;
-		font-weight: 550;
+		font-weight: 600;
 	}
 
 	.docs-pager span {
 		color: var(--ui-muted);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 		font-weight: 400;
 	}
 
@@ -66,7 +66,7 @@
 	}
 
 	.docs-md {
-		font-size: 0.875rem;
+		font-size: var(--type-small);
 		color: var(--ui-muted);
 	}
 </style>

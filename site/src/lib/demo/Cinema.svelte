@@ -10,8 +10,7 @@
 <style>
 	.cinema-info h2 {
 		margin: 0;
-		font-size: 1.75rem;
-		letter-spacing: -0.02em;
+		font-size: var(--type-heading);
 	}
 
 	.cinema-info p {

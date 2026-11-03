@@ -72,9 +72,9 @@
 	<section class="hero site-wrap">
 		<div class="hero-grid">
 			<div class="hero-copy">
-				<span class="pill">Free and open source · MIT</span>
-				<h1>A video player for any website, in <span class="accent">one HTML element</span>.</h1>
-				<p class="lede">
+				<span class="site-label pill">Free and open source · MIT</span>
+				<h1 class="site-display">A video player for any website, in <span class="accent">one HTML element</span>.</h1>
+				<p class="site-lede">
 					HLS, DASH, live and MP4, with captions, chapters and thumbnails. It works with a mouse, a keyboard, a touchscreen and a
 					screen reader, in every browser.
 				</p>
@@ -93,13 +93,13 @@
 
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap">
-			<p class="eyebrow">How it works</p>
+			<p class="site-label eyebrow">How it works</p>
 			<h2>From nothing to a finished player in three steps.</h2>
 			<ol class="flow">
 				{#each steps as step, i (step.title)}
 					<li data-reveal-item style:--i={i}>
 						<div>
-							<span class="step-no">Step {String(i + 1).padStart(2, '0')}</span>
+							<span class="site-label step-no">Step {String(i + 1).padStart(2, '0')}</span>
 							<h3>{step.title}</h3>
 							<p>{step.text}</p>
 						</div>
@@ -112,7 +112,7 @@
 
 	<section class="site-section tint" {@attach reveal}>
 		<div class="site-wrap">
-			<p class="eyebrow">What viewers get</p>
+			<p class="site-label eyebrow">What viewers get</p>
 			<h2>The parts people notice, and the ones they miss when they're gone.</h2>
 			<ul class="features">
 				{#each features as f, i (f.title)}
@@ -128,9 +128,9 @@
 
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap">
-			<p class="eyebrow">With AI</p>
+			<p class="site-label eyebrow">With AI</p>
 			<h2>Let your coding agent set it up.</h2>
-			<p class="sub">Each agent reads Qyro's skill from its own folder. Ask it to add the player, and it uses the current API.</p>
+			<p class="site-lede sub">Each agent reads Qyro's skill from its own folder. Ask it to add the player, and it uses the current API.</p>
 			<ul class="agents">
 				{#each agents as t, i (t.id)}
 					<li data-reveal-item style:--i={i}>
@@ -148,14 +148,14 @@
 	<section class="site-section tint" {@attach reveal}>
 		<div class="site-wrap compat">
 			<div>
-				<p class="eyebrow">Compatibility</p>
+				<p class="site-label eyebrow">Compatibility</p>
 				<h2>Works wherever your page does.</h2>
-				<p class="sub">Qyro is a standard custom element. Importing it on the server is safe, and the player starts in the browser only.</p>
+				<p class="site-lede sub">Qyro is a standard custom element. Importing it on the server is safe, and the player starts in the browser only.</p>
 			</div>
 			<div class="faq">
 				{#each compat as row, i (row.name)}
 					<details open={i < 2} {@attach accordion}>
-						<summary>{row.name}<span class="chev" aria-hidden="true"><i></i></span></summary>
+						<summary class="site-face">{row.name}<span class="chev" aria-hidden="true"><i></i></span></summary>
 						<p>{row.text}</p>
 					</details>
 				{/each}
@@ -165,12 +165,12 @@
 
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap">
-			<p class="eyebrow">Weight and privacy</p>
+			<p class="site-label eyebrow">Weight and privacy</p>
 			<h2>Small on the page, and nothing is tracked unless you turn it on.</h2>
 			<ul class="numbers">
-				<li data-reveal-item style:--i={0}><strong>32 kB</strong><span>The player, gzipped.</span></li>
-				<li data-reveal-item style:--i={1}><strong>255 kB</strong><span>The playback engine, loaded the first time a video plays.</span></li>
-				<li data-reveal-item style:--i={2}><strong>0</strong><span>Trackers. Analytics stay off unless you set <code>seyr-key</code>, and then they go to your own server.</span></li>
+				<li data-reveal-item style:--i={0}><strong class="site-display">32 kB</strong><span>The player, gzipped.</span></li>
+				<li data-reveal-item style:--i={1}><strong class="site-display">255 kB</strong><span>The playback engine, loaded the first time a video plays.</span></li>
+				<li data-reveal-item style:--i={2}><strong class="site-display">0</strong><span>Trackers. Analytics stay off unless you set <code>seyr-key</code>, and then they go to your own server.</span></li>
 			</ul>
 		</div>
 	</section>
@@ -178,9 +178,9 @@
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap install">
 			<div>
-				<p class="eyebrow">Install</p>
+				<p class="site-label eyebrow">Install</p>
 				<h2>From npm, or one script tag.</h2>
-				<p class="sub">Use the package in your bundler, or load the single file on any page.</p>
+				<p class="site-lede sub">Use the package in your bundler, or load the single file on any page.</p>
 			</div>
 			<div class="options">
 				<div class="option">
@@ -199,9 +199,9 @@
 
 	<section class="site-section tint" {@attach reveal}>
 		<div class="site-wrap">
-			<p class="eyebrow">Principles</p>
+			<p class="site-label eyebrow">Principles</p>
 			<h2>Built to serve good use, and never to be used for harm.</h2>
-			<p class="sub">Qyro is free and open source under the MIT licence. These are the commitments behind it, and a request to everyone who uses it.</p>
+			<p class="site-lede sub">Qyro is free and open source under the MIT licence. These are the commitments behind it, and a request to everyone who uses it.</p>
 			<ul class="features">
 				{#each principles as p, i (p.title)}
 					<li data-reveal-item style:--i={i}>
@@ -218,7 +218,7 @@
 	<section class="site-section cta" {@attach reveal}>
 		<div class="site-wrap">
 			<h2>Ready in a minute.</h2>
-			<p class="sub">Add the script, point it at a video, and it plays.</p>
+			<p class="site-lede sub">Add the script, point it at a video, and it plays.</p>
 			<div class="actions">
 				<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
 				<Button size="lg" variant="outline" href="https://github.com/ebnsina/qyro">View on GitHub</Button>
@@ -247,10 +247,6 @@
 
 	.hero h1 {
 		margin: 1.25rem 0 0;
-		font-size: clamp(2.5rem, 4.8vw, 4.25rem);
-		line-height: 1;
-		letter-spacing: 0.01em;
-		text-wrap: balance;
 	}
 
 	.pill {
@@ -260,21 +256,10 @@
 		border: 1px solid var(--ui-field-line);
 		border-radius: 999px;
 		color: var(--ui-muted);
-		font-family: var(--ui-font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
 	}
 
 	.accent {
 		color: var(--ui-accent);
-	}
-
-	.lede {
-		margin: 0;
-		max-width: 32rem;
-		color: var(--ui-muted);
-		font-size: clamp(1.125rem, 1.6vw, 1.3125rem);
 	}
 
 	.actions {
@@ -287,7 +272,7 @@
 	.install-line {
 		margin: 1.5rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.875rem;
+		font-size: var(--type-ui);
 	}
 
 	.hero-player {
@@ -303,7 +288,7 @@
 	.credit {
 		margin: 0.75rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 	}
 
 	/* The brand pink on the hero player, as in the approved draft. */
@@ -314,16 +299,10 @@
 	.eyebrow {
 		margin: 0 0 1rem;
 		color: var(--ui-accent);
-		font-family: var(--ui-font-mono);
-		font-size: 0.75rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 
 	.sub {
 		margin: 1rem 0 0;
-		max-width: 40rem;
-		color: var(--ui-muted);
 	}
 
 	.tint {
@@ -347,16 +326,11 @@
 
 	.step-no {
 		color: var(--ui-accent);
-		font-family: var(--ui-font-mono);
-		font-size: 0.8125rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
 	}
 
 	.flow h3 {
 		margin: 0.75rem 0 0.5rem;
-		font-size: clamp(1.5rem, 2.6vw, 1.875rem);
-		line-height: 1.1;
+		font-size: var(--type-heading);
 	}
 
 	.flow p {
@@ -409,8 +383,6 @@
 	.features h3,
 	.agents h3 {
 		margin: 0.25rem 0 0;
-		font-size: 1.375rem;
-		line-height: 1.15;
 	}
 
 	.features p,
@@ -423,7 +395,7 @@
 		display: block;
 		margin-top: 0.25rem;
 		color: var(--ui-fg);
-		font-size: 0.8125rem;
+		font-size: var(--type-small);
 	}
 
 	.foot-note {
@@ -457,10 +429,7 @@
 		gap: 1.5rem;
 		cursor: pointer;
 		list-style: none;
-		font-family: var(--site-display);
-		font-size: clamp(1.25rem, 2vw, 1.5rem);
-		font-weight: 600;
-		line-height: 1.2;
+		font-size: var(--type-subheading);
 	}
 
 	.faq summary::-webkit-details-marker {
@@ -507,7 +476,7 @@
 
 	.faq p {
 		margin: 0.75rem 0 0;
-		max-width: 40rem;
+		max-width: var(--site-measure);
 		color: var(--ui-muted);
 	}
 
@@ -517,11 +486,6 @@
 
 	.numbers strong {
 		display: block;
-		font-family: var(--site-display);
-		font-size: clamp(2.5rem, 5vw, 3.5rem);
-		font-weight: 600;
-		letter-spacing: 0.01em;
-		line-height: 1;
 	}
 
 	.numbers span {
@@ -545,7 +509,6 @@
 	.option-label {
 		margin: 0 0 0.75rem;
 		color: var(--ui-muted);
-		font-size: 1rem;
 	}
 
 	.cta {
