@@ -51,6 +51,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Video tools for the live test streams
         run: brew install ffmpeg
+      - name: Build the library, for the script-tag tests
+        run: pnpm build
       - name: Browsers
         run: pnpm exec playwright install webkit
       - name: End-to-end tests (WebKit)
