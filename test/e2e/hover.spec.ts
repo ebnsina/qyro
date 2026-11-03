@@ -93,8 +93,6 @@ test('settings: a diagonal path from the gear into the quality submenu keeps eve
 	await page.waitForTimeout(3200);
 	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
 	expect(await idle(player)).toBe(false);
-	// DIAGNOSTIC (remove once fixed): what the engine and the menu hold right before the click.
-	console.log('DIAG', JSON.stringify(await player.evaluate((p: any) => ({ variants: p.engine.getVariantTracks().map((t: any) => [t.id, t.height, t.active, t.audioId]), menu: [...p.shadowRoot.querySelectorAll('[role=menuitemradio]')].map((e: any) => e.textContent.trim()), page: p.shadowRoot.querySelector('.sheet')?.getAttribute('data-page') ?? null }))));
 	await option.click();
 	await expect.poll(() => player.evaluate((p: any) => p.engine.getVariantTracks().find((t: any) => t.active).height)).toBe(540);
 });
