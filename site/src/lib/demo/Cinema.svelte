@@ -8,9 +8,9 @@
 </div>
 
 <style>
-	/* The credits sit inside the dark frame, clear of its rounded corners. */
+	/* Under the player, on the page, as video sites show a title: the film's shape needs no band around it. */
 	.cinema-info {
-		padding: 1rem 1.25rem 1.25rem;
+		margin-block-start: 1rem;
 	}
 
 	.cinema-info h2 {
@@ -20,6 +20,6 @@
 
 	.cinema-info p {
 		margin: 0.25rem 0 0;
-		opacity: 0.7;
+		color: var(--ui-muted);
 	}
 </style>

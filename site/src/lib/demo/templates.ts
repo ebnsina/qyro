@@ -25,7 +25,7 @@ export interface Template {
 
 export const templates: Template[] = [
 	{ slug: 'standard', title: 'Standard', description: 'A plain embed with poster, title and thumbnails.', icon: Video01Icon },
-	{ slug: 'cinema', title: 'Cinema', description: 'Full width and dark, with a letterboxed film.', icon: ClapperboardIcon, side: Cinema, player: { style: '--qyro-radius: 0' } },
+	{ slug: 'cinema', title: 'Cinema', description: 'Full width, in the 2.35:1 shape of the film.', icon: ClapperboardIcon, side: Cinema, player: { style: '--qyro-radius: 0; --qyro-aspect-ratio: 2.35' } },
 	{ slug: 'hero', title: 'Marketing hero', description: 'A muted loop behind a headline.', icon: Megaphone01Icon, side: Hero, player: { style: '--qyro-radius: 0' } },
 	{ slug: 'course', title: 'Course', description: 'Chapters, resume where you left off, captions.', icon: BookOpen01Icon, side: Course, player: { title: 'Lesson 3: Storytelling with animals' } },
 	{ slug: 'article', title: 'Article', description: 'Inline in a reading column.', icon: News01Icon, side: Article },

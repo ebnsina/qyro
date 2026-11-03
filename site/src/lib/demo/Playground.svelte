@@ -381,11 +381,6 @@
 		object-fit: cover;
 	}
 
-	.pg-frame:has(.pg-layout[data-t='cinema']) {
-		background: #050506;
-		color: #eee;
-		color-scheme: dark;
-	}
 
 	/* The hero: a background loop with the headline over the bottom of the same player box. */
 	.pg-layout[data-t='hero'] qyro-player::part(controls),
