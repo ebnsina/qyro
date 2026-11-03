@@ -51,8 +51,8 @@
 	// What Qyro is for, and what it is not for. Stated as the maintainers' commitment, since MIT licensing can't restrict use.
 	const principles = [
 		{ icon: Shield01Icon, title: 'Nothing that Islam prohibits', text: 'Qyro must not be used to host, stream or promote gambling, obscene or sexual content, alcohol or drug promotion, or anything else haram.' },
-		{ icon: Tick02Icon, title: 'No dark patterns', text: 'No hidden fees, no tricks to keep people watching, and no selling of viewers\' data. Clear pricing, with nothing added at checkout.' },
-		{ icon: SecurityCheckIcon, title: 'No tracking by default', text: 'Analytics are off unless the site owner turns them on, and then they go to a server the owner runs.' },
+		{ icon: Tick02Icon, title: 'No dark patterns', text: 'No adverts injected into videos, no hidden fees, no fake countdowns or autoplay traps. Controls do what they look like.' },
+		{ icon: SecurityCheckIcon, title: 'No tracking by default', text: 'Analytics are off until the site owner turns them on. Then the data goes to a server the owner runs, not to a third party.' },
 	];
 
 	const compat = [

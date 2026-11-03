@@ -4,68 +4,68 @@
 	import Seo from '#lib/site/Seo.svelte';
 	import { to } from '#lib/site/links.js';
 
-	const takes = [
-		'Trade, operations and logistics',
-		'Health, education and public services',
-		'Interest-free finance',
-		'Charities and community organisations',
-		'Anything the client would be comfortable explaining to their family',
+	const forUse = [
+		'Teaching and courses that people sign up to learn from',
+		'News, documentaries and explainers that inform',
+		'Product demos, support videos and manuals',
+		'Charities, mosques and community groups sharing their work',
+		'Businesses that sell halal goods and services',
 	];
-	const declines = [
-		'Adult content',
-		'Gambling and betting',
-		'Interest-based lending, including buy-now-pay-later and predatory short-term credit',
-		'Alcohol and tobacco',
-		'Dark patterns: hidden charges, hard-to-cancel subscriptions',
-		'Fake reviews, endorsements, or impersonation',
+	const notForUse = [
+		'Gambling and betting, including streams that promote them',
+		'Pornography and sexual content',
+		'Promotion of alcohol and tobacco',
+		'Adverts for interest-based lending, including predatory credit',
+		'Music and content that Islam prohibits, promoted or sold through the player',
 	];
-	const screening = [
-		'The client describes what the product does and who pays for it.',
-		'We answer within a working day, with reasons, and a referral if we decline.',
-		'Scope and standards go into the contract.',
-		'The standard still applies if the project changes direction. We flag problems early and hand over cleanly.',
+	const viewers = [
+		'No adverts are injected into a video. The owner decides what plays.',
+		'No hidden fees, and nothing added at checkout.',
+		'No dark patterns: no fake countdowns, no autoplay traps, no buttons that look like something else.',
+		'Controls work with a mouse, a keyboard, a touchscreen and a screen reader.',
+		'No tracking by default. Analytics are off until the site owner turns them on, and then the data stays on a server they run.',
 	];
 </script>
 
-<Seo title="Ethos" description="How Qyro decides what it is used for: the work it takes on, the work it turns down, and why." />
+<Seo title="Ethos" description="What Qyro is for, what it must never be used for, and how the player treats the people who watch." />
 
 <Header />
 
 <main id="main" class="page site-wrap">
 	<p class="eyebrow">Ethos</p>
-	<h1>Halal by design.</h1>
+	<h1>Built for good video.</h1>
 	<p class="lede">
-		Ethics come before budget or brief. Clients don't need to share these beliefs to work with us, but the standard applies to every project.
+		Qyro is a player. What a site shows through it is the site owner's choice, but the player itself should never help with what Islam
+		prohibits, and it should treat every viewer fairly.
 	</p>
 
-	<h2>Work we take on</h2>
+	<h2>What it is for</h2>
 	<ul>
-		{#each takes as item (item)}<li>{item}</li>{/each}
+		{#each forUse as item (item)}<li>{item}</li>{/each}
 	</ul>
 
-	<h2>Work we turn down</h2>
+	<h2>What it must not be used for</h2>
+	<p>We don't build features for these, and our demos and templates never show them.</p>
 	<ul>
-		{#each declines as item (item)}<li>{item}</li>{/each}
+		{#each notForUse as item (item)}<li>{item}</li>{/each}
 	</ul>
 
-	<h2>How we screen a project</h2>
-	<ol>
-		{#each screening as item (item)}<li>{item}</li>{/each}
-	</ol>
+	<h2>How the player treats viewers</h2>
+	<ul>
+		{#each viewers as item (item)}<li>{item}</li>{/each}
+	</ul>
+
+	<h2>What we do when something goes wrong</h2>
+	<p>
+		If you see Qyro used for something on the list above, or a feature that works against viewers, report it in the
+		<a href="https://github.com/ebnsina/qyro/issues">issue tracker</a>. We'll say publicly what we're doing about it, and we'll remove any demo or
+		template that conflicts with these principles.
+	</p>
 
 	<h2>The basis</h2>
 	<p>
-		We draw on the Qur'an, 5:2, on cooperating in righteousness rather than in sin, and on a hadith on interest, which names the scribe and
-		the witnesses as well as the parties. We see ourselves as the scribe: we write the terms down clearly and make sure both sides can read them.
-	</p>
-	<p>
-		We are not a group of scholars, and this page is not a fatwa. When we are unsure, we consult qualified people.
-	</p>
-
-	<h2>If we would rather not</h2>
-	<p>
-		We would rather lose a project than take one we are uneasy about. If you want to talk about a project, write to
-		<a href="mailto:salam@fajrlabs.io">salam@fajrlabs.io</a>.
+		We draw on the Qur'an, 5:2: cooperate in righteousness and piety, not in sin and transgression. We are not scholars. When we are unsure
+		whether something fits, we ask qualified people before we decide.
 	</p>
 
 	<p class="back"><a href={to('/')}>Back to the home page</a></p>
@@ -118,8 +118,7 @@
 		margin: 0.75rem 0 0;
 	}
 
-	ul,
-	ol {
+	ul {
 		margin: 0;
 		padding-left: 1.25rem;
 	}
