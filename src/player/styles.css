@@ -501,13 +501,7 @@ video::-webkit-media-controls {
 		transform var(--_dur) var(--_ease);
 }
 
-/* A glass square like the keys, so the ring reads over any picture. Only the arc turns; the square stays put. */
-@property --spin {
-	syntax: '<angle>';
-	inherits: false;
-	initial-value: 0deg;
-}
-
+/* A glass square like the keys, with a ring on it: a faint track and a bright dash that turns clockwise. */
 .spinner::before {
 	content: '';
 	position: absolute;
@@ -518,18 +512,31 @@ video::-webkit-media-controls {
 	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
 }
 
-.spinner span {
+.spinner .ring {
 	position: absolute;
 	inset: 0;
-	padding: 3px;
-	border-radius: var(--_panel-radius);
-	/* A comet: the tail fades out and the bright head leads, turning clockwise (angles run clockwise from the top). */
-	background: conic-gradient(from var(--spin), transparent 0deg, var(--_fg) 270deg, var(--_fg));
-	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-	-webkit-mask-composite: xor;
-	mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
-	filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.4));
-	animation: spin 0.9s linear infinite;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.spinner .track,
+.spinner .arc {
+	fill: none;
+	stroke-width: 3;
+}
+
+.spinner .track {
+	stroke: var(--_track);
+}
+
+.spinner .arc {
+	stroke: var(--_fg);
+	stroke-linecap: round;
+	stroke-dasharray: 26 100;
+	transform-box: view-box;
+	transform-origin: 50% 50%;
+	animation: turn 0.9s linear infinite;
 }
 
 /* Wait a beat before showing, so short stalls don't flash it. */
@@ -563,9 +570,9 @@ video::-webkit-media-controls {
 	}
 }
 
-@keyframes spin {
+@keyframes turn {
 	to {
-		--spin: 1turn;
+		transform: rotate(360deg);
 	}
 }
 
@@ -1999,8 +2006,8 @@ video::-webkit-media-controls {
 		animation-iteration-count: 1 !important;
 	}
 
-	.spinner span {
-		animation: spin 2.4s linear infinite !important;
+	.spinner .arc {
+		animation: turn 2.4s linear infinite !important;
 	}
 
 	.dock,
