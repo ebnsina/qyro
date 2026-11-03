@@ -24,6 +24,8 @@ jobs:
         run: pnpm build
       - name: Build the site and check its AI files
         run: pnpm --filter qyro-site build
+      - name: Video tools for the live test streams
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Browsers
         run: pnpm exec playwright install --with-deps chromium webkit
       - name: End-to-end tests
