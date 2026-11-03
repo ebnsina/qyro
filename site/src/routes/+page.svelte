@@ -290,6 +290,11 @@
 		width: 100%;
 	}
 
+	/* The brand pink on the hero player, as in the approved draft. */
+	.hero-player qyro-player {
+		--qyro-accent: var(--ui-accent);
+	}
+
 	.eyebrow {
 		margin: 0 0 1rem;
 		color: var(--ui-accent);
