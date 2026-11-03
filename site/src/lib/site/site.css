@@ -10,7 +10,7 @@
 	--ui-accent: light-dark(#db2777, #f472b6);
 	--ui-on-accent: light-dark(#ffffff, #1b1d1e);
 	--ui-radius: clamp(0.625rem, 1.2vw, 0.875rem);
-	--ui-radius-control: 0.5rem;
+	--ui-radius-control: 0.75rem;
 	/* Large buttons: wider than sinaui default, so CTAs read as buttons. */
 	--ui-button-pad-lg: 1.75rem;
 	--ui-control-h-lg: 2.75rem;
