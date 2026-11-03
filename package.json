@@ -10,7 +10,7 @@
 	"type": "module",
 	"packageManager": "pnpm@11.23.0",
 	"sideEffects": ["./dist/qyro.js", "./dist/qyro.iife.js", "./dist/seyr.js", "./src/index.ts", "./src/seyr.ts"],
-	"files": ["dist", "skills", "THIRD_PARTY_NOTICES", "CHANGELOG.md"],
+	"files": ["dist", "skills", "licenses", "CHANGELOG.md"],
 	"main": "./dist/qyro.js",
 	"module": "./dist/qyro.js",
 	"types": "./dist/types/index.d.ts",

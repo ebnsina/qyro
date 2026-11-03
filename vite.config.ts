@@ -20,8 +20,8 @@ export default defineConfig(({ mode }) => {
 			rolldownOptions: script
 				? {
 						output: {
-							// The one place, besides THIRD_PARTY_NOTICES, where the bundled engine is named: its licence requires it.
-							postBanner: `/*! Qyro ${version} | MIT | https://github.com/ebnsina/qyro\n * Includes Shaka Player, Copyright 2016 Google LLC, Apache-2.0 (see THIRD_PARTY_NOTICES) */`,
+							// The one place, besides licenses/THIRD_PARTY_NOTICES, where the bundled engine is named: its licence requires it.
+							postBanner: `/*! Qyro ${version} | MIT | https://github.com/ebnsina/qyro\n * Includes Shaka Player, Copyright 2016 Google LLC, Apache-2.0 (see licenses/THIRD_PARTY_NOTICES) */`,
 						},
 					}
 				: { external: [/^shaka-player/, /^@seyr\/video/], output: { minify: true } },

@@ -31,4 +31,4 @@ No. Analytics only exist when you set `seyr-key`, and they go to your own Seyr s
 
 ## What's the licence?
 
-MIT. The bundled playback engine is Apache-2.0; see `THIRD_PARTY_NOTICES` in the package.
+MIT. The bundled playback engine is Apache-2.0; see `licenses/THIRD_PARTY_NOTICES` in the package.

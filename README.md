@@ -101,4 +101,4 @@ Qyro is free and open source under the MIT licence, which allows any use. The ma
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). The bundled playback engine is Apache-2.0 and the icons are MIT; see [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES). Demo films are from the Blender Foundation under CC BY 3.0.
+MIT, see [LICENSE](LICENSE). The bundled playback engine is Apache-2.0 and the icons are MIT; see [THIRD_PARTY_NOTICES](licenses/THIRD_PARTY_NOTICES). Demo films are from the Blender Foundation under CC BY 3.0.
