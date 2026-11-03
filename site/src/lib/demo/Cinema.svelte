@@ -8,6 +8,11 @@
 </div>
 
 <style>
+	/* The credits sit inside the dark frame, clear of its rounded corners. */
+	.cinema-info {
+		padding: 1rem 1.25rem 1.25rem;
+	}
+
 	.cinema-info h2 {
 		margin: 0;
 		font-size: var(--type-heading);
@@ -15,6 +20,6 @@
 
 	.cinema-info p {
 		margin: 0.25rem 0 0;
-		color: #9a9a9a;
+		opacity: 0.7;
 	}
 </style>
