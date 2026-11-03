@@ -74,10 +74,12 @@
 
 <main id="main">
 	<section class="hero site-wrap">
+		<div class="hero-head">
+			<span class="site-label pill">Free and open source · MIT</span>
+			<h1 class="site-display">A video player for any website, in <span class="accent">one HTML element</span>.</h1>
+		</div>
 		<div class="hero-grid">
 			<div class="hero-copy">
-				<span class="site-label pill">Free and open source · MIT</span>
-				<h1 class="site-display">A video player for any website, in <span class="accent">one HTML element</span>.</h1>
 				<p class="site-lede">
 					HLS, DASH, live and MP4, with captions, chapters and thumbnails. It works with a mouse, a keyboard, a touchscreen and a
 					screen reader, in every browser.
@@ -243,7 +245,9 @@
 	.hero {
 		min-height: calc(100svh - 4.5rem);
 		display: flex;
-		align-items: center;
+		flex-direction: column;
+		justify-content: center;
+		gap: 3rem;
 		padding-block: 2.5rem;
 	}
 
@@ -251,24 +255,24 @@
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
 		gap: 3rem;
-		align-items: center;
+		align-items: start;
 		width: 100%;
 	}
 
 	/* Sized to the copy column so the headline sets on two lines on desktop; it scales down on phones. */
-	.hero-copy {
-		--hero-title-min: 1.75rem;
-		--hero-title-fit: 6.5cqi;
-		--hero-title-max: 4.5rem;
-		container-type: inline-size;
+	/* The headline spans the full width, so it can be large and still set on two lines on desktop. */
+	.hero-head {
+		display: grid;
+		width: 100%;
 	}
 
 	.hero h1 {
 		margin: 1.25rem 0 0;
-		font-size: clamp(var(--hero-title-min), var(--hero-title-fit), var(--hero-title-max));
+		font-size: clamp(2.25rem, 4.4vw, 4.25rem);
 	}
 
 	.pill {
+		justify-self: start;
 		display: inline-flex;
 		align-items: center;
 		padding: 0.35rem 0.9rem;
