@@ -2,18 +2,13 @@
 
 All notable changes to Qyro. The format follows [Keep a Changelog](https://keepachangelog.com), and versions follow [Semantic Versioning](https://semver.org).
 
-## [Unreleased]
-
-### Changed
-
-- The script-tag build (`dist/qyro.iife.js`) no longer contains the playback engine. It is shipped as `dist/qyro-engine.js` beside it and fetched when a player starts, so the script tag's download drops from about 279 kB to about 33 kB gzipped. Serve both files from the same folder.
-
 ## [0.1.0] - 2026-10-29
 
 The first version.
 
 ### Added
 
+- The script-tag build (`dist/qyro.iife.js`) keeps the playback engine in `dist/qyro-engine.js` beside it, fetched when a player starts, so the script tag's own download is about 33 kB gzipped. Serve both files from the same folder.
 - Playlists: `player.playlist`, `next()`, `previous()`, `index`, `autoadvance` and `next-at`, with previous and next buttons, an Up next list inside the player, and an Up next card that counts down near the end.
 - Chapters from a WebVTT `<track kind="chapters">` or `chapters` attribute, from the stream, or from `player.chapters`, with `player.chapter`, `seekToChapter()` and a `chapterchange` event. A Chapters button opens a list inside the player, like Up next; the seek bar has a small gap at each chapter, the preview shows the chapter's title, and wide players show the current chapter by the time.
 - Settings → Captions → Caption style holds size, background and text color, so the top level is Quality, Speed, Captions and Audio.
