@@ -9,7 +9,7 @@ Most people add Qyro by asking their coding agent. Give the agent the Qyro skill
 
 ## Install the skill
 
-The skill is one folder, `skills/qyro/`, in the npm package (`node_modules/qyro/skills/qyro`) and in the [Qyro repository](https://github.com/ebnsina/qyro/tree/main/skills/qyro). Pick your tool:
+The skill is one folder, `skills/qyro/`, in the npm package (`node_modules/@ebnsina/qyro/skills/qyro`) and in the [Qyro repository](https://github.com/ebnsina/qyro/tree/main/skills/qyro). Pick your tool:
 
 <!-- ai:tools -->
 
@@ -31,7 +31,7 @@ Plain HTML:
 
 ```html
 <script type="module">
-	import 'https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.js';
+	import 'https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.js';
 </script>
 <qyro-player src="/video.m3u8" title="My video"></qyro-player>
 ```
@@ -41,7 +41,7 @@ SvelteKit (load it in the browser only):
 ```svelte
 <script>
 	import { onMount } from 'svelte';
-	onMount(() => import('qyro'));
+	onMount(() => import('@ebnsina/qyro'));
 </script>
 
 <qyro-player src="/video.m3u8" title="My video"></qyro-player>
@@ -54,7 +54,7 @@ import { useEffect } from 'react';
 
 export function Video({ src }: { src: string }) {
 	useEffect(() => {
-		import('qyro');
+		import('@ebnsina/qyro');
 	}, []);
 	return <qyro-player src={src} title="My video" />;
 }
@@ -64,7 +64,7 @@ Vue (tell Vue it's a custom element with `compilerOptions.isCustomElement: (tag)
 
 ```vue
 <script setup>
-import 'qyro';
+import '@ebnsina/qyro';
 </script>
 
 <template>

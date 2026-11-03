@@ -12,7 +12,7 @@
 
 	// The player registers itself in the browser; the server just renders the tag.
 	onMount(() => {
-		import('qyro');
+		import('@ebnsina/qyro');
 	});
 </script>
 

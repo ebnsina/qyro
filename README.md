@@ -7,17 +7,17 @@ A beautiful video player for any website. One element, `<qyro-player>`, streams 
 ## Install
 
 ```shell
-npm install qyro
+npm install @ebnsina/qyro
 ```
 
 ```js
-import 'qyro';
+import '@ebnsina/qyro';
 ```
 
 Or with no build step, one file:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>
 ```
 
 ## Use
@@ -35,6 +35,16 @@ player.addEventListener('ended', () => console.log('done'));
 player.seek(30);
 player.play();
 ```
+
+## Frameworks and server rendering
+
+Qyro is a standard custom element, so it works in any framework that renders HTML. Import it once in the browser, then use `<qyro-player>` like any element.
+
+- **React 19+:** `<qyro-player src={src} />`. Get a ref to the element to call methods such as `play()` and `seek()`.
+- **Vue:** tell the compiler the tag is native: `compilerOptions: { isCustomElement: (tag) => tag === 'qyro-player' }`.
+- **Angular:** add `CUSTOM_ELEMENTS_SCHEMA` to the component's `schemas`.
+- **Svelte, Solid, Lit, Stencil:** no configuration needed.
+- **Next.js, Nuxt, SvelteKit, Astro (server rendering):** importing `qyro` on the server is safe; the element only upgrades in the browser. Call `player.play()` and similar only after mount, in an effect or `onMounted`.
 
 ## Attributes
 
@@ -62,7 +72,7 @@ Every token and part, with a live preview: [Theming](https://ebnsina.github.io/q
 
 ## Analytics
 
-Off unless you set `seyr-key`. Then Qyro loads the [Seyr](https://github.com/ebnsina/seyr) video SDK, from `@seyr/video` if you `import 'qyro/seyr'`, or from `<seyr-host>/js/seyr-video.js`, and reports startup, rebuffering, quality, errors and watch time to your own server. See [Analytics](https://ebnsina.github.io/qyro/docs/analytics).
+Off unless you set `seyr-key`. Then Qyro loads the [Seyr](https://github.com/ebnsina/seyr) video SDK, from `@seyr/video` if you `import '@ebnsina/qyro/seyr'`, or from `<seyr-host>/js/seyr-video.js`, and reports startup, rebuffering, quality, errors and watch time to your own server. See [Analytics](https://ebnsina.github.io/qyro/docs/analytics).
 
 ## Browser support
 
@@ -70,13 +80,13 @@ Current and previous Chrome, Edge, Firefox and Safari on desktop, iOS, iPadOS an
 
 ## Sizes
 
-Qyro itself is about 27 kB gzipped. The playback engine (about 255 kB gzipped) loads the first time a player needs it. The single-file script build has both: about 273 kB gzipped. `pnpm build` prints the current numbers.
+Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) loads the first time a player needs it. The single-file script build has both: about 279 kB gzipped. `pnpm build` prints the current numbers.
 
 ## Develop
 
 ```shell
 pnpm install
-pnpm dev          # playground at http://localhost:5310/dev/
+pnpm dev          # playground at http://localhost:5310/playground/
 pnpm test         # unit tests
 pnpm test:e2e     # end-to-end tests (Chromium and WebKit, desktop and touch)
 pnpm build        # library, script build, types and sizes

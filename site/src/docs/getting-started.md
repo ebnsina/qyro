@@ -12,17 +12,17 @@ Qyro is one HTML element, `<qyro-player>`. It works in plain HTML and in every f
 With a bundler (Vite, SvelteKit, React, Vue, Astro, anything):
 
 ```shell
-npm install qyro
+npm install @ebnsina/qyro
 ```
 
 ```js
-import 'qyro';
+import '@ebnsina/qyro';
 ```
 
 Without a bundler, one script tag gives you everything in a single file:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/qyro@0.1.0/dist/qyro.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>
 ```
 
 ## Add a video

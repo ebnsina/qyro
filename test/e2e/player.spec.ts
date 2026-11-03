@@ -4,7 +4,7 @@ const HLS = '/test/fixtures/hls/main.m3u8';
 
 async function open(page: Page, params: Record<string, string> = {}) {
 	const q = new URLSearchParams({ src: HLS, title: 'Test pattern', muted: '', ...params });
-	await page.goto(`/dev/index.html?${q}`);
+	await page.goto(`/playground/index.html?${q}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	return player;
@@ -122,7 +122,7 @@ test('toggles full screen', async ({ page }) => {
 test('shows a plain error with a working retry for a bad URL', async ({ page }) => {
 	const logs: string[] = [];
 	page.on('console', (m) => m.type() != 'debug' && logs.push(m.text()));
-	await page.goto('/dev/index.html?src=/test/fixtures/missing.m3u8');
+	await page.goto('/playground/index.html?src=/test/fixtures/missing.m3u8');
 	const player = page.locator('qyro-player');
 	const error = player.locator('.error');
 	await expect(error).toBeVisible();

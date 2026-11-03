@@ -6,8 +6,8 @@ description: Properties and methods on the qyro-player element, with TypeScript 
 # JavaScript API
 
 ```ts
-import 'qyro';
-import type { QyroPlayer } from 'qyro';
+import '@ebnsina/qyro';
+import type { QyroPlayer } from '@ebnsina/qyro';
 
 const player = document.querySelector('qyro-player') as QyroPlayer;
 await player.ready;

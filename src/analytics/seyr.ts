@@ -28,7 +28,7 @@ type Loader = () => Promise<SeyrVideo>;
 
 let loader: Loader | undefined;
 
-/** Set by `qyro/seyr`, which imports @seyr/video from npm through your bundler. */
+/** Set by `@ebnsina/qyro/seyr`, which imports @seyr/video from npm through your bundler. */
 export function useSeyrLoader(l: Loader): void {
 	loader = l;
 }
@@ -40,13 +40,13 @@ declare global {
 }
 
 /**
- * Finds the SDK: the npm loader if `qyro/seyr` was imported, a page that already has
+ * Finds the SDK: the npm loader if `@ebnsina/qyro/seyr` was imported, a page that already has
  * `window.seyrVideo`, or else the script your Seyr server serves at `<host>/js/seyr-video.js`.
  */
 export async function loadSeyr(host: string | undefined): Promise<SeyrVideo> {
 	if (loader) return loader();
 	if (window.seyrVideo) return window.seyrVideo;
-	if (!host) throw new Error('qyro: seyr-key is set, but there is no seyr-host to load the Seyr video script from and qyro/seyr was not imported');
+	if (!host) throw new Error('qyro: seyr-key is set, but there is no seyr-host to load the Seyr video script from and @ebnsina/qyro/seyr was not imported');
 	await script(`${host.replace(/\/$/, '')}/js/seyr-video.js`);
 	if (!window.seyrVideo) throw new Error(`qyro: ${host}/js/seyr-video.js loaded but did not define window.seyrVideo`);
 	return window.seyrVideo;

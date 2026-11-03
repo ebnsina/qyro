@@ -20,7 +20,7 @@
 		"@sveltejs/kit": "^3.0.0",
 		"@sveltejs/vite-plugin-svelte": "^7.2.0",
 		"marked": "^16.4.2",
-		"qyro": "workspace:*",
+		"@ebnsina/qyro": "workspace:*",
 		"simple-icons": "^16.36.0",
 		"svelte": "^5.57.1",
 		"svelte-check": "^4.6.0",

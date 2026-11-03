@@ -7,7 +7,7 @@ const items = [
 ];
 
 async function open(page: Page, attrs = ''): Promise<Locator> {
-	await page.goto(`/dev/index.html?src=&muted${attrs}`);
+	await page.goto(`/playground/index.html?src=&muted${attrs}`);
 	const player = page.locator('qyro-player');
 	await player.evaluate((p: any, list) => {
 		p.events = [];

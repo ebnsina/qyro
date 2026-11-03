@@ -4,7 +4,7 @@ import { SITE_URL } from '#lib/site/links.js';
 
 const site = () => SITE_URL;
 const SKILL = 'https://github.com/ebnsina/qyro/blob/main/skills/qyro/SKILL.md';
-const copy = (dir: string) => `mkdir -p ${dir} && cp -r node_modules/qyro/skills/qyro ${dir}/`;
+const copy = (dir: string) => `mkdir -p ${dir} && cp -r node_modules/@ebnsina/qyro/skills/qyro ${dir}/`;
 
 export interface Tool {
 	id: string;

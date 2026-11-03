@@ -1,19 +1,21 @@
 import { expect, test } from '@playwright/test';
 
-// A public DASH live simulator with a DVR window. This suite needs the network on purpose.
-const LIVE = 'https://livesim2.dashif.org/livesim2/testpic_2s/Manifest.mpd';
+// Local live streams from scripts/live.sh, started by playwright.config.ts: a 5-minute DVR window, and no DVR.
+const LIVE = '/test/generated/live/index.m3u8';
+const NO_DVR = '/test/generated/live-no-dvr/index.m3u8';
 
 test.skip(({ isMobile }) => isMobile, 'live UI is the same on touch');
 
-test('live: red at the edge, "Go live" behind it, and back to the edge', async ({ page, browserName }) => {
-	// Playwright's WebKit stalls on this public stream and drifts behind the edge on its own.
-	test.skip(browserName == 'webkit', 'WebKit build stalls on the public live simulator');
-	await page.goto(`/dev/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
+test('live: red at the edge, "Go live" behind it, and back to the edge', async ({ page }) => {
+	test.setTimeout(90000); // the DVR window fills in real time, about 40s from the stream's start
+	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	const live = player.locator('.timeline .live');
 	const root = () => player.evaluate((p: any) => p.shadowRoot.querySelector('.root').hasAttribute('data-at-live'));
 	await expect.poll(root, { timeout: 15000 }).toBe(true);
+	// The seek back needs a DVR window of at least 30s; the stream has to run for a while first.
+	await expect.poll(() => player.evaluate((p: any) => { const r = p.engine.seekRange(); return r.end - r.start; }), { timeout: 60000 }).toBeGreaterThanOrEqual(40);
 	await expect(live).toContainText('Live');
 	await expect(live.locator('.dot')).toHaveCSS('background-color', 'rgb(255, 59, 48)');
 	await expect(player.locator('.duration')).toBeHidden();
@@ -50,14 +52,14 @@ test('live: red at the edge, "Go live" behind it, and back to the edge', async (
 });
 
 test('live: the corner pill shows on the poster before playback', async ({ page }) => {
-	await page.goto(`/dev/index.html?muted&src=${encodeURIComponent(LIVE)}`);
+	await page.goto(`/playground/index.html?muted&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live), { timeout: 30000 }).toBe(true);
 	await expect(player.locator('.live-corner')).toHaveCSS('opacity', '1');
 });
 
 test('live: no speed control, and stats show the live delay', async ({ page }) => {
-	await page.goto(`/dev/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
+	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	await player.locator('.gear').click();
@@ -70,8 +72,7 @@ test('live: no speed control, and stats show the live delay', async ({ page }) =
 });
 
 test('live without a DVR window: no bar, and the LIVE pill sits beside play', async ({ page }) => {
-	const short = 'https://livesim2.dashif.org/livesim2/tsbd_10/testpic_2s/Manifest.mpd';
-	await page.goto(`/dev/index.html?muted&autoplay&src=${encodeURIComponent(short)}`);
+	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(NO_DVR)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	await expect(player.locator('.timeline')).toBeHidden();

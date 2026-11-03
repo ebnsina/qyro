@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 // Runs on the phone and tablet projects (and with emulated touch on desktop).
 
 async function open(page: Page, params = ''): Promise<Locator> {
-	await page.goto(`/dev/index.html?src=/test/fixtures/hls/main.m3u8&title=Big%20Buck%20Bunny&muted${params}`);
+	await page.goto(`/playground/index.html?src=/test/fixtures/hls/main.m3u8&title=Big%20Buck%20Bunny&muted${params}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	return player;
@@ -57,18 +57,28 @@ test('a tap shows or hides the controls and never toggles play', async ({ page }
 	expect((await state(player)).paused).toBe(false);
 });
 
+// Two taps in one task: real taps arrive too far apart under load to count as a double tap (280ms window).
+async function doubleTap(player: Locator, x: number, y: number) {
+	await player.locator('.surface').evaluate((el, [px, py]) => {
+		for (let i = 0; i < 2; i++) {
+			const init = { bubbles: true, composed: true, pointerType: 'touch', pointerId: 1, isPrimary: true, clientX: px, clientY: py };
+			el.dispatchEvent(new PointerEvent('pointerdown', init));
+			el.dispatchEvent(new PointerEvent('pointerup', init));
+		}
+	}, [x, y]);
+}
+
 test('double tap on the right seeks forward with a ripple, on the left seeks back', async ({ page }) => {
-	const player = await playing(page);
+	// Loop: the 12s clip could reach its end under load, which pauses it.
+	const player = await playing(page, '&loop');
 	await player.evaluate((p: any) => p.seek(1));
 	const s = (await player.locator('.surface').boundingBox())!;
 	const before = (await state(player)).time;
-	await page.touchscreen.tap(s.x + s.width * 0.85, s.y + s.height / 2);
-	await page.touchscreen.tap(s.x + s.width * 0.85, s.y + s.height / 2);
+	await doubleTap(player, s.x + s.width * 0.85, s.y + s.height / 2);
 	await expect.poll(async () => (await state(player)).time).toBeGreaterThan(before + 8);
 	await expect(player.locator('.ripple[data-side="forward"]')).toHaveAttribute('data-on', '');
 	await page.waitForTimeout(500);
-	await page.touchscreen.tap(s.x + s.width * 0.15, s.y + s.height / 2);
-	await page.touchscreen.tap(s.x + s.width * 0.15, s.y + s.height / 2);
+	await doubleTap(player, s.x + s.width * 0.15, s.y + s.height / 2);
 	await expect.poll(async () => (await state(player)).time).toBeLessThan(5);
 	expect((await state(player)).paused).toBe(false);
 });
@@ -152,8 +162,8 @@ test('chapters open with a tap, as a bottom sheet on phones, and a tap on one se
 	const panel = player.getByRole('dialog', { name: 'Chapters' });
 	await expect(panel).toBeVisible();
 	const box = (await player.boundingBox())!;
-	const toc = (await player.locator('.toc').boundingBox())!;
-	expect(toc.height).toBeGreaterThanOrEqual(44);
+	// The button is still settling right after the tap, so wait for its final size.
+	await expect.poll(async () => (await player.locator('.toc').boundingBox())!.height).toBeGreaterThanOrEqual(44);
 	await page.waitForTimeout(500); // the panel slides into place
 	const sheet = (await panel.boundingBox())!;
 	expect(sheet.x).toBeGreaterThanOrEqual(box.x);

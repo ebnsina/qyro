@@ -31,8 +31,8 @@ Qyro looks for the Seyr video SDK in this order:
    ```
 
    ```js
-   import 'qyro';
-   import 'qyro/seyr';
+   import '@ebnsina/qyro';
+   import '@ebnsina/qyro/seyr';
    ```
 
    Your bundler puts the SDK in its own chunk, fetched only by players that have `seyr-key`.
