@@ -324,16 +324,6 @@
 		view-transition-name: pg-frame;
 	}
 
-	/* Drawn on top: the hero layout pulls the player into the padding, which would cover an inset border. */
-	.pg-frame::after {
-		content: '';
-		position: absolute;
-		inset: 0;
-		border-radius: inherit;
-		box-shadow: inset 0 0 0 1px var(--ui-line);
-		pointer-events: none;
-	}
-
 	.pg-frame[data-scheme='dark'] {
 		color-scheme: dark;
 	}
@@ -570,7 +560,6 @@
 		margin: 0;
 		padding: 0;
 		list-style: none;
-		border-top: 1px solid var(--ui-line);
 		font: var(--type-small)/1.5 var(--ui-font-mono);
 	}
 
@@ -579,7 +568,6 @@
 		grid-template-columns: 4.5rem 10rem minmax(0, 1fr);
 		gap: 0.75rem;
 		padding: 0.3rem 0;
-		border-bottom: 1px solid var(--ui-line);
 	}
 
 	.pg-log .at,
