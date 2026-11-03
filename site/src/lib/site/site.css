@@ -273,13 +273,6 @@ kbd {
 	text-decoration: underline;
 }
 
-.site-credit {
-	width: min(100% - 2 * var(--site-gutter), var(--site-width));
-	margin: 3rem auto 0;
-	color: var(--ui-muted);
-	font-size: 0.8125rem;
-}
-
 @media (max-width: 860px) {
 	.site-footer-inner {
 		grid-template-columns: repeat(2, 1fr);

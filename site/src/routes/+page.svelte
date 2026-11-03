@@ -86,6 +86,7 @@
 			</div>
 			<div class="hero-player">
 				<qyro-player src={media.bbb.hls} poster={media.bbb.poster} title={media.bbb.title} thumbnails={file(media.bbb.storyboard)} start="5" muted></qyro-player>
+				<p class="credit">Demo film: {media.bbb.credit}</p>
 			</div>
 		</div>
 	</section>
@@ -297,6 +298,12 @@
 	.hero-player qyro-player {
 		display: block;
 		width: 100%;
+	}
+
+	.credit {
+		margin: 0.75rem 0 0;
+		color: var(--ui-muted);
+		font-size: 0.8125rem;
 	}
 
 	/* The brand pink on the hero player, as in the approved draft. */

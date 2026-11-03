@@ -1,6 +1,5 @@
 <script lang="ts">
-	import ThemeToggle from '#lib/sinaui/ui/ThemeToggle.svelte';
-	import { GITHUB, media, to } from './links';
+	import { GITHUB, to } from './links';
 
 	const columns = [
 		{ title: 'Product', links: [['Demo', to('/demo')], ['Getting started', to('/docs/getting-started')], ['Theming', to('/docs/theming')], ['Changelog', `${GITHUB}/blob/main/CHANGELOG.md`]] },
@@ -15,7 +14,6 @@
 		<div class="site-footer-brand">
 			<strong class="site-footer-name">Qyro</strong>
 			<p>A beautiful video player for any website. Free and open source.</p>
-			<ThemeToggle size="sm" />
 		</div>
 		{#each columns as col (col.title)}
 			<div class="site-footer-col">
@@ -28,7 +26,4 @@
 			</div>
 		{/each}
 	</div>
-	<p class="site-credit">
-		Demo films: {media.bbb.credit}. {media.sintel.credit}. {media.tos.credit}.
-	</p>
 </footer>

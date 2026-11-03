@@ -10,6 +10,7 @@
 	import Select from '#lib/sinaui/ui/Select.svelte';
 	import Switch from '#lib/sinaui/ui/Switch.svelte';
 	import * as Tabs from '#lib/sinaui/ui/tabs/index.js';
+	import { media } from '#lib/site/links.js';
 	import { isDark } from '#lib/sinaui/ui/theme.js';
 	import ThemeControls from './ThemeControls.svelte';
 	import { snippet, TABS, type Tab } from './code.js';
@@ -264,9 +265,16 @@
 			</section>
 		</div>
 	</div>
+	<p class="pg-credit">Demo films: {media.bbb.credit}. {media.sintel.credit}. {media.tos.credit}.</p>
 </div>
 
 <style>
+	.pg-credit {
+		margin: 1.5rem 0 0;
+		color: var(--ui-muted);
+		font-size: 0.8125rem;
+	}
+
 	.pg {
 		display: grid;
 		gap: 1rem;
