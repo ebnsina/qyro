@@ -80,7 +80,7 @@ Current and previous Chrome, Edge, Firefox and Safari on desktop, iOS, iPadOS an
 
 ## Sizes
 
-Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) loads when the first player starts, as a separate file in the script build too, so the script tag's own download stays about 33 kB. `pnpm build` prints the current numbers.
+Qyro itself is about 33 kB gzipped. The playback engine (about 261 kB gzipped) loads when the first player starts, as a separate file in the script build too, so the script tag's own download stays about 33 kB. `pnpm build` prints the current numbers.
 
 ## Develop
 

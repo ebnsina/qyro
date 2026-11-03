@@ -36,9 +36,14 @@ export interface Theme {
 	blur: number;
 	radius: number;
 	glass: 'dark' | 'light';
+	/** The glass tint takes the accent's colour, so the controls and the accent read as one. */
+	matchTint: boolean;
 }
 
-export const DEFAULT_THEME: Theme = { accent: '#ffffff', tint: '#1c1c20', tintAlpha: 36, blur: 18, radius: 16, glass: 'dark' };
+export const DEFAULT_THEME: Theme = { accent: '#ffffff', tint: '#1c1c20', tintAlpha: 36, blur: 18, radius: 16, glass: 'dark', matchTint: false };
+
+/** The tint colour in effect: the accent when the tint follows it. */
+export const tintOf = (t: Theme) => (t.matchTint ? t.accent : t.tint);
 
 export interface Settings {
 	source: string;
@@ -80,7 +85,7 @@ export function initial(t = 'standard'): State {
 }
 
 const BOOLS = ['autoplay', 'muted', 'loop', 'poster', 'captions', 'thumbnails', 'live'] as const;
-const THEME_KEYS: Record<keyof Theme, string> = { accent: 'accent', tint: 'tint', tintAlpha: 'tint-alpha', blur: 'blur', radius: 'radius', glass: 'glass' };
+const THEME_KEYS: Record<keyof Theme, string> = { accent: 'accent', tint: 'tint', tintAlpha: 'tint-alpha', blur: 'blur', radius: 'radius', glass: 'glass', matchTint: 'match-tint' };
 
 /** Reads a state from `?t=course&src=…&captions=1`; anything missing comes from the template. */
 export function parse(search: string, templates: string[]): State {
@@ -105,6 +110,7 @@ export function parse(search: string, templates: string[]): State {
 		if (k == 'accent' || k == 'tint') {
 			if (/^#[0-9a-f]{6}$/i.test(v)) s.theme[k] = v.toLowerCase();
 		} else if (k == 'glass') s.theme.glass = v == 'light' ? 'light' : 'dark';
+		else if (k == 'matchTint') s.theme.matchTint = v == '1';
 		else if (Number.isFinite(Number(v))) s.theme[k] = Number(v);
 	}
 	return s;
@@ -117,7 +123,11 @@ export function serialize(s: State): string {
 	if (s.source != d.source || s.source == 'custom') q.set('src', s.source == 'custom' ? s.url : s.source);
 	for (const b of BOOLS) if (s[b] != d[b]) q.set(b, s[b] ? '1' : '0');
 	if (s.start != d.start) q.set('start', String(s.start));
-	for (const [k, name] of Object.entries(THEME_KEYS) as [keyof Theme, string][]) if (s.theme[k] != d.theme[k]) q.set(name, String(s.theme[k]));
+	for (const [k, name] of Object.entries(THEME_KEYS) as [keyof Theme, string][]) {
+		if (s.theme[k] == d.theme[k]) continue;
+		const v = s.theme[k];
+		q.set(name, typeof v == 'boolean' ? (v ? '1' : '0') : String(v));
+	}
 	return `?${q}`;
 }
 
@@ -151,7 +161,7 @@ export function themeVars(t: Theme): Record<string, string> {
 	const d = DEFAULT_THEME;
 	const v: Record<string, string> = {};
 	if (t.accent != d.accent) v['--qyro-accent'] = t.accent;
-	if (t.tint != d.tint || t.tintAlpha != d.tintAlpha) v['--qyro-glass-tint'] = `rgb(${hexToRgb(t.tint)} / ${t.tintAlpha / 100})`;
+	if (tintOf(t) != tintOf(d) || t.tintAlpha != d.tintAlpha) v['--qyro-glass-tint'] = `rgb(${hexToRgb(tintOf(t))} / ${t.tintAlpha / 100})`;
 	if (t.blur != d.blur) v['--qyro-glass-blur'] = `${t.blur}px`;
 	if (t.radius != d.radius) v['--qyro-radius'] = `${t.radius}px`;
 	return v;

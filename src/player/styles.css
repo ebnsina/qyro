@@ -6,16 +6,19 @@
 	--_bg: var(--qyro-background, #000);
 	--_accent: var(--qyro-accent, #fff);
 	--_tint: var(--qyro-glass-tint, rgb(28 28 32 / 0.36));
+	/* The rail's round keys take the glass tint too, with their own dark default. */
+	--_disc: var(--qyro-glass-tint, rgb(12 13 14 / 0.6));
+	--_thumb: var(--qyro-thumb, #fff);
 	--_blur: var(--qyro-glass-blur, 18px);
 	--_saturate: var(--qyro-glass-saturate, 180%);
 	--_highlight: var(--qyro-glass-highlight, rgb(255 255 255 / 0.4));
 	--_rim: var(--qyro-glass-rim, rgb(255 255 255 / 0.28));
 	--_shadow: var(--qyro-glass-shadow, 0 6px 20px -6px rgb(0 0 0 / 0.45), 0 1px 3px rgb(0 0 0 / 0.2));
-	--_scrim: var(--qyro-scrim, rgb(0 0 0 / 0.62));
+	--_scrim: var(--qyro-scrim, rgb(0 0 0 / 0.7));
 	/* Radius scale: pill for capsules, buttons and chips; one panel radius; nested = outer - padding. */
 	--_r-pill: 999px;
 	--_player-radius: var(--qyro-radius, 16px);
-	--_panel-radius: var(--qyro-panel-radius, 18px);
+	--_panel-radius: var(--qyro-panel-radius, 14px);
 	--_panel-pad: 6px;
 	/* One size scale for every panel, menu and label, so they all match. */
 	--_fs-body: 13px;
@@ -25,8 +28,8 @@
 	--_item-h: 34px;
 	--_r-inner: calc(var(--_panel-radius) - var(--_panel-pad));
 	--_r-small: 6px;
-	--_track: var(--qyro-track, rgb(255 255 255 / 0.26));
-	--_buffered: var(--qyro-buffered, rgb(255 255 255 / 0.44));
+	--_track: var(--qyro-track, rgb(255 255 255 / 0.35));
+	--_buffered: var(--qyro-buffered, rgb(255 255 255 / 0.2));
 	--_control: var(--qyro-control-size, 38px);
 	--_icon: var(--qyro-icon-size, 18px);
 	--_scrubber: 22px;
@@ -392,8 +395,13 @@ video::-webkit-media-controls {
 .big-play {
 	width: clamp(44px, 6cqi, 56px);
 	height: clamp(44px, 6cqi, 56px);
-	--_tint: rgb(28 28 32 / 0.3);
+	/* The same disc as the rail's keys: the glass tint, and a glyph that contrasts with it. */
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
 	box-shadow: none;
+	color: var(--_fg);
+	color: contrast-color(var(--_disc));
 }
 
 .big-play svg {
@@ -1053,7 +1061,7 @@ video::-webkit-media-controls {
 	height: 6px;
 	margin-top: -3px;
 	border-radius: 50%;
-	background: #fff;
+	background: var(--_thumb);
 	box-shadow: 0 0 0 1.5px rgb(0 0 0 / 0.25);
 	opacity: 0;
 	transform: scale(0.4);
@@ -1691,7 +1699,9 @@ video::-webkit-media-controls {
 
 .next-actions .next-play {
 	background: var(--_accent);
-	color: #111;
+	/* Black or white, whichever reads better on the accent; the fallback is the background token. */
+	color: var(--_bg);
+	color: contrast-color(var(--_accent));
 }
 
 @container (max-width: 440px) {
@@ -1998,19 +2008,8 @@ video::-webkit-media-controls {
 }
 
 /* ---------- Player look: the rail (the default) ---------- */
-
-/* Keys and dropdowns share one radius, so the rail reads as one family. */
-:host {
-	--_panel-radius: var(--qyro-panel-radius, 14px);
-}
-
-/* Rail: controls stack in a column on the right, above a full-width bar; each key sits in its own dark disc. */
-:host {
-	--_track: rgb(255 255 255 / 0.35);
-	--_buffered: rgb(255 255 255 / 0.2);
-	--_accent: #fff;
-	--_scrim: rgb(0 0 0 / 0.7);
-}
+/* Rail: controls stack in a column on the right, above a full-width bar; each key sits in its own dark disc.
+   Its colours and radii come from the public tokens at the top, so a theme reaches them. */
 
 :host .dock .glass {
 	background: none;
@@ -2049,8 +2048,12 @@ video::-webkit-media-controls {
 }
 
 :host .btn {
-	background: rgb(12 13 14 / 0.6);
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
 	border-radius: var(--_panel-radius);
+	color: var(--_fg);
+	color: contrast-color(var(--_disc));
 }
 
 :host .btn:focus-visible {
@@ -2096,7 +2099,10 @@ video::-webkit-media-controls {
 	right: calc(100% + 10px);
 	height: var(--_control);
 	transform: translateY(-50%);
-	background: rgb(12 13 14 / 0.7);
+	/* The same glass disc as the keys beside it. */
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
 	border-radius: var(--_panel-radius);
 }
 
@@ -2111,7 +2117,7 @@ video::-webkit-media-controls {
 	width: 12px;
 	height: 12px;
 	margin-top: -6px;
-	background: #fff;
+	background: var(--_thumb);
 	box-shadow: 0 0 0 3px rgb(0 0 0 / 0.35);
 	-webkit-backdrop-filter: none;
 	backdrop-filter: none;

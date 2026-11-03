@@ -28,6 +28,8 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Build the player, so the site can measure it
+        run: pnpm build
       - name: Build the website
         run: pnpm --filter qyro-site build
         env:

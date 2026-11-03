@@ -11,7 +11,7 @@ Yes. It is a standard custom element. Import `qyro` once, then use `<qyro-player
 
 ## How big is it?
 
-About 32 kB gzipped for Qyro itself. The playback engine (about 255 kB gzipped) loads when the first player starts. With the script tag it is a second file beside `qyro.iife.js`, so serve both from the same folder.
+About 33 kB gzipped for Qyro itself. The playback engine (about 261 kB gzipped) loads when the first player starts. With the script tag it is a second file beside `qyro.iife.js`, so serve both from the same folder.
 
 ## Can I use my own controls?
 

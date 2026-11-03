@@ -8,7 +8,8 @@
 	interface Props {
 		/** The figure. It rolls up from zero the first time the stat scrolls into view. */
 		value: number;
-		format?: Intl.NumberFormatOptions;
+		/** Set for a unit, such as "kilobyte": the figure is then formatted with Intl. */
+		unit?: string;
 		/** A small muted icon on the right of the figure. */
 		icon: ComponentProps<typeof Icon>['icon'];
 		/** Position in the row, for the staggered reveal. */
@@ -16,7 +17,11 @@
 		children: Snippet;
 	}
 
-	let { value, format, icon, i, children }: Props = $props();
+	let { value, unit, icon, i, children }: Props = $props();
+
+	const format = $derived(unit ? { style: 'unit', unit, unitDisplay: 'short', maximumFractionDigits: 0 } satisfies Intl.NumberFormatOptions : undefined);
+	// Half the figure in view: the roll starts once it reads as on screen, not at its first pixel.
+	const VIEW_THRESHOLD = 0.5;
 
 	// Undefined until the page runs, so without JavaScript the real figure is what shows.
 	let start = $state<number | undefined>(undefined);
@@ -26,7 +31,7 @@
 	function rollUp(node: HTMLElement) {
 		if (reduced()) return;
 		start = 0;
-		return inView(() => (start = undefined), { threshold: 0.5 })(node);
+		return inView(() => (start = undefined), { threshold: VIEW_THRESHOLD })(node);
 	}
 </script>
 
