@@ -4,11 +4,26 @@
 	--site-width: 72rem;
 	--site-gutter: clamp(1rem, 4vw, 1.5rem);
 	--site-measure: 65ch;
-	--ui-font: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', sans-serif;
+	--ui-font: 'Cabin Condensed', ui-sans-serif, system-ui, sans-serif;
+	--site-display: 'Clash Display', 'Cabin Condensed', ui-sans-serif, system-ui, sans-serif;
+	/* Brand: pink, on the sinaui tokens, so every component follows it. */
+	--ui-accent: light-dark(#db2777, #f472b6);
+	--ui-on-accent: light-dark(#ffffff, #1b1d1e);
+	--ui-radius: clamp(1rem, 2.2vw, 1.5rem);
+	--ui-radius-control: 0.625rem;
+	/* Alternate section tint: one step off the page colour. */
+	--site-tint: light-dark(#f4f4f5, #232627);
 	--ui-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 	/* The demo players use the page's fonts. */
 	--qyro-font: var(--ui-font);
 	--qyro-font-mono: var(--ui-font-mono);
+}
+
+h1,
+h2,
+h3 {
+	font-family: var(--site-display);
+	font-weight: 600;
 }
 
 html {
