@@ -523,7 +523,8 @@ video::-webkit-media-controls {
 	inset: 0;
 	padding: 3px;
 	border-radius: var(--_panel-radius);
-	background: conic-gradient(from var(--spin), transparent 0 25%, var(--_fg));
+	/* A comet: the tail fades out and the bright head leads, turning clockwise (angles run clockwise from the top). */
+	background: conic-gradient(from var(--spin), transparent 0deg, var(--_fg) 270deg, var(--_fg));
 	-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
 	-webkit-mask-composite: xor;
 	mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
