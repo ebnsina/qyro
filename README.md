@@ -86,7 +86,7 @@ Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) l
 
 ```shell
 pnpm install
-pnpm dev          # playground at http://localhost:5310/playground/
+pnpm dev          # test page at http://localhost:5310/test/harness/
 pnpm test         # unit tests
 pnpm test:e2e     # end-to-end tests (Chromium and WebKit, desktop and touch)
 pnpm build        # library, script build, types and sizes

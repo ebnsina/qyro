@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 // Runs on the phone and tablet projects (and with emulated touch on desktop).
 
 async function open(page: Page, params = ''): Promise<Locator> {
-	await page.goto(`/playground/index.html?src=/test/fixtures/hls/main.m3u8&title=Big%20Buck%20Bunny&muted${params}`);
+	await page.goto(`/test/harness/index.html?src=/test/fixtures/hls/main.m3u8&title=Big%20Buck%20Bunny&muted${params}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	return player;
