@@ -27,13 +27,36 @@ jobs:
       - name: Video tools for the live test streams
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
       - name: Browsers
-        run: pnpm exec playwright install --with-deps chromium webkit
-      - name: End-to-end tests
-        run: pnpm test:e2e
+        run: pnpm exec playwright install --with-deps chromium
+      - name: End-to-end tests (Chromium)
+        run: pnpm test:e2e --project=chromium-desktop --project=chromium-mobile --project=chromium-touch-laptop
       - name: Website tests
         run: pnpm --filter qyro-site test
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-traces
+          path: test-results
+
+  # Safari's engine runs on macOS, so WebKit tests run there, not on the Linux WebKit build.
+  webkit:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Video tools for the live test streams
+        run: brew install ffmpeg
+      - name: Browsers
+        run: pnpm exec playwright install webkit
+      - name: End-to-end tests (WebKit)
+        run: pnpm test:e2e --project=webkit-desktop --project=webkit-mobile --project=webkit-tablet
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces-webkit
           path: test-results
