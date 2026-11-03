@@ -25,7 +25,7 @@
 		</nav>
 		<div class="site-header-end">
 			<ThemeToggle size="sm" />
-			<Button size="sm" href={to('/docs/getting-started')}>Get started</Button>
+			<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
 		</div>
 	</div>
 </header>

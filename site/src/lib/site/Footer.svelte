@@ -1,6 +1,5 @@
 <script lang="ts">
 	import ThemeToggle from '#lib/sinaui/ui/ThemeToggle.svelte';
-	import Mark from './Mark.svelte';
 	import { GITHUB, media, to } from './links';
 
 	const columns = [
@@ -14,7 +13,7 @@
 <footer class="site-footer">
 	<div class="site-footer-inner">
 		<div class="site-footer-brand">
-			<Mark />
+			<strong class="site-footer-name">Qyro</strong>
 			<p>A beautiful video player for any website. Free and open source.</p>
 			<ThemeToggle size="sm" />
 		</div>
