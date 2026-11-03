@@ -202,6 +202,7 @@
 					</li>
 				{/each}
 			</ul>
+			<p class="foot-note"><a href={to('/ethos')}>Read the full ethos</a></p>
 		</div>
 	</section>
 

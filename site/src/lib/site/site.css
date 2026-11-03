@@ -9,8 +9,8 @@
 	/* Brand: pink, on the sinaui tokens, so every component follows it. */
 	--ui-accent: light-dark(#db2777, #f472b6);
 	--ui-on-accent: light-dark(#ffffff, #1b1d1e);
-	--ui-radius: clamp(1rem, 2.2vw, 1.5rem);
-	--ui-radius-control: 0.625rem;
+	--ui-radius: clamp(0.625rem, 1.2vw, 0.875rem);
+	--ui-radius-control: 0.5rem;
 	/* Alternate section tint: one step off the page colour. */
 	--site-tint: light-dark(#f4f4f5, #232627);
 	--ui-font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -91,7 +91,6 @@ kbd {
 	background: color-mix(in oklab, var(--ui-bg) 82%, transparent);
 	-webkit-backdrop-filter: saturate(160%) blur(14px);
 	backdrop-filter: saturate(160%) blur(14px);
-	border-bottom: 1px solid var(--ui-line);
 }
 
 .site-header-inner {
@@ -105,6 +104,11 @@ kbd {
 
 .site-home {
 	text-decoration: none;
+	color: var(--ui-fg);
+	font-family: var(--site-display);
+	font-size: 1.25rem;
+	font-weight: 600;
+	letter-spacing: -0.01em;
 }
 
 .site-header nav {
