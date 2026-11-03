@@ -313,7 +313,7 @@
 		position: relative;
 		min-width: 0;
 		max-width: 100%;
-		padding: 1rem;
+		/* No inset: the player's edge lines up with the heading, tabs and controls, in every template. */
 		border-radius: var(--ui-radius);
 		background: var(--ui-bg);
 		color: var(--ui-fg);
@@ -332,7 +332,6 @@
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas: 'before' 'player' 'after' 'aside';
-		gap: 1rem;
 	}
 
 	.pg-player {
@@ -345,16 +344,20 @@
 		display: contents;
 	}
 
+	/* Space sits on the side pieces, not in the grid, so an empty row never adds a gap above the player. */
 	.pg-side :global(.side-before) {
 		grid-area: before;
+		margin-block-end: 1rem;
 	}
 
 	.pg-side :global(.side-after) {
 		grid-area: after;
+		margin-block-start: 1rem;
 	}
 
 	.pg-side :global(.side-aside) {
 		grid-area: aside;
+		margin-block-start: 1rem;
 	}
 
 	.pg-side :global(.side-over) {
@@ -565,10 +568,6 @@
 	}
 
 	@media (max-width: 600px) {
-		.pg-frame {
-			padding: 0.5rem;
-		}
-
 		.pg-handle {
 			display: none;
 		}
