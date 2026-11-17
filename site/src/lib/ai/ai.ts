@@ -4,7 +4,8 @@ import { SITE_URL } from '#lib/site/links.js';
 
 const site = () => SITE_URL;
 const SKILL = 'https://github.com/ebnsina/qyro/blob/main/skills/qyro/SKILL.md';
-const copy = (dir: string) => `mkdir -p ${dir} && cp -r node_modules/@ebnsina/qyro/skills/qyro ${dir}/`;
+// Fetches the skill folder from the repository, so it never depends on node_modules or an installed version.
+const copy = (dir: string) => `npx degit ebnsina/qyro/skills/qyro ${dir}/qyro`;
 
 export interface Tool {
 	id: string;

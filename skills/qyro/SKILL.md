@@ -23,7 +23,7 @@ npm install @ebnsina/qyro
 import '@ebnsina/qyro';
 ```
 
-Without a bundler, one script tag gives you everything in a single file:
+Without a bundler, one script tag is enough. The playback engine is a second file, `qyro-engine.js`, next to it, and the browser fetches it when the player starts, so the script itself stays small:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>

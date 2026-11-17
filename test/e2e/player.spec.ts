@@ -4,7 +4,7 @@ const HLS = '/test/fixtures/hls/main.m3u8';
 
 async function open(page: Page, params: Record<string, string> = {}) {
 	const q = new URLSearchParams({ src: HLS, title: 'Test pattern', muted: '', ...params });
-	await page.goto(`/playground/index.html?${q}`);
+	await page.goto(`/test/harness/index.html?${q}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	return player;
@@ -93,6 +93,19 @@ test('settings: switches quality, then back to Auto', async ({ page }) => {
 	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
 });
 
+test('settings: a click outside closes the sheet, a click on its button toggles it', async ({ page }) => {
+	const player = await open(page);
+	await play(player);
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
+	await page.mouse.click(5, 5);
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'true');
+	await player.locator('.gear').click();
+	await expect(player.locator('.gear')).toHaveAttribute('aria-expanded', 'false');
+});
+
 test('settings: speed and captions', async ({ page }) => {
 	const player = await open(page, { captions: '/test/fixtures/captions.vtt' });
 	await expect(player.locator('.cc')).toBeVisible();
@@ -122,7 +135,7 @@ test('toggles full screen', async ({ page }) => {
 test('shows a plain error with a working retry for a bad URL', async ({ page }) => {
 	const logs: string[] = [];
 	page.on('console', (m) => m.type() != 'debug' && logs.push(m.text()));
-	await page.goto('/playground/index.html?src=/test/fixtures/missing.m3u8');
+	await page.goto('/test/harness/index.html?src=/test/fixtures/missing.m3u8');
 	const player = page.locator('qyro-player');
 	const error = player.locator('.error');
 	await expect(error).toBeVisible();
@@ -245,6 +258,8 @@ test('qualitychange fires with the new resolution when the viewer picks one', as
 		p.addEventListener('qualitychange', (e: CustomEvent) => p.changes.push(e.detail));
 	});
 	await play(player);
+	// A viewer moves the pointer to reveal the controls; the idle timer hides them while playing.
+	await player.hover();
 	await player.locator('.gear').click();
 	await player.getByRole('menuitem', { name: /Quality/ }).click();
 	await player.getByRole('menuitemradio', { name: '360p', exact: true }).click();

@@ -1,5 +1,6 @@
 import type { Option } from '../engine/tracks.js';
 import { icons } from './icons.js';
+import { focusQuietly } from './focus.js';
 
 /** One row of the settings sheet and the choices behind it. */
 export interface Menu {
@@ -36,6 +37,8 @@ export class Settings {
 		pages.append(this.#main, this.#sub);
 		sheet.addEventListener('keydown', this.#key);
 		sheet.addEventListener('click', this.#click);
+		// A press anywhere outside the sheet and its button closes it, as on any popover.
+		document.addEventListener('pointerdown', (e) => this.#open && !e.composedPath().some((n) => n == sheet || n == button) && this.close(), true);
 	}
 
 	get isOpen(): boolean {
@@ -69,7 +72,7 @@ export class Settings {
 		this.sheet.inert = true;
 		this.button.setAttribute('aria-expanded', 'false');
 		this.onToggle(false);
-		if (returnFocus) this.button.focus();
+		if (returnFocus) focusQuietly(this.button);
 	}
 
 	/** Redraws the open pages, e.g. after the quality changes on its own. */
@@ -79,7 +82,7 @@ export class Settings {
 		const focused = (this.sheet.getRootNode() as ShadowRoot).activeElement as HTMLElement | null;
 		const key = focused && this.sheet.contains(focused) ? focusKey(focused) : null;
 		this.#draw();
-		if (key) this.sheet.querySelector<HTMLElement>(key)?.focus();
+		if (key) focusQuietly(this.sheet.querySelector<HTMLElement>(key));
 	}
 
 	#draw(): void {
@@ -126,6 +129,7 @@ export class Settings {
 	/** Opens a page one level deeper. */
 	#push(menu: Menu): void {
 		this.#stack.push(menu);
+		this.#pageChanged();
 		this.#slide();
 		this.render();
 		this.#focusFirst(this.#sub, '[aria-checked="true"]');
@@ -134,13 +138,22 @@ export class Settings {
 	/** Goes back one level, focusing the row that opened the page. */
 	#pop(): void {
 		const from = this.#stack.pop();
+		this.#pageChanged();
 		if (this.#stack.length) this.#slide();
 		this.render();
 		const page = this.#stack.length ? this.#sub : this.#main;
-		page.querySelector<HTMLElement>(`[data-menu="${from?.id}"]`)?.focus();
+		focusQuietly(page.querySelector<HTMLElement>(`[data-menu="${from?.id}"]`));
 	}
 
 	// Replays the slide when one sub page replaces another.
+	/** A page changed: scroll the sheet to its top, and hide hover until the pointer moves, since the row under it is now another. */
+	#pageChanged(): void {
+		this.sheet.scrollTop = 0;
+		const host = (this.sheet.getRootNode() as ShadowRoot).host;
+		host.toggleAttribute('data-paging', true);
+		this.sheet.addEventListener('pointermove', () => host.removeAttribute('data-paging'), { once: true });
+	}
+
 	#slide(): void {
 		if (this.#stack.length < 2 && this.#sub.dataset.state != '') return;
 		this.#sub.dataset.state = 'right';
@@ -172,7 +185,7 @@ export class Settings {
 		const page = deep ? this.#sub : this.#main;
 		const items = [...page.querySelectorAll<HTMLElement>('.item')];
 		const i = items.indexOf(e.composedPath()[0] as HTMLElement);
-		const go = (n: number) => items[(n + items.length) % items.length]?.focus();
+		const go = (n: number) => focusQuietly(items[(n + items.length) % items.length]);
 		switch (e.key) {
 			case 'ArrowDown':
 				go(i + 1);
@@ -208,8 +221,9 @@ export class Settings {
 		e.stopPropagation();
 	};
 
+	/** Moves focus into the page; the focus ring shows only after a key press, not after a mouse or touch open. */
 	#focusFirst(page: HTMLElement, selector = '.item'): void {
-		(page.querySelector<HTMLElement>(selector) ?? page.querySelector<HTMLElement>('.item'))?.focus();
+		focusQuietly(page.querySelector<HTMLElement>(selector) ?? page.querySelector<HTMLElement>('.item'));
 	}
 }
 

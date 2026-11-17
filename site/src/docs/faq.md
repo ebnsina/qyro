@@ -11,7 +11,7 @@ Yes. It is a standard custom element. Import `qyro` once, then use `<qyro-player
 
 ## How big is it?
 
-About 32 kB gzipped for Qyro itself. The playback engine for HLS and DASH loads on demand the first time a player needs it.
+About 33 kB gzipped for Qyro itself. The playback engine (about 261 kB gzipped) loads when the first player starts. With the script tag it is a second file beside `qyro.iife.js`, so serve both from the same folder.
 
 ## Can I use my own controls?
 
@@ -31,4 +31,4 @@ No. Analytics only exist when you set `seyr-key`, and they go to your own Seyr s
 
 ## What's the licence?
 
-MIT. The bundled playback engine is Apache-2.0; see `THIRD_PARTY_NOTICES` in the package.
+MIT. The bundled playback engine is Apache-2.0; see `licenses/THIRD_PARTY_NOTICES` in the package.

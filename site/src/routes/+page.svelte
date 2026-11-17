@@ -1,40 +1,70 @@
 <script lang="ts">
 	import {
-		Analytics01Icon,
+		AccessIcon,
 		ClosedCaptionIcon,
-		ColorsIcon,
+		CpuIcon,
+		Image01Icon,
+		PackageIcon,
 		KeyboardIcon,
 		LiveStreaming02Icon,
-		SparklesIcon,
-		Image01Icon,
-		AccessIcon,
+		PlayIcon,
+		SecurityCheckIcon,
+		Shield01Icon,
+		Tick02Icon,
 	} from '@hugeicons/core-free-icons';
-	import Badge from '#lib/sinaui/ui/Badge.svelte';
+	import { tools } from '#lib/ai/ai.js';
+	import ToolMark from '#lib/ai/ToolMark.svelte';
 	import Button from '#lib/sinaui/ui/Button.svelte';
 	import CodeBlock from '#lib/sinaui/ui/CodeBlock.svelte';
 	import Icon from '#lib/sinaui/ui/Icon.svelte';
 	import Footer from '#lib/site/Footer.svelte';
 	import Header from '#lib/site/Header.svelte';
 	import Seo from '#lib/site/Seo.svelte';
-	import AiGuide from '#lib/ai/AiGuide.svelte';
-		import { file, media, to } from '#lib/site/links.js';
+	import Stat from '#lib/site/Stat.svelte';
+	import { sizes } from '#lib/site/sizes.js';
+	import { accordion } from '#lib/site/accordion.js';
+	import { file, media, to } from '#lib/site/links.js';
 	import { reveal } from '#lib/site/reveal.js';
 
 	const steps = [
-		{ title: 'Add the script', text: 'Install from npm, or drop in one script tag. Nothing else to set up.', code: `npm install @ebnsina/qyro\n\nimport '@ebnsina/qyro';`, lang: 'shell' as const },
-		{ title: 'Set the source', text: 'HLS, DASH, live or MP4. Captions are plain track elements.', code: `<qyro-player\n  src="/film.m3u8"\n  title="My film"\n  thumbnails="/film/storyboard.vtt"\n>\n  <track srclang="en" label="English" src="/en.vtt" />\n</qyro-player>`, lang: 'html' as const },
-		{ title: 'Make it yours', text: 'Every color, radius and blur is a CSS custom property.', code: `qyro-player {\n  --qyro-accent: #ffd60a;\n  --qyro-radius: 24px;\n}`, lang: 'css' as const },
+		{ title: 'Add the script', text: 'Install from npm, or drop in one script tag. There is no build step to set up.', code: `npm install @ebnsina/qyro\n\nimport '@ebnsina/qyro';`, lang: 'shell' as const },
+		{ title: 'Set the source', text: 'Give it an HLS, DASH, live or MP4 URL. Captions are plain track elements.', code: `<qyro-player src="/film.m3u8" title="My film">\n  <track srclang="en" label="English" src="/en.vtt" />\n</qyro-player>`, lang: 'html' as const },
+		{ title: 'Make it yours', text: 'Colour, radius and glass are CSS custom properties. Change them in one place.', code: `qyro-player {\n  --qyro-accent: #ffd60a;\n  --qyro-radius: 24px;\n}`, lang: 'css' as const },
 	];
 
 	const features = [
-		{ icon: SparklesIcon, title: 'Liquid glass', text: 'Frosted capsules with a specular rim and soft depth, readable over bright and dark frames.' },
-		{ icon: LiveStreaming02Icon, title: 'HLS, DASH and live', text: 'Adaptive quality with an Auto choice, DVR seeking and a clear live badge.' },
-		{ icon: ClosedCaptionIcon, title: 'Captions, done right', text: 'WebVTT, SRT, TTML and in-stream captions, with viewer styling that sticks.' },
-		{ icon: Image01Icon, title: 'Thumbnails', text: 'Storyboard previews on the seek bar, from a WebVTT sprite or the stream itself.' },
-		{ icon: KeyboardIcon, title: 'Keyboard and touch', text: 'YouTube-style shortcuts, double-tap to skip, long-press menu, 44px targets.' },
-		{ icon: AccessIcon, title: 'Accessible', text: 'Labelled controls, announced changes, visible focus and reduced-motion fades.' },
-		{ icon: ColorsIcon, title: 'Theming', text: 'Custom properties and ::part() hooks for every piece, in light or dark glass.' },
-		{ icon: Analytics01Icon, title: 'Private analytics, if you want', text: 'Opt-in Seyr video analytics on your own server. No trackers, ever.' },
+		{ icon: PlayIcon, title: 'HLS, DASH and MP4', text: 'Adaptive quality with an Auto choice, plus MP4 files, in every modern browser.' },
+		{ icon: LiveStreaming02Icon, title: 'Live, with a DVR window', text: 'Scrub back through a live stream, then jump to "Go live" with one click.' },
+		{ icon: ClosedCaptionIcon, title: 'Captions and chapters', text: 'WebVTT, SRT and TTML captions, with a chapter list on the timeline.' },
+		{ icon: Image01Icon, title: 'Thumbnails on seek', text: 'Storyboard previews appear on the timeline while the viewer scrubs.' },
+		{ icon: KeyboardIcon, title: 'Keyboard and touch', text: 'Familiar shortcuts, double-tap to skip, a long-press menu, and 44px touch targets.' },
+		{ icon: AccessIcon, title: 'Accessible by default', text: 'Labelled controls, visible focus, announced changes, and motion that respects the reduced-motion setting.' },
+	];
+
+	// One short line per coding agent; the folder and install steps come from the shared tool list.
+	const blurbs: Record<string, string> = {
+		claude: "Anthropic's terminal agent.",
+		codex: "OpenAI's coding agent.",
+		cursor: 'AI code editor.',
+		copilot: 'Agent mode in your repo.',
+		gemini: "Google's terminal agent.",
+		windsurf: 'AI editor with Cascade.',
+	};
+	const agents = tools.filter((t) => t.id in blurbs);
+
+	// What Qyro is for, and what it is not for. Stated as the maintainers' commitment, since MIT licensing can't restrict use.
+	const principles = [
+		{ icon: Shield01Icon, title: 'Nothing that Islam prohibits', text: 'Qyro must not be used to host, stream or promote gambling, obscene or sexual content, alcohol or drug promotion, or anything else haram.' },
+		{ icon: Tick02Icon, title: 'No dark patterns', text: 'No adverts injected into videos, no hidden fees, no fake countdowns or autoplay traps. Controls do what they look like.' },
+		{ icon: SecurityCheckIcon, title: 'No tracking by default', text: 'Analytics are off until the site owner turns them on. Then the data goes to a server the owner runs, not to a third party.' },
+	];
+
+	const compat = [
+		{ name: 'Plain HTML', text: 'One script tag, or an import in any bundler.' },
+		{ name: 'React, Solid, Svelte, Lit', text: 'Use the tag as it is. No configuration.' },
+		{ name: 'Vue', text: 'Mark the tag as native in your compiler options.' },
+		{ name: 'Angular', text: 'Add the custom elements schema to the component.' },
+		{ name: 'Next.js, Nuxt, SvelteKit, Astro', text: 'Renders on the server, plays in the browser.' },
 	];
 </script>
 
@@ -44,31 +74,41 @@
 
 <main id="main">
 	<section class="hero site-wrap">
-		<Badge tone="neutral" icon={false}>Open source · MIT</Badge>
-		<h1>A beautiful video player for any website.</h1>
-		<p class="site-lede">
-			Adaptive streaming, live, captions and thumbnails that work in every browser, on every phone, with a keyboard or a
-			screen reader. One HTML element, ready in a minute.
-		</p>
-		<div class="hero-actions">
-			<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
-			<Button size="lg" variant="outline" href={to('/demo')}>See the demos</Button>
+		<div class="hero-head">
+			<span class="site-label pill">Free and open source · MIT</span>
+			<h1 class="site-display">A video player for any website, in <span class="accent">one HTML element</span>.</h1>
 		</div>
-		<div class="hero-player">
-			<qyro-player src={media.bbb.hls} poster={media.bbb.poster} title={media.bbb.title} thumbnails={file(media.bbb.storyboard)} muted></qyro-player>
+		<div class="hero-grid">
+			<div class="hero-copy">
+				<p class="site-lede">
+					HLS, DASH, live and MP4, with captions, chapters and thumbnails. It works with a mouse, a keyboard, a touchscreen and a
+					screen reader, in every browser.
+				</p>
+				<div class="actions">
+					<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
+					<Button size="lg" variant="outline" href={to('/demo')}>See the demos</Button>
+				</div>
+				<p class="install-line"><code>npm install @ebnsina/qyro</code></p>
+			</div>
+			<div class="hero-player">
+				<qyro-player src={media.bbb.hls} poster={media.bbb.poster} title={media.bbb.title} thumbnails={file(media.bbb.storyboard)} start="5" muted></qyro-player>
+				<p class="credit">Demo film: {media.bbb.credit}</p>
+			</div>
 		</div>
 	</section>
 
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap">
-			<h2>How it works</h2>
-			<p class="site-lede">Three steps from nothing to a finished player. No build step needed.</p>
-			<ol class="steps">
+			<p class="site-label eyebrow">How it works</p>
+			<h2>From nothing to a finished player in three steps.</h2>
+			<ol class="flow">
 				{#each steps as step, i (step.title)}
 					<li data-reveal-item style:--i={i}>
-						<span class="step-n">{i + 1}</span>
-						<h3>{step.title}</h3>
-						<p>{step.text}</p>
+						<div>
+							<span class="site-label step-no">Step {String(i + 1).padStart(2, '0')}</span>
+							<h3>{step.title}</h3>
+							<p>{step.text}</p>
+						</div>
 						<CodeBlock code={step.code} lang={step.lang} />
 					</li>
 				{/each}
@@ -76,15 +116,17 @@
 		</div>
 	</section>
 
-	<section class="site-section" {@attach reveal}>
+	<section class="site-section tint" {@attach reveal}>
 		<div class="site-wrap">
-			<h2>Everything a player needs</h2>
-			<p class="site-lede">The parts people notice and the parts they only miss when they're gone.</p>
+			<p class="site-label eyebrow">What viewers get</p>
+			<h2>The parts people notice, and the ones they miss when they're gone.</h2>
 			<ul class="features">
 				{#each features as f, i (f.title)}
 					<li data-reveal-item style:--i={i}>
-						<Icon icon={f.icon} size={22} />
-						<h3>{f.title}</h3>
+						<div class="card-head">
+							<h3>{f.title}</h3>
+							<span class="chip"><Icon icon={f.icon} size={20} /></span>
+						</div>
 						<p>{f.text}</p>
 					</li>
 				{/each}
@@ -93,28 +135,106 @@
 	</section>
 
 	<section class="site-section" {@attach reveal}>
-		<div class="site-wrap install">
+		<div class="site-wrap">
+			<p class="site-label eyebrow">With AI</p>
+			<h2>Let your coding agent set it up.</h2>
+			<p class="site-lede sub">Each agent reads Qyro's skill from its own folder. Ask it to add the player, and it uses the current API.</p>
+			<ul class="agents">
+				{#each agents as t, i (t.id)}
+					<li data-reveal-item style:--i={i}>
+						<div class="card-head">
+							<h3>{t.name}</h3>
+							<span class="mark"><ToolMark tool={t} size={20} /></span>
+						</div>
+						<p>{blurbs[t.id]}</p>
+						<p class="path">Skill in <code>{t.where}</code></p>
+					</li>
+				{/each}
+			</ul>
+			<p class="foot-note">Using another agent? <a href={to('/docs/ai')}>Copy the skill or the install prompt</a>.</p>
+		</div>
+	</section>
+
+	<section class="site-section" {@attach reveal}>
+		<div class="site-wrap compat">
 			<div>
-				<h2>Install</h2>
-				<p class="site-lede">From npm for your bundler, or one script tag for any page.</p>
+				<p class="site-label eyebrow">Compatibility</p>
+				<h2>Works wherever your page does.</h2>
+				<p class="site-lede sub">Qyro is a standard custom element. Importing it on the server is safe, and the player starts in the browser only.</p>
 			</div>
-			<div class="install-code">
-				<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
-				<CodeBlock code={`<script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></${"script"}>`} lang="html" />
+			<div class="faq">
+				{#each compat as row, i (row.name)}
+					<details open={i < 2} {@attach accordion}>
+						<summary class="site-face">{row.name}<span class="chev" aria-hidden="true"><i></i></span></summary>
+						<p>{row.text}</p>
+					</details>
+				{/each}
 			</div>
+		</div>
+	</section>
+
+	<section class="site-section tint" {@attach reveal}>
+		<div class="site-wrap">
+			<p class="site-label eyebrow">Weight and privacy</p>
+			<h2>Small on the page, and nothing is tracked unless you turn it on.</h2>
+			<ul class="numbers">
+				<Stat value={sizes.player / 1000} unit="kilobyte" icon={PackageIcon} i={0}>The player, gzipped.</Stat>
+				<Stat value={sizes.engine / 1000} unit="kilobyte" icon={CpuIcon} i={1}>The playback engine, loaded when the first player starts.</Stat>
+				<Stat value={0} icon={Shield01Icon} i={2}>Trackers. Analytics stay off unless you set <code>seyr-key</code>, and then they go to your own server.</Stat>
+			</ul>
 		</div>
 	</section>
 
 	<section class="site-section" {@attach reveal}>
 		<div class="site-wrap install">
 			<div>
-				<h2>Build it with your AI</h2>
-				<p class="site-lede">
-					Claude Code, Codex, Cursor, Copilot and the rest add Qyro correctly with its skill. Copy a prompt and paste it into yours.
-				</p>
-				<Button variant="outline" href={to('/docs/ai')}>Install the skill</Button>
+				<p class="site-label eyebrow">Install</p>
+				<h2>From npm, or one script tag.</h2>
+				<p class="site-lede sub">Use the package in your bundler, or add one script tag to any page.</p>
 			</div>
-			<AiGuide show="compact" />
+			<div class="options">
+				<div class="option">
+					<p class="option-label">With npm, for bundlers such as Vite, Next.js and Astro</p>
+					<CodeBlock code={`npm install @ebnsina/qyro`} lang="shell" />
+				</div>
+				<div class="option">
+					<p class="option-label">With a script tag, for any page and no build step</p>
+					<CodeBlock code={`<script
+  src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"
+></${'script'}>`} lang="html" />
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class="site-section tint" {@attach reveal}>
+		<div class="site-wrap">
+			<p class="site-label eyebrow">Principles</p>
+			<h2>Built to serve good use, and never to be used for harm.</h2>
+			<p class="site-lede sub">Qyro is free and open source under the MIT licence. These are the commitments behind it, and a request to everyone who uses it.</p>
+			<ul class="features">
+				{#each principles as p, i (p.title)}
+					<li data-reveal-item style:--i={i}>
+						<div class="card-head">
+							<h3>{p.title}</h3>
+							<span class="chip"><Icon icon={p.icon} size={20} /></span>
+						</div>
+						<p>{p.text}</p>
+					</li>
+				{/each}
+			</ul>
+			<p class="foot-note"><a href={to('/ethos')}>Read the full ethos</a></p>
+		</div>
+	</section>
+
+	<section class="site-section cta" {@attach reveal}>
+		<div class="site-wrap">
+			<h2>Ready in a minute.</h2>
+			<p class="site-lede sub">Add the script, point it at a video, and it plays.</p>
+			<div class="actions">
+				<Button size="lg" href={to('/docs/getting-started')}>Get started</Button>
+				<Button size="lg" variant="outline" href="https://github.com/ebnsina/qyro">View on GitHub</Button>
+			</div>
 		</div>
 	</section>
 </main>
@@ -123,94 +243,313 @@
 
 <style>
 	.hero {
+		min-height: calc(100svh - 4.5rem);
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 3rem;
+		padding-block: 2.5rem;
+	}
+
+	.hero-grid {
 		display: grid;
-		justify-items: center;
-		text-align: center;
-		padding-block: clamp(3.5rem, 9vw, 6.5rem) clamp(3rem, 7vw, 5rem);
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+		gap: 3rem;
+		align-items: start;
+		width: 100%;
+	}
+
+	/* Sized to the copy column so the headline sets on two lines on desktop; it scales down on phones. */
+	/* The headline spans the full width, so it can be large and still set on two lines on desktop. */
+	.hero-head {
+		display: grid;
+		width: 100%;
 	}
 
 	.hero h1 {
-		margin: 1.25rem 0 1rem;
-		font-size: clamp(2.5rem, 7vw, 4.75rem);
-		line-height: 1.02;
-		letter-spacing: -0.045em;
-		font-weight: 680;
-		text-wrap: balance;
+		margin: 1.25rem 0 0;
+		font-size: clamp(2.25rem, 4.4vw, 4.25rem);
 	}
 
-	.hero .site-lede {
-		margin-inline: auto;
-	}
-
-	.hero-actions {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		gap: 0.75rem;
-	}
-
-	.hero-player {
-		width: 100%;
-		margin-top: clamp(2.5rem, 6vw, 4rem);
-		filter: drop-shadow(0 30px 60px rgb(0 0 0 / 0.25));
-	}
-
-	.steps {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-		gap: 2.5rem 2rem;
-		margin: 0;
-		padding: 0;
-		list-style: none;
-	}
-
-	.steps h3,
-	.features h3 {
-		margin: 0.75rem 0 0.35rem;
-		font-size: 1.0625rem;
-		font-weight: 600;
-	}
-
-	.steps p,
-	.features p {
-		margin: 0 0 1rem;
+	.pill {
+		justify-self: start;
+		display: inline-flex;
+		align-items: center;
+		padding: 0.35rem 0.9rem;
+		border: 1px solid var(--ui-field-line);
+		border-radius: 999px;
 		color: var(--ui-muted);
 	}
 
-	.step-n {
-		display: inline-grid;
-		place-items: center;
-		width: 2rem;
-		height: 2rem;
-		border-radius: 50%;
-		border: 1px solid var(--ui-control-line);
-		font-family: var(--ui-font-mono);
-		font-size: 0.875rem;
+	.accent {
+		color: var(--ui-accent);
 	}
 
-	.features {
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		margin-top: 2rem;
+	}
+
+	.install-line {
+		margin: 1.5rem 0 0;
+		color: var(--ui-muted);
+		font-size: var(--type-ui);
+	}
+
+	.hero-player {
+		border-radius: var(--ui-radius);
+		overflow: hidden;
+	}
+
+	.hero-player qyro-player {
+		display: block;
+		width: 100%;
+	}
+
+	.credit {
+		margin: 0.75rem 0 0;
+		color: var(--ui-muted);
+		font-size: var(--type-small);
+	}
+
+	/* The brand pink on the hero player, as in the approved draft. */
+	.hero-player qyro-player {
+		--qyro-accent: var(--ui-accent);
+	}
+
+	.eyebrow {
+		margin: 0 0 1rem;
+		color: var(--ui-accent);
+	}
+
+	.sub {
+		margin: 1rem 0 0;
+	}
+
+	.tint {
+		background: var(--site-tint);
+	}
+
+	.flow {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
-		gap: 2.5rem 2rem;
-		margin: 0;
+		gap: 3.5rem;
+		margin: 3.5rem 0 0;
 		padding: 0;
 		list-style: none;
+	}
+
+	.flow li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+		gap: 2.5rem 3.5rem;
+		align-items: center;
+	}
+
+	.step-no {
+		color: var(--ui-accent);
+	}
+
+	.flow h3 {
+		margin: 0.75rem 0 0.5rem;
+		font-size: var(--type-heading);
+	}
+
+	.flow p {
+		margin: 0;
+		max-width: 28rem;
+		color: var(--ui-muted);
+	}
+
+	.features,
+	.agents,
+	.numbers {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		margin: 3.5rem 0 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.features li,
+	.agents li {
+		display: grid;
+		gap: 0.75rem;
+		align-content: start;
+		padding: 1.5rem;
+		border-radius: var(--ui-radius);
+		background: var(--ui-surface);
+	}
+
+	.agents li {
+		background: var(--site-tint);
+	}
+
+	.mark {
+		color: var(--ui-fg);
+		background: var(--ui-subtle);
+	}
+
+	.card-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.features h3,
+	.agents h3 {
+		margin: 0;
+	}
+
+	.features p,
+	.agents p {
+		margin: 0;
+		color: var(--ui-muted);
+	}
+
+	.agents .path code {
+		display: block;
+		margin-top: 0.25rem;
+		color: var(--ui-fg);
+		font-size: var(--type-small);
+	}
+
+	.foot-note {
+		margin: 1.5rem 0 0;
+		color: var(--ui-muted);
+	}
+
+	.foot-note a {
+		color: var(--ui-fg);
+	}
+
+	.compat {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+		gap: 3rem;
+		align-items: start;
+	}
+
+	.faq details {
+		padding-block: 1.25rem;
+	}
+
+	.faq details:first-child {
+		padding-top: 0;
+	}
+
+	.faq summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		cursor: pointer;
+		list-style: none;
+		font-size: var(--type-subheading);
+	}
+
+	.faq summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.chev {
+		display: grid;
+		place-items: center;
+		flex: none;
+		width: 2rem;
+		height: 2rem;
+		border-radius: var(--ui-radius-control);
+		background: var(--ui-surface);
+	}
+
+	.chev i {
+		position: relative;
+		width: 0.75rem;
+		height: 0.75rem;
+		transition: transform 200ms ease;
+	}
+
+	.chev i::before,
+	.chev i::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 50%;
+		width: 100%;
+		height: 2px;
+		background: currentColor;
+		border-radius: 1px;
+		transform: translateY(-50%);
+	}
+
+	.chev i::after {
+		transform: translateY(-50%) rotate(90deg);
+	}
+
+	.faq details[open] .chev i {
+		transform: rotate(45deg);
+	}
+
+	.faq p {
+		margin: 0.75rem 0 0;
+		max-width: var(--site-measure);
+		color: var(--ui-muted);
+	}
+
+	.numbers {
+		margin-top: 3.5rem;
 	}
 
 	.install {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
-		gap: 2rem 3rem;
+		gap: 3rem;
 		align-items: start;
 	}
 
-	.install-code {
+	.options {
 		display: grid;
-		gap: 1rem;
+		gap: 2.25rem;
 	}
 
-	@media (max-width: 800px) {
-		.install {
+	.option-label {
+		margin: 0 0 0.75rem;
+		color: var(--ui-muted);
+	}
+
+	.cta {
+		text-align: center;
+	}
+
+	.cta .sub {
+		margin-inline: auto;
+	}
+
+	.cta .actions {
+		justify-content: center;
+	}
+
+	@media (max-width: 900px) {
+		.hero-grid,
+		.flow li,
+		.install,
+		.compat {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.features,
+		.agents {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 560px) {
+		.features,
+		.agents,
+		.numbers {
 			grid-template-columns: minmax(0, 1fr);
 		}
 	}

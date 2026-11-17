@@ -2,7 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import pkg from '../../package.json' with { type: 'json' };
 
 async function open(page: Page, params = ''): Promise<Locator> {
-	await page.goto(`/playground/index.html?src=/test/fixtures/hls/main.m3u8&muted${params}`);
+	await page.goto(`/test/harness/index.html?src=/test/fixtures/hls/main.m3u8&muted${params}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	return player;

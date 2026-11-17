@@ -1,3 +1,4 @@
+import { focusQuietly } from './focus.js';
 export interface MenuItem {
 	id: string;
 	label: string;
@@ -59,7 +60,7 @@ export class ContextMenu {
 		this.el.inert = false;
 		this.#open = true;
 		this.onToggle(true);
-		this.el.querySelector<HTMLElement>('[data-id]')?.focus();
+		focusQuietly(this.el.querySelector<HTMLElement>('[data-id]'));
 	}
 
 	close(returnFocus = false): void {
@@ -84,7 +85,7 @@ export class ContextMenu {
 	#key = (e: KeyboardEvent) => {
 		const items = [...this.el.querySelectorAll<HTMLElement>('[data-id]')];
 		const i = items.indexOf(e.composedPath()[0] as HTMLElement);
-		const go = (n: number) => items[(n + items.length) % items.length]?.focus();
+		const go = (n: number) => focusQuietly(items[(n + items.length) % items.length]);
 		const keys: Record<string, () => void> = {
 			ArrowDown: () => go(i + 1),
 			ArrowUp: () => go(i - 1),

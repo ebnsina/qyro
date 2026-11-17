@@ -1,22 +1,18 @@
 <script lang="ts">
 	import CodeBlock from '#lib/sinaui/ui/CodeBlock.svelte';
 	import ThemeControls from '#lib/demo/ThemeControls.svelte';
-	import { DEFAULT_THEME, type Theme } from '#lib/demo/state.js';
+	import { initial, themeVars, type Theme } from '#lib/demo/state.js';
 	import { file, media } from '#lib/site/links.js';
 
-	let theme = $state<Theme>({ ...DEFAULT_THEME });
-	const rgb = (hex: string) => {
-		const n = parseInt(hex.slice(1), 16);
-		return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
-	};
-	const vars = $derived({
-		'--qyro-accent': theme.accent,
-		'--qyro-glass-tint': `rgb(${rgb(theme.tint)} / ${theme.tintAlpha / 100})`,
-		'--qyro-glass-blur': `${theme.blur}px`,
-		'--qyro-radius': `${theme.radius}px`,
-	});
+	let theme = $state<Theme>(initial().theme);
+	// Only what differs from Qyro's defaults, the same values the playground sets and the CSS panel shows.
+	const vars = $derived(themeVars(theme));
 	const style = $derived(Object.entries(vars).map(([k, v]) => `${k}: ${v}`).join('; '));
-	const css = $derived(`qyro-player {\n${Object.entries(vars).map(([k, v]) => `\t${k}: ${v};`).join('\n')}\n}`);
+	const css = $derived(
+		Object.keys(vars).length
+			? `qyro-player {\n${Object.entries(vars).map(([k, v]) => `\t${k}: ${v};`).join('\n')}\n}`
+			: '/* Qyro\'s defaults. Change a control to see the CSS here. */',
+	);
 </script>
 
 <div class="theme-preview">

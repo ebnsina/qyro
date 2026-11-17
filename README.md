@@ -14,7 +14,7 @@ npm install @ebnsina/qyro
 import '@ebnsina/qyro';
 ```
 
-Or with no build step, one file:
+Or with no build step, one script tag. The engine is a second file, `qyro-engine.js`, which the script fetches from the same folder:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@ebnsina/qyro@0.1.0/dist/qyro.iife.js"></script>
@@ -80,13 +80,13 @@ Current and previous Chrome, Edge, Firefox and Safari on desktop, iOS, iPadOS an
 
 ## Sizes
 
-Qyro itself is about 32 kB gzipped. The playback engine (about 255 kB gzipped) loads the first time a player needs it. The single-file script build has both: about 279 kB gzipped. `pnpm build` prints the current numbers.
+Qyro itself is about 33 kB gzipped. The playback engine (about 261 kB gzipped) loads when the first player starts, as a separate file in the script build too, so the script tag's own download stays about 33 kB. `pnpm build` prints the current numbers.
 
 ## Develop
 
 ```shell
 pnpm install
-pnpm dev          # playground at http://localhost:5310/playground/
+pnpm dev          # test page at http://localhost:5310/test/harness/
 pnpm test         # unit tests
 pnpm test:e2e     # end-to-end tests (Chromium and WebKit, desktop and touch)
 pnpm build        # library, script build, types and sizes
@@ -95,6 +95,10 @@ pnpm --filter qyro-site dev   # the website
 
 The docs live in `site/src/docs/*.md`; the website, `llms.txt`, the Markdown copies and `skills/qyro/SKILL.md` are all made from them (`pnpm skill` rebuilds the skill, `pnpm check` fails if it's stale).
 
+## Principles
+
+Qyro is free and open source under the MIT licence, which allows any use. The maintainers ask that it is not used to host, stream or promote anything Islam prohibits, such as gambling or obscene content. Qyro also has no dark patterns, no hidden fees, and no trackers unless the site owner turns analytics on.
+
 ## Licence
 
-MIT, see [LICENSE](LICENSE). The bundled playback engine is Apache-2.0 and the icons are MIT; see [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES). Demo films are from the Blender Foundation under CC BY 3.0.
+MIT, see [LICENSE](LICENSE). The bundled playback engine is Apache-2.0 and the icons are MIT; see [THIRD_PARTY_NOTICES](licenses/THIRD_PARTY_NOTICES). Demo films are from the Blender Foundation under CC BY 3.0.

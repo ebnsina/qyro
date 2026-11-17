@@ -75,4 +75,11 @@ describe('code panel', () => {
 		expect(snippet(s, 'html')).toContain('--qyro-radius: 24px;');
 		expect(snippet(s, 'svelte')).toContain(':global(qyro-player)');
 	});
+	it('tint follows the accent when matchTint is on, and round-trips through the URL', () => {
+		const theme = { ...initial().theme, accent: '#30d158', matchTint: true };
+		expect(themeVars(theme)).toEqual({ '--qyro-accent': '#30d158', '--qyro-glass-tint': 'rgb(48 209 88 / 0.36)' });
+		const url = serialize({ ...initial(), theme });
+		expect(url).toContain('match-tint=1');
+		expect(parse(url, ['standard']).theme).toMatchObject({ accent: '#30d158', matchTint: true });
+	});
 });

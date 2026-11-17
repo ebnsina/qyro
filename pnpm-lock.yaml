@@ -12,9 +12,6 @@ importers:
         specifier: 5.3.2
         version: 5.3.2
     devDependencies:
-      '@hugeicons/core-free-icons':
-        specifier: 4.4.0
-        version: 4.4.0
       '@playwright/test':
         specifier: ~1.63.0
         version: 1.63.0
@@ -33,6 +30,9 @@ importers:
 
   site:
     dependencies:
+      '@fontsource/cabin-condensed':
+        specifier: ^5.3.0
+        version: 5.3.0
       '@hugeicons/core-free-icons':
         specifier: ^4.4.0
         version: 4.4.0
@@ -93,6 +93,9 @@ packages:
 
   '@fontsource-variable/inter@5.3.0':
     resolution: {integrity: sha512-OupL48va4JNofb97w6NYeF9S7W/kHNKM0Er8Dem5nqi4jeOLrVJDoE8tZEpnMJmtkvNbB1EIPPwHcdkF6b1oUA==}
+
+  '@fontsource/cabin-condensed@5.3.0':
+    resolution: {integrity: sha512-A6Wv/0kemTc5m9GiSqxlfm16A2jfe2tQyOGAUJiwiZW5LfNx9Rfkf8+9Sn570C+DHh1zfL4qfPWdUTij2dhwNA==}
 
   '@fontsource/geist-mono@5.3.0':
     resolution: {integrity: sha512-UtJ1BBBCVpMYdIcW7nEB45UAoAw5M53ZXs2t0ciPW+IokuAAIc56M8+kW5tXbRJCTpDw4XTtU7proT6NdQAHTg==}
@@ -888,6 +891,8 @@ snapshots:
     optional: true
 
   '@fontsource-variable/inter@5.3.0': {}
+
+  '@fontsource/cabin-condensed@5.3.0': {}
 
   '@fontsource/geist-mono@5.3.0': {}
 

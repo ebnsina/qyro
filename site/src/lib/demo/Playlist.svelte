@@ -69,7 +69,7 @@
 	.l {
 		font-family: var(--ui-font-mono);
 		color: var(--ui-muted);
-		font-size: 0.875rem;
+		font-size: var(--type-small);
 	}
 
 	.t {

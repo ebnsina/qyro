@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 test.skip(({ isMobile }) => isMobile, 'covered on desktop; the menus are the same on touch');
 
 async function open(page: Page, params = ''): Promise<Locator> {
-	await page.goto(`/playground/index.html?src=/test/fixtures/hls/main.m3u8&muted&tracks${params}`);
+	await page.goto(`/test/harness/index.html?src=/test/fixtures/hls/main.m3u8&muted&tracks${params}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.engine.getTextTracks().length == 2)).toBe(true);
 	return player;
@@ -85,7 +85,7 @@ test('captions lift above the controls while they show', async ({ page }) => {
 });
 
 test('storyboard: the preview shows the thumbnail for the time under the pointer', async ({ page }) => {
-	await page.goto('/playground/index.html?src=/test/fixtures/hls/main.m3u8&muted&thumbnails=/test/fixtures/storyboard/storyboard.vtt');
+	await page.goto('/test/harness/index.html?src=/test/fixtures/hls/main.m3u8&muted&thumbnails=/test/fixtures/storyboard/storyboard.vtt');
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
 	await player.locator('.big-play').click();

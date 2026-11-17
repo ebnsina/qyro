@@ -35,9 +35,15 @@ export interface Option<T = number> {
 }
 
 /** One entry per resolution for the audio track now playing, highest first. */
-export function qualityOptions(tracks: VariantTrack[]): Option[] {
-	const current = tracks.find((t) => t.active);
-	const sameAudio = current ? tracks.filter((t) => t.audioId == current.audioId) : tracks;
+/**
+ * The resolutions for the audio the viewer chose. Adaptive streaming can move to a track in another
+ * audio group, so the list follows the choice, not the track playing; without a choice, it follows the
+ * highest-bandwidth track, which doesn't change as the stream adapts.
+ */
+export function qualityOptions(tracks: VariantTrack[], audioId?: number | null): Option[] {
+	const top = tracks.reduce<VariantTrack | undefined>((best, t) => (!best || t.bandwidth > best.bandwidth ? t : best), undefined);
+	const chosen = audioId !== undefined && tracks.some((t) => t.audioId == audioId) ? audioId : top?.audioId;
+	const sameAudio = tracks.filter((t) => t.audioId == chosen);
 	const byHeight = new Map<string, VariantTrack>();
 	for (const t of sameAudio) {
 		if (!t.height) continue;

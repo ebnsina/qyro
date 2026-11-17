@@ -26,17 +26,18 @@ qyro-player {
 | `--qyro-foreground` | `#fff` | Icons and text. |
 | `--qyro-background` | `#000` | Behind the video (letterboxing). |
 | `--qyro-accent` | `#fff` | Played part of the seek bar and the volume level. |
-| `--qyro-track` | `rgb(255 255 255 / 0.26)` | Unplayed part of the sliders. |
-| `--qyro-buffered` | `rgb(255 255 255 / 0.44)` | Buffered part of the seek bar. |
+| `--qyro-track` | `rgb(255 255 255 / 0.35)` | Unplayed part of the sliders. |
+| `--qyro-buffered` | `rgb(255 255 255 / 0.2)` | Buffered part of the seek bar. |
 | `--qyro-glass-tint` | `rgb(28 28 32 / 0.36)` | Color laid over the blurred video. |
 | `--qyro-glass-blur` | `18px` | How frosted the glass is. |
 | `--qyro-glass-saturate` | `180%` | How vivid the video looks through the glass. |
 | `--qyro-glass-highlight` | `rgb(255 255 255 / 0.4)` | The bright line on the glass's top edge. |
 | `--qyro-glass-rim` | `rgb(255 255 255 / 0.28)` | The hairline rim around the glass. |
 | `--qyro-glass-shadow` | soft drop shadow | Depth under the glass. |
-| `--qyro-scrim` | `rgb(0 0 0 / 0.62)` | The shade at the bottom that keeps controls readable. |
+| `--qyro-thumb` | `#fff` | The bead on the seek bar and the volume slider. |
+| `--qyro-scrim` | `rgb(0 0 0 / 0.7)` | The shade at the bottom that keeps controls readable. |
 | `--qyro-radius` | `16px` | Corners of the player. |
-| `--qyro-panel-radius` | `18px` | Corners of the settings sheet, menu and panels. |
+| `--qyro-panel-radius` | `14px` | Corners of the settings sheet, menu and panels. |
 | `--qyro-control-size` | `38px` | Button size with a mouse. Touch screens always get at least 44px. |
 | `--qyro-icon-size` | `18px` | Icon size. |
 | `--qyro-inset` | `14px` | Space between the controls and the player's edge. |

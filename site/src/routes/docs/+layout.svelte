@@ -14,7 +14,7 @@
 <div class="site-wrap docs">
 	<nav class="docs-nav" aria-label="Docs">
 		{#each sections as s (s.title)}
-			<h2>{s.title}</h2>
+			<h2 class="site-label">{s.title}</h2>
 			<ul>
 				{#each s.slugs as slug (slug)}
 					<li><a href={to(`/docs/${slug}`)} aria-current={slug == current ? 'page' : undefined}>{find(slug)?.title}</a></li>
@@ -42,16 +42,12 @@
 		align-self: start;
 		max-height: calc(100vh - 6rem);
 		overflow-y: auto;
-		font-size: 0.9375rem;
+		font-size: var(--type-ui);
 	}
 
 	.docs-nav h2 {
 		margin: 1.25rem 0 0.4rem;
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
 		color: var(--ui-muted);
-		font-weight: 600;
 	}
 
 	.docs-nav h2:first-child {
@@ -80,7 +76,7 @@
 	.docs-nav a[aria-current='page'] {
 		color: var(--ui-fg);
 		background: var(--ui-subtle);
-		font-weight: 550;
+		font-weight: 600;
 	}
 
 	@media (max-width: 800px) {

@@ -8,7 +8,7 @@ test.skip(({ isMobile }) => isMobile, 'live UI is the same on touch');
 
 test('live: red at the edge, "Go live" behind it, and back to the edge', async ({ page }) => {
 	test.setTimeout(90000); // the DVR window fills in real time, about 40s from the stream's start
-	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
+	await page.goto(`/test/harness/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	const live = player.locator('.timeline .live');
@@ -52,14 +52,14 @@ test('live: red at the edge, "Go live" behind it, and back to the edge', async (
 });
 
 test('live: the corner pill shows on the poster before playback', async ({ page }) => {
-	await page.goto(`/playground/index.html?muted&src=${encodeURIComponent(LIVE)}`);
+	await page.goto(`/test/harness/index.html?muted&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live), { timeout: 30000 }).toBe(true);
 	await expect(player.locator('.live-corner')).toHaveCSS('opacity', '1');
 });
 
 test('live: no speed control, and stats show the live delay', async ({ page }) => {
-	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
+	await page.goto(`/test/harness/index.html?muted&autoplay&src=${encodeURIComponent(LIVE)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	await player.locator('.gear').click();
@@ -72,7 +72,7 @@ test('live: no speed control, and stats show the live delay', async ({ page }) =
 });
 
 test('live without a DVR window: no bar, and the LIVE pill sits beside play', async ({ page }) => {
-	await page.goto(`/playground/index.html?muted&autoplay&src=${encodeURIComponent(NO_DVR)}`);
+	await page.goto(`/test/harness/index.html?muted&autoplay&src=${encodeURIComponent(NO_DVR)}`);
 	const player = page.locator('qyro-player');
 	await expect.poll(() => player.evaluate((p: any) => p.live && !p.paused), { timeout: 30000 }).toBe(true);
 	await expect(player.locator('.timeline')).toBeHidden();

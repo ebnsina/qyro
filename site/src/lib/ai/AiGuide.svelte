@@ -123,7 +123,7 @@
 		background: none;
 		color: var(--ui-muted);
 		font: inherit;
-		font-size: 0.9375rem;
+		font-size: var(--type-ui);
 		cursor: pointer;
 		transition:
 			color 150ms,
@@ -137,7 +137,7 @@
 	.ai-tools button[aria-checked='true'] {
 		color: var(--ui-fg);
 		border-color: var(--ui-control-line);
-		font-weight: 550;
+		font-weight: 600;
 	}
 
 	.ai-tools button:focus-visible {
@@ -152,8 +152,6 @@
 
 	h3 {
 		margin: 0.5rem 0 0;
-		font-size: 1.0625rem;
-		font-weight: 600;
 	}
 
 	.ai-install p,
@@ -163,7 +161,7 @@
 
 	.ai-note {
 		color: var(--ui-muted);
-		font-size: 0.9375rem;
+		font-size: var(--type-ui);
 	}
 
 	.ai-prompts {
@@ -187,14 +185,14 @@
 
 	h4 {
 		margin: 0;
-		font-size: 1rem;
+		font-size: var(--type-body);
 		font-weight: 600;
 	}
 
 	.ai-prompt-head p {
 		margin: 0.2rem 0 0;
 		color: var(--ui-muted);
-		font-size: 0.9375rem;
+		font-size: var(--type-ui);
 	}
 
 	/* Three lines of the prompt, then a fade; expanding shows all of it. */
@@ -203,7 +201,7 @@
 		max-height: 4.8em;
 		overflow: hidden;
 		color: var(--ui-muted);
-		font: 0.8125rem/1.6 var(--ui-font-mono);
+		font: var(--type-small)/1.6 var(--ui-font-mono);
 		white-space: pre-wrap;
 		mask-image: linear-gradient(to bottom, #000 40%, transparent);
 	}
@@ -225,7 +223,7 @@
 		background: none;
 		color: var(--ui-fg);
 		font: inherit;
-		font-size: 0.875rem;
+		font-size: var(--type-small);
 		cursor: pointer;
 	}
 

@@ -21,7 +21,5 @@
 
 	h1 {
 		margin: 0 0 0.5rem;
-		font-size: clamp(1.75rem, 4vw, 2.5rem);
-		letter-spacing: -0.04em;
 	}
 </style>

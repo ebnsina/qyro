@@ -6,16 +6,19 @@
 	--_bg: var(--qyro-background, #000);
 	--_accent: var(--qyro-accent, #fff);
 	--_tint: var(--qyro-glass-tint, rgb(28 28 32 / 0.36));
+	/* The rail's round keys take the glass tint too, with their own dark default. */
+	--_disc: var(--qyro-glass-tint, rgb(12 13 14 / 0.6));
+	--_thumb: var(--qyro-thumb, #fff);
 	--_blur: var(--qyro-glass-blur, 18px);
 	--_saturate: var(--qyro-glass-saturate, 180%);
 	--_highlight: var(--qyro-glass-highlight, rgb(255 255 255 / 0.4));
 	--_rim: var(--qyro-glass-rim, rgb(255 255 255 / 0.28));
 	--_shadow: var(--qyro-glass-shadow, 0 6px 20px -6px rgb(0 0 0 / 0.45), 0 1px 3px rgb(0 0 0 / 0.2));
-	--_scrim: var(--qyro-scrim, rgb(0 0 0 / 0.62));
+	--_scrim: var(--qyro-scrim, rgb(0 0 0 / 0.7));
 	/* Radius scale: pill for capsules, buttons and chips; one panel radius; nested = outer - padding. */
 	--_r-pill: 999px;
 	--_player-radius: var(--qyro-radius, 16px);
-	--_panel-radius: var(--qyro-panel-radius, 18px);
+	--_panel-radius: var(--qyro-panel-radius, 14px);
 	--_panel-pad: 6px;
 	/* One size scale for every panel, menu and label, so they all match. */
 	--_fs-body: 13px;
@@ -25,8 +28,8 @@
 	--_item-h: 34px;
 	--_r-inner: calc(var(--_panel-radius) - var(--_panel-pad));
 	--_r-small: 6px;
-	--_track: var(--qyro-track, rgb(255 255 255 / 0.26));
-	--_buffered: var(--qyro-buffered, rgb(255 255 255 / 0.44));
+	--_track: var(--qyro-track, rgb(255 255 255 / 0.35));
+	--_buffered: var(--qyro-buffered, rgb(255 255 255 / 0.2));
 	--_control: var(--qyro-control-size, 38px);
 	--_icon: var(--qyro-icon-size, 18px);
 	--_scrubber: 22px;
@@ -381,7 +384,7 @@ video::-webkit-media-controls {
 .round {
 	display: grid;
 	place-items: center;
-	border-radius: var(--_r-pill);
+	border-radius: var(--_panel-radius);
 	pointer-events: auto;
 	transition:
 		opacity var(--_dur) var(--_ease-out),
@@ -390,9 +393,15 @@ video::-webkit-media-controls {
 }
 
 .big-play {
-	width: clamp(48px, 8cqi, 68px);
-	height: clamp(48px, 8cqi, 68px);
-	--_tint: rgb(28 28 32 / 0.3);
+	width: clamp(44px, 6cqi, 56px);
+	height: clamp(44px, 6cqi, 56px);
+	/* The same disc as the rail's keys: the glass tint, and a glyph that contrasts with it. */
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	box-shadow: none;
+	color: var(--_fg);
+	color: contrast-color(var(--_disc));
 }
 
 .big-play svg {
@@ -492,15 +501,24 @@ video::-webkit-media-controls {
 		transform var(--_dur) var(--_ease);
 }
 
-.spinner span {
+/* A glass square like the keys, with a ring in it: a faint full ring and a bright segment that turns clockwise. */
+.spinner::before {
+	content: '';
 	position: absolute;
 	inset: 0;
+	border-radius: var(--_panel-radius);
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+}
+
+.spinner .ring {
+	position: absolute;
+	inset: 14px;
+	border: 3px solid var(--_track);
+	border-top-color: var(--_fg);
 	border-radius: 50%;
-	background: conic-gradient(from 0deg, transparent 0 15%, #fff);
-	-webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
-	mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
-	filter: drop-shadow(0 0 6px rgb(0 0 0 / 0.4));
-	animation: spin 0.9s linear infinite;
+	animation: turn 0.9s linear infinite;
 }
 
 /* Wait a beat before showing, so short stalls don't flash it. */
@@ -510,9 +528,33 @@ video::-webkit-media-controls {
 	transition-delay: 250ms;
 }
 
-@keyframes spin {
+/* After a long stall the viewer is told it's still working, not left wondering. */
+.spinner-note {
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin: 10px 0 0;
+	transform: translateX(-50%);
+	white-space: nowrap;
+	font: var(--_fs-meta) var(--_font);
+	color: var(--_fg);
+	text-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
+	opacity: 0;
+}
+
+.root[data-buffering]:not([data-error]) .spinner-note {
+	animation: note-in 300ms ease-out 6s forwards;
+}
+
+@keyframes note-in {
 	to {
-		transform: rotate(1turn);
+		opacity: 1;
+	}
+}
+
+@keyframes turn {
+	to {
+		transform: rotate(360deg);
 	}
 }
 
@@ -1043,7 +1085,7 @@ video::-webkit-media-controls {
 	height: 6px;
 	margin-top: -3px;
 	border-radius: 50%;
-	background: #fff;
+	background: var(--_thumb);
 	box-shadow: 0 0 0 1.5px rgb(0 0 0 / 0.25);
 	opacity: 0;
 	transform: scale(0.4);
@@ -1681,7 +1723,9 @@ video::-webkit-media-controls {
 
 .next-actions .next-play {
 	background: var(--_accent);
-	color: #111;
+	/* Black or white, whichever reads better on the accent; the fallback is the background token. */
+	color: var(--_bg);
+	color: contrast-color(var(--_accent));
 }
 
 @container (max-width: 440px) {
@@ -1944,8 +1988,8 @@ video::-webkit-media-controls {
 		animation-iteration-count: 1 !important;
 	}
 
-	.spinner span {
-		animation: spin 2.4s linear infinite !important;
+	.spinner .ring {
+		animation: turn 2.4s linear infinite !important;
 	}
 
 	.dock,
@@ -1985,4 +2029,239 @@ video::-webkit-media-controls {
 	:host([glass='light']) .glass {
 		background: rgb(250 250 252 / 0.92);
 	}
+}
+
+/* ---------- Player look: the rail (the default) ---------- */
+/* Rail: controls stack in a column on the right, above a full-width bar; each key sits in its own dark disc.
+   Its colours and radii come from the public tokens at the top, so a theme reaches them. */
+
+:host .dock .glass {
+	background: none;
+	box-shadow: none;
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+
+:host .dock .glass::before {
+	display: none;
+}
+
+:host .timeline {
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+:host .row {
+	position: absolute;
+	right: 0;
+	bottom: calc(100% + 12px);
+	flex-direction: column;
+	align-items: center;
+	height: auto;
+	gap: 10px;
+}
+
+:host .spacer {
+	display: none;
+}
+
+:host .cap {
+	flex-direction: column;
+	height: auto;
+	gap: 10px;
+}
+
+:host .btn {
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	border-radius: var(--_panel-radius);
+	color: var(--_fg);
+	color: contrast-color(var(--_disc));
+}
+
+:host .btn:focus-visible {
+	border-radius: var(--_panel-radius);
+}
+
+:host .btn::before {
+	background: rgb(255 255 255 / 0.18);
+	border-radius: calc(var(--_panel-radius) - 3px);
+}
+
+
+/* Rail: panels open beside the rail column they came from, not in the corner (on phones they stay bottom sheets). */
+:host {
+	--_rail-right: calc(var(--_gap) + var(--_control) + 12px);
+	--_rail-bottom: calc(var(--_gap) + var(--_control) + 20px);
+}
+
+@container (min-width: 441px) {
+	:host .sheet,
+	:host .upnext,
+	:host .chapters {
+		right: var(--_rail-right);
+		bottom: var(--_rail-bottom);
+		transform-origin: bottom right;
+	}
+
+	:host .sheet {
+		max-height: calc(100% - var(--_rail-bottom) - var(--_gap));
+		overflow: hidden auto;
+	}
+
+	:host .upnext,
+	:host .chapters {
+		max-height: calc(100% - var(--_rail-bottom) - var(--_gap));
+	}
+}
+
+/* Rail volume: a pill that slides out to the left of the mute key. */
+:host .volume-pop {
+	position: absolute;
+	top: 50%;
+	right: calc(100% + 10px);
+	height: var(--_control);
+	transform: translateY(-50%);
+	/* The same glass disc as the keys beside it. */
+	background: var(--_disc);
+	-webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	backdrop-filter: blur(var(--_blur)) saturate(var(--_saturate));
+	border-radius: var(--_panel-radius);
+}
+
+:host .volume[data-open] .volume-pop {
+	width: 92px;
+}
+
+
+/* Rail thumb: one clean white dot with a dark keyline, no glass highlight. */
+:host .thumb {
+	left: -6px;
+	width: 12px;
+	height: 12px;
+	margin-top: -6px;
+	background: var(--_thumb);
+	box-shadow: 0 0 0 3px rgb(0 0 0 / 0.35);
+	-webkit-backdrop-filter: none;
+	backdrop-filter: none;
+}
+
+/* Touch: keys reach the 44px target size, with a little room so rounding never leaves them just under it. */
+@media (pointer: coarse) {
+	:host .btn {
+		width: 46px;
+		height: 46px;
+	}
+}
+
+/* Narrow players: a column can't fit a short player, so the keys run in a row above the bar, as in the classic layout. */
+@container (max-width: 440px) {
+	:host .volume,
+	:host .pip {
+		display: none;
+	}
+
+	/* Pages take their full height, so the sheet itself scrolls. A page can't inherit the sheet's max-height: it clamps to one row. */
+:host .page {
+	max-height: none;
+}
+
+/* The sheet opens above the 46px keys, at the right, at a width that leaves the picture visible. */
+	:host .sheet {
+		left: auto;
+		right: var(--_gap);
+		bottom: calc(var(--_gap) - 2px + 2 * 46px + 16px);
+		width: min(var(--_panel-w), calc(100% - 2 * var(--_gap)));
+		max-height: calc(100% - var(--_gap) - 2 * 46px - 16px - var(--_gap));
+		overflow-y: auto;
+	}
+
+	:host .row,
+	:host .cap {
+		flex-direction: row;
+		gap: 8px;
+	}
+
+	:host .btn {
+		width: 46px;
+		height: 46px;
+		--_icon: 14px;
+	}
+}
+
+/* Very narrow players: the centre play button already plays and pauses, so the row's play key would sit under it. */
+@container (max-width: 340px) {
+	:host .row > .cap:first-child {
+		display: none;
+	}
+}
+
+/* Phones: the keys move to the top right, the seek bar stays at the bottom, and the settings sheet opens downward from the keys. */
+@container (max-width: 440px) {
+	/* The dock spans the player so its keys can sit at the top; only its children take pointer events. */
+	:host .dock {
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		pointer-events: none;
+	}
+
+	:host .timeline {
+		position: absolute;
+		left: var(--_gap);
+		right: var(--_gap);
+		bottom: calc(var(--_gap) - 2px);
+		margin: 0;
+		pointer-events: auto;
+	}
+
+	:host .row {
+		position: absolute;
+		top: var(--_gap);
+		right: var(--_gap);
+		bottom: auto;
+		height: auto;
+		align-items: center;
+		pointer-events: auto;
+	}
+
+	:host .sheet {
+		top: calc(var(--_gap) + 46px + 8px);
+		bottom: auto;
+		max-height: calc(100% - var(--_gap) - 46px - 8px - var(--_gap));
+		transform-origin: top right;
+	}
+
+	.root[data-idle] .timeline,
+	.root[data-idle] .row,
+	.root[data-fresh] .timeline,
+	.root[data-fresh] .row,
+	.root[data-error] .timeline,
+	.root[data-error] .row {
+		pointer-events: none;
+	}
+}
+
+/* Touch: settings rows reach the 44px target, with less padding before the label. */
+@media (pointer: coarse) {
+	.item {
+		min-height: max(44px, var(--_item-h));
+		padding-left: 8px;
+	}
+}
+
+/* After a mouse or touch open, focus moves without its style; a key press brings it back. */
+:host([data-pointer]) :focus-visible {
+	outline: none;
+}
+
+:host([data-pointer]) .item:focus-visible {
+	background: none;
+}
+
+/* A page just changed under a resting pointer: its rows don't show hover until the pointer moves. */
+:host([data-paging]) .item:hover {
+	background: none;
 }
