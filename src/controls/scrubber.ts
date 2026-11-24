@@ -95,10 +95,20 @@ export class Scrubber {
 		this.#chapter.textContent = chapter;
 		this.#bubble.toggleAttribute('data-chapter', !!chapter);
 		this.#paintShot(this.hooks.thumb(t));
+		this.#at = f;
+		this.#place();
+	}
+
+	/** The fraction last previewed, so a tile that finishes loading later can re-place the bubble. */
+	#at = 0;
+
+	/** Keeps the bubble inside the bar at both ends, measured as it is now (its tile may have just been sized). */
+	#place(): void {
 		const width = this.el.clientWidth;
-		const half = this.#bubble.offsetWidth / 2;
-		this.el.style.setProperty('--hover-x', `${f * width}px`);
-		this.el.style.setProperty('--bubble-x', `${Math.min(Math.max(f * width, half), width - half)}px`);
+		const x = this.#at * width;
+		const half = Math.min(this.#bubble.offsetWidth / 2, width / 2);
+		this.el.style.setProperty('--hover-x', `${x}px`);
+		this.el.style.setProperty('--bubble-x', `${Math.min(Math.max(x, half), width - half)}px`);
 	}
 
 	/** Draws the storyboard tile, keeping the last one up until the next image has loaded. */
@@ -123,6 +133,8 @@ export class Scrubber {
 			backgroundSize: `${img.naturalWidth * scale}px ${img.naturalHeight * scale}px`,
 			backgroundPosition: `${-th.x * scale}px ${-th.y * scale}px`,
 		});
+		// The bubble just changed size (a tile loaded after the pointer moved): clamp it again.
+		this.#place();
 	}
 
 	/** Starts loading the images for a storyboard before anyone hovers. */
