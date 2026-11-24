@@ -102,6 +102,33 @@ test('storyboard: the preview shows the thumbnail for the time under the pointer
 	await expect(player.locator('.marker')).toHaveCSS('opacity', '1');
 });
 
+test('storyboard: near either end the preview stays inside the bar, even when its tile loads late', async ({ page }) => {
+	// The tile image is held back, so the bubble is placed before it has its picture size (the cutoff in the field).
+	let release!: () => void;
+	const held = new Promise<void>((r) => (release = r));
+	await page.route('**/storyboard.jpg', async (route) => {
+		await held;
+		await route.continue();
+	});
+	await page.goto('/test/harness/index.html?src=/test/fixtures/hls/main.m3u8&muted&thumbnails=/test/fixtures/storyboard/storyboard.vtt');
+	const player = page.locator('qyro-player');
+	await expect.poll(() => player.evaluate((p: any) => !!p.engine && p.video.readyState >= 1)).toBe(true);
+	await player.locator('.big-play').click();
+	await page.waitForTimeout(450);
+	const bar = (await player.locator('.scrubber').boundingBox())!;
+	for (const at of [0.99, 0.01]) {
+		await page.mouse.move(bar.x + bar.width * at, bar.y + bar.height / 2);
+		if (at === 0.99) release();
+		await expect(player.locator('.bubble')).toHaveAttribute('data-shot', '');
+		await expect
+			.poll(async () => {
+				const b = (await player.locator('.bubble').boundingBox())!;
+				return b.width > 100 && b.x >= bar.x - 1 && b.x + b.width <= bar.x + bar.width + 1;
+			})
+			.toBe(true);
+	}
+});
+
 test('the top level of settings stays short: style lives under Captions', async ({ page }) => {
 	const player = await open(page);
 	await player.locator('.big-play').click();

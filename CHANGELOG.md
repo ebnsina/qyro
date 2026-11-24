@@ -2,6 +2,12 @@
 
 All notable changes to Qyro. The format follows [Keep a Changelog](https://keepachangelog.com), and versions follow [Semantic Versioning](https://semver.org).
 
+## [Unreleased]
+
+### Fixed
+
+- The seek preview stays inside the bar near the start and end. When a storyboard image loaded after the pointer moved, the preview kept the narrow size it had before and ran off the edge of the player.
+
 ## [0.1.0] - 2026-10-29
 
 The first version.
